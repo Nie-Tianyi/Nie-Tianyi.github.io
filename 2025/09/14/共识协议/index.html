@@ -1,0 +1,535 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>nty的技术博客 | nty的技术博客</title><meta name="author" content="nty"><meta name="copyright" content="nty"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="## 介绍 共识协议是保证区块链中保证多台计算机（分布式系统）在存在网络延迟的情况下，仍然能保证状态一致的算法。分布式系统中的共识协议根据解决问题的不同可以分为两大类，一种是**崩溃容错协议**（Crash Fault Tolerance, CFT）,另一种是**拜占庭容错协议**（Byzantine Fault Tolerance, BFT）。**崩溃容错协议**保证系统中有组件宕机的情况下仍能">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nty的技术博客">
+<meta property="og:url" content="https://nie-tianyi.github.io/2025/09/14/%E5%85%B1%E8%AF%86%E5%8D%8F%E8%AE%AE/index.html">
+<meta property="og:site_name" content="nty的技术博客">
+<meta property="og:description" content="## 介绍 共识协议是保证区块链中保证多台计算机（分布式系统）在存在网络延迟的情况下，仍然能保证状态一致的算法。分布式系统中的共识协议根据解决问题的不同可以分为两大类，一种是**崩溃容错协议**（Crash Fault Tolerance, CFT）,另一种是**拜占庭容错协议**（Byzantine Fault Tolerance, BFT）。**崩溃容错协议**保证系统中有组件宕机的情况下仍能">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://nie-tianyi.github.io/images/avatar.png">
+<meta property="article:published_time" content="2025-09-14T06:36:28.790Z">
+<meta property="article:modified_time" content="2025-09-14T06:42:16.567Z">
+<meta property="article:author" content="nty">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://nie-tianyi.github.io/images/avatar.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "",
+  "url": "https://nie-tianyi.github.io/2025/09/14/%E5%85%B1%E8%AF%86%E5%8D%8F%E8%AE%AE/",
+  "image": "https://nie-tianyi.github.io/images/avatar.png",
+  "datePublished": "2025-09-14T06:36:28.790Z",
+  "dateModified": "2025-09-14T06:42:16.567Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "nty",
+      "url": "https://nie-tianyi.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://nie-tianyi.github.io/2025/09/14/%E5%85%B1%E8%AF%86%E5%8D%8F%E8%AE%AE/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'nty的技术博客',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"><link href="https://cdn.bootcss.com/KaTeX/0.11.1/katex.min.css" rel="stylesheet" /></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">nty的技术博客</span></a><a class="nav-page-title" href="/"><span class="site-name">nty的技术博客</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">无标题</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-09-14T06:36:28.790Z" title="发表于 2025-09-14 14:36:28">2025-09-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-09-14T06:42:16.567Z" title="更新于 2025-09-14 14:42:16">2025-09-14</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><html><head></head><body>## 介绍
+共识协议是保证区块链中保证多台计算机（分布式系统）在存在网络延迟的情况下，仍然能保证状态一致的算法。分布式系统中的共识协议根据解决问题的不同可以分为两大类，一种是**崩溃容错协议**（Crash Fault Tolerance, CFT）,另一种是**拜占庭容错协议**（Byzantine Fault Tolerance, BFT）。**崩溃容错协议**保证系统中有组件宕机的情况下仍能达成共识，即网络中存在数据的重复或者丢失，但不存在错误消息，适用于中心化的分布式数据集群。常见的崩溃容错协议有Paxos和Raft协议。**拜占庭容错协议**可以保证分布式系统在故障或者恶意组件干扰的情况下，依然可以达成共识，即网络内不仅存在消息的重复和丢失，还存在错误的消息。区块链需要抵御恶意节点的干扰，因此常见的区块链协议（例如PoW，PoS）都属于拜占庭容错协议。区块链共识协议大都可以分为两个步骤，首先是出块节点的选举，决定谁负责产生新的区块；然后是主链共识，网络内的计算机就新的区块达成共识。网络内的计算机通常会验证新的区块，以防御恶意节点的攻击。这两步共同保证了区块链数据的一致性，**在不可信的环境中用密码学提供可信的环境**。
+<h3 id="网络性质">网络性质</h3>
+<p>不同性质、不同网络环境的区块链通常对共识机制有不同的要求。在分布式系统中，我们可以把不同的网络环境大致分为三类，分别是<strong>同步网络</strong>、<strong>半同步网络</strong>、和<strong>异步网络</strong>。<strong>同步网络</strong>是指网络中网络的延迟上线时已知的，即所有的消息都可以在已知的时间内到达。同步网络是一种十分理想的网络环境，在现实中很难达到。而<strong>半同步网络</strong>假设网络的延迟是有上限的，但是这个上线时未可知的，即消息一定会到达，但是到达的时间不可预测。大部分的共识协议都是基于半同步网络的假设来设计的。而<strong>异步网络</strong>则对消息的传递时间没有假设，在不误网络中消息可能到达，也可能不到达；可能顺序到达，也可能乱序到达。异步网络下的共识协议需要更复杂的机制来应对网络研制的不确定性。</p>
+<h3 id="链的分类">链的分类</h3>
+<p>我们可以根据准入机制的不同将区块链分为<strong>许可链</strong>和<strong>非许可链</strong>。非许可链又称公开链，节点可以以匿名的形式任意加入或者退出系统，我们常见的比特币，以太坊都是非许可链。与非许可链不同，在许可链中，节点需要经过中心机构的准入审查，获得授权后才能加入系统（这意味着许可链中的身份是唯一且确定的）。许可链又可以细分为联盟链和私有链：联盟链通常由具有相同行业背景的多家不同机构组成，而私有链通常部署在单个机构内部。公开链的用户通常分在全球，互相沟通延迟较高，对共识机制的安全性要求较高；而非许可链通常部署在私有企业或者联盟内部，并且所有参与者身份固定，因此对共识协议的安全性要求没有公开链高，私有链因为减少了对安全性的要求而常常拥有较高的性能。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/jpeg/45785720/1725934666489-ffff32b5-24b0-43fd-a247-322fb0d43978.jpeg" alt></p>
+<h3 id="研究方法">研究方法</h3>
+<p>我们可以把共识协议分为两步研究，分别是<strong>出块选举</strong>机制和<strong>主链共识</strong>机制。共识机制中出块节点的选举通常和主链共识没有强联系关系，因此将共识机制分为两个步骤可以帮助我们理解共识机制的本质，同时我们也可以通过组合不同的出块节点选举机制和主链共识机制创造出新的共识机制。</p>
+<h2 id="出块节点选举">出块节点选举</h2>
+<p>区块链中的出块节点选举机制与现实中领导人的选举机制类似，在现实中领导人的选举投票是和身份锚定的。但是在公开链中，节点可以以匿名的形式任意加入或者退出系统，因此恶意的参与者可以轻松的伪造出多个身份参与投票，以此在投票结果中占有更多权重。这个问题是区块链中常见“女巫攻击（Sybil Attack）”，即攻击者利用单个节点来伪造多个身份存在于P2P网络中，从而达到干扰或者控制网阔正常活动的目的。因此在区块链出块节点选举中，我们常用“<strong>身份定价</strong>”机制来保证网络中的每个参与者难以伪造票数。“身份定价”将身份与网络中稀缺的资源相锚定，来保证网络的参与者不能轻易伪造虚假的身份。</p>
+<h3 id="工作量证明">工作量证明</h3>
+<p>最早使用的“身份定价”机制是工作量证明（PoW，Proof of Work），通过<strong>将身份与算力相锚定</strong>，来保证网络中参与者不能伪造虚假身份。工作量证明最早用户缓解垃圾邮件和拒绝服务（DoS，Deny of Service）攻击，邮件的发送者需要花时间（通常是几秒）计算大量无用的哈希函数来保证自己的电子邮件不会被拒收——这对普通用户是可以接受的，但是对于要发送大量垃圾邮件的广告商来说，则需要成倍增长的算力条件。随后工作量证明被中本聪用于比特币中，比特币网络的参与者需要计算大量无用的哈希算法（确切的来说是SHA256算法）来赢取成为出块人的机会。比特币中成为出块人的机会是与算力成正比的，拥有越多的算力，就越有可能成为网络中下一个区块的出块人。（确切的来说，成为出块人的概率等于某个节点在网络中的算力占比。例如节点A拥有比特币网络中所有节点算力总额的5%的算力，那么他成为下一个出块人的机会就等于5%。）</p>
+<p>在工作量证明机制中，我们可以把参与的角色划分为证明者和验证者：证明者需要相验证者出示证明，表明自己完成了一定数量的计算任务；而验证者需要验证工作量是否真实。在工作量证明中，我们要求要完成的工作量难题是“<strong>难以求解，但是容易验证的</strong>”。比特币中的工作量难题如下：</p>
+<p><em>给定全网统一的难度值 D、区块元数据 blockData,寻找满足条件的 Nonce值,使得根据哈希函数 SHA-256 计算得到的区块哈希 blockHash 低于目标难度值 D。</em></p>
+<p>证明者需要尝试多个Nonce值，以找到一个合适的Nonce使得blockHash小于目标难度值D，而验证者只需要计算一次，就能知道证明者给出的证明是否有效。将身份与计算资源相锚定的机制有效的缓解了女巫攻击，节点即使伪造了身份，也伪造不了算力。节点如果想要在网络中占有更大的权重，只能真金白银的购买新的算力和设备，这极大提高了伪造身份的门槛。</p>
+<h3 id="工作量证明缺点以及改进">工作量证明缺点以及改进</h3>
+<p>比特币的工作量证明随着加密货币市场的发展逐渐凸显很多缺点，这里主要讨论三个主要比特币中工作量机制的不足，分别是<strong>算力中心化</strong>、<strong>资源浪费</strong>、以及<strong>出块性能差</strong>。</p>
+<h4 id="算力中心化">算力中心化</h4>
+<p>由于比特币工作量证明难题<strong>可聚集、可外包</strong>的特性，比特币网络中的矿工自发的组成矿池。可聚集、可外包是指比特币的挖矿难题可以拆分成多个简单的子问题。多个矿工可以以合作的方式，每个人解决一个子问题，来一起解决挖矿难题。例如在比特币中我们可以把Nonce的范围划分为多个子区间 0~100,101~200…，每个矿工负责搜索一个子区间内是否有解，最后通过根据贡献，加权分配得到的奖励。加入矿池虽然不能提高挖矿收益的期望，但是可以显著降低挖矿收益的方差，让挖矿收益更稳定。因此越来越多的矿工加入矿池。</p>
+<p>同时，随着比特币市值的升高，比特币网络内算力竞争越来越激烈，专门用于比特币挖矿的专用集成电路（ASIC，Application Specific Integrated Circuits）开始出现在市场上。专用集成电路是专门用于计算比特币工作量证明的芯片（即专门用于计算SHA256算法的电路）。专用集成电路在特定难题上的的计算效率是通用计算设备（CPU或GPU）效率的几倍，在成本相同的情况下，使用专用集成电路设备的收益是使用普通电脑计算设备（CPU或者是GPU）的好几倍。但是专用集成电路设备由于价格昂贵，因此购买门槛较高，这就导致普通用户越来越难参与到比特币网络中的挖矿活动。比特币网络中的出块权越来越集中在几个大的大规模购买矿机的矿场主手中。</p>
+<p>越来越多的节点加入矿池和矿机的大规模应用让比特币网络的挖矿活动越来越中心化，这是否是一个好的趋势，比特币社区中对此存在激烈的讨论。支持者认为竞争越来越激烈的挖矿会加强比特币的安全性，攻击者需要真金白银的购买更多算力设备才能发起攻击，这提高了攻击比特币网络的门槛；反对者则认为中心化的挖矿方式违反了比特币去中心化的初衷——中本聪在比特币白皮书内写到，比特币网络最理想的挖矿状态是“one CPU one vote（一个CPU一票）”。在中心化挖矿的方式下，网络内的大矿工可以联合起来发动双花攻击、自私挖矿攻击。这降低了比特币网络的安全性。下图是世界上最大比特币矿池的排名和其算力占比：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/45785720/1725937189355-728ec07e-9801-4756-8505-113e35ce6d90.png" alt></p>
+<h5 id="内存密集型哈希函数">内存密集型哈希函数</h5>
+<p>使用内存密集型哈希函数是加密货币社区应对算力中心化问题最主流的方式，其基本思想是选择<strong>需要使用大量内存</strong>的哈希函数替换比特币挖矿难题中的哈希函数，并且<strong>难以并行计算</strong>。使用专用计算电路（ASIC）可以大幅降低计算的成本，但是要给专有计算电路配备大量内存却十分昂贵。矿机成本变高，相比使用通用计算设备挖矿，带来的额外收益大幅减少，矿工研发专有矿机的动机则没有那么强烈。</p>
+<p>以太坊早期使用的工作量机制就是这个思路。以太坊早期使用的工作量机制的难题叫ETHASH，在这个计算哈希函数时需要先计算一个16MB的小数据集cache；然后根据伪随机顺序，从cache中取样，生成一个1GB大小的大数据集DAG。在求解难题时，需要频繁大量的从大数据集中采样——这就保证了矿工在挖矿时不得不准备大量内存，缓存大数据集，以便随时采样。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/jpeg/45785720/1725937071703-7a6234ab-fe17-4ec2-a53b-e6ed0173d1eb.jpeg" alt></p>
+<h4 id="资源浪费">资源浪费</h4>
+<p>计算大量无用的哈希函数需要大量的计算资源，同时也浪费了大量能源。据统计，比特币网络每年消耗的能源占全球能源开支的0.15%，而这些能源全都用在了计算无用的哈希函数上。一个最直接的解决办法是将无用的哈希函数难题替换成求解有用的数学问题。</p>
+<h5 id="有用工作量证明">有用工作量证明</h5>
+<p>有用工作量证明（PoUW，Proof of Useful Work），即将工作量证明难题替换为解决有用的数学问题。例如在素数币中，矿工需要寻找合适的素数来解决挖矿难题。于此类似的还有<font style="color:rgb(51, 51, 51);">π</font>币等。</p>
+<h5 id="其他证明">其他证明</h5>
+<p>解决这个问题的另外一个思路就是将“身份定价”机制的锚定物与其他网络中稀缺的资源相锚定。常见的锚定机制有<strong>权益证明</strong>（PoS，Proof of Stake），将身份与其手中所持有的代币（虚拟货币）相锚定；<strong>容量证明</strong>（PoC，Proof of Capacity）将身份与其可以提供的存储容量相结合；<strong>存储证明</strong>（PoSt，Proof of Storage），也有叫<strong>时空证明</strong>（PoSt，Proof of Spacetime）的，这是Filecoin中使用的“身份定价”机制。Filecoin是一个提供分布式云存储服务的加密货币，用户可以通过支付一定网络内的代币，将私有文件存储到网络中矿工的电脑上。矿工则需要提供自己在某个特定的时刻，存储了客户要求的文件的零知识证明发送到网络内来参与挖矿。这里，Filecoin把身份与其存储了的客户的文件相锚定。还有<strong>权威证明</strong>（PoAu，Proof of Authority），只有网络内权威较高的节点拥有出块的权限；或者<strong>信誉证明</strong>（Proof of Reputation），只有网络内拥有较高信誉的节点才能成为出块节点。</p>
+<h4 id="出块性能差">出块性能差</h4>
+<p>比特币出块性能差，比特币出块时间被设计为10min，每隔十分钟调整一次难度，难度越高，则出块时间越长。如果出块时间大于十分钟，则调低难度；出块时间过少，则调高难度。这导致比特币网络每秒只能处理3到5笔交易，这远不足以算的上是一个有效的支付系统。调低比特币网络的出块时间增加吞吐量的一个方法，但是盲目调低区块链出块时间会导致链中分叉频繁。区块需要足够的时间在P2P网络中传播和共识，缩短出块间隔会消弱区块链系统的安全性。</p>
+<h5 id="修改出块节点机制">修改出块节点机制</h5>
+<p>在Bitcoin-NG中，针对出块节点慢，对出块节点机制做出修改。在Bitcoin-NG一旦一个节点通过工作量证明赢取了一个出块的机会，那么这个节点将负责连续打包多个区块的交易，其具体机制如下：</p>
+<ol>
+<li>区块分为关键块和微块</li>
+<li>关键块包含工作量证明难题的解</li>
+<li>微块包含关键快出块节点的签名，但是不包含人很工作量证明难题的解</li>
+<li>节点在生成关键块后，负责在随后的间隔时间内，将交易打包进微块并且签名</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/jpeg/45785720/1725937290903-35a31a8f-370a-421b-9406-acf2db73b7a5.jpeg" alt></p>
+<h4 id="改进方案的限制">改进方案的限制</h4>
+<p>区块链中，针对现有工作量机制的改进大多集中于白皮数中的想法和少量实现，白皮书中缺少对现有解决方案的形式化安全性证明，也没有量化的性能提升数据。对现有方案的改进方案大都依赖于想法，而没有确实的理论和数据证明改进方案的有效性。</p>
+<h3 id="权益证明">权益证明</h3>
+<p>权益证明（PoS，Proof of Stake）是是另一种广泛应用的“身份锚定”机制，其将身份与节点手中所持有的<strong>虚拟货币相锚定</strong>。权益证明中一个节点能投票的数量与其手中所持有的代币数量相关，一个节点拥有网络内越多的代币，则越有可能成为下一个出块节点。权益证明机制的安全性来自于区块链代币持有者的更有动力维护该区块链网络的安全的假设。倘若一个人持有大量的代币，那么他有更少的可能破坏网络，因为一旦网络被攻击，其手中持有的代币的价值就会大幅度下降。若一个不持有任何代币的人想要攻击网络，那么在攻击网络前他需要购买该网络大量代币，从而抬高代币价格——这是网络内代币持有者希望看到的。因此我们认为权益证明是比工作量证明更节能、更安全的“身份定价”机制。</p>
+<p>点点币（Peercoin）是最早使用权益证明的加密货币之一，点点币使用了币龄的概念来限制网络中两极分化的问题。简单的权益证明机制会促成网络中节点的二八分化，网络中拥有最多代币的节点总是成为获得出块奖励的节点。为了缓解这个问题，点点币采用了币龄的概念，币龄是节点持有代币数量和持有每个代币的的时间的乘积，即:</p>
+<p>币龄 = $ \sum $代币数量 * 持有时间</p>
+<p>点点币的挖矿难题如下：</p>
+<p><em>给定全网统一的难度值 D,区块元数据 blockData,寻找满足条件的时间戳timeStamp,使根据哈希函数 SHA-256 计算得到的区块哈希 blockHash 低于目标难度值.目标难度值为全网统一难度值 D 和币龄 (coinDay) 的乘积.</em></p>
+<p>点点币虽然是最初使用权益证明的加密货币之一，其挖矿过程仍需要工作量证明的辅助，在决定出块人的时候仍需要通过计算哈希函数的方式随机找到一个出块的节点。但是点点币中，持有代币越多，持有时间越长，则挖矿难度越低，越有可能成为下一个出块的节点。但是这样的机制仍有问题，不活跃的节点可以长期持有代币，以积累大量币龄来发起攻击，因此在以太坊现阶段使用的权益证明协议中，持有时间的上限为90天。每个节点持有超过90天的代币将只能按90天计算。在维理币中，使用将权益证明机制与活动证明机制（PoAc, Proof of Activity）相结合，不活跃的节点手中代币的币龄将慢慢减少。</p>
+<h3 id="基于随机函数的权益证明">基于随机函数的权益证明</h3>
+<p>即便使用了权益证明算法，以上算法最后仍需要通过竞争计算无用的哈希函数来赢取成为出块人的机会，并没有完全解决工作量证明耗能过高的问题。以上算法最后的工作量机制及实际上是通过权益比例加权随机抽取一个节点作为出块节点。那我们可以直接使用随机函数吗？如果直接使用随机函数决定出块节点，那么网络中的其他节点将很难重现出块时的随机过程，那么由谁出块将变得不可验证。因此我们需要一个<strong>容易复现的伪随机函数</strong>作为我们挑选随机节点出块的方法。</p>
+<p>用于选取出块节点的伪随机函数多种多样，例如在Algorand链中，出块节点的选取是通过可验证随机函数（verifiable random function, VRF）做到的，其流程机制答题如下：</p>
+<ol>
+<li>各个节点利用自己的私钥和全网统一的随机数粽子作为算法输入，判断自己是否是本轮出块节点。</li>
+<li>若成为出块节点，节点将同时出示算法生成的选举证明，供其他节点验证。</li>
+<li>前一个区块间隔的出块节点利用VRF函数更新下一个间隔的随机数种子。</li>
+</ol>
+<p>还有例如Tendermint中，每个时间段采用确定轮询算法决定出块节点，每个区块间隔将确定产生一个出块节点。另外一类常见的伪随机函数算法叫做“Follow-The-Satoshi（跟着聪，这里的聪 Satoshi 指的是比特币中最小的货币单位）”算法。“Follow-The-Satoshi”算法的核心思想是在已发行的所有货币中通过伪随机算法找到一个代币，然后通过追溯区块数据，找到持有目前持有该货币的节点，该节点即成为出块节点。这样的算法保证了持有代币越多，则越有可能被选中。这里要注意的是，随机数的生成算法一定是伪随机数，并且要使用可重复的方法生成伪随机数（例如使用上一个区块的的哈希值作为伪随机算法的种子）。</p>
+<p>选取随机数算法种子的方法多种多样，例如在权威证明里：出块节点首先要生成满足 工作量证明 PoW 的空区块（不包含任何交易，只包含区块元数据的空区块）；然后将空区块的哈希值作为随机算法的输入，选出一组委员会（即 权益证明中的委员会）；最后出块节点需要收集一定数量的委员会签名才能打包交易、生成一个合法的区块。在活动链（CoA，Chains of Activities）中，我们将前N个区块的哈希值做为随机算法的输入，选出后N个区块的出块节点。在Ouroboros中，种子是基于安全多发计算（Multi-party computation，MPC）算法更新的，其算法大致如下：</p>
+<ol>
+<li>Ouroboros中将多个出块间隔组合称为一个纪元（epoch）。</li>
+<li>纪元内所有出块检点组成一个委员会（commitee）。</li>
+<li>委员会解i按参与MPC算法，合作更新随机种子。</li>
+</ol>
+<h3 id="权益证明的缺点以及改进">权益证明的缺点以及改进</h3>
+<p>权益证明由于解决了区块链能耗高的问题而得到大规模应用，但是现有的权益证明也有许多漏洞。常见针对权益证明的攻击有三种，分别是<strong>粉碎攻击</strong>、<strong>无权益攻击</strong>、和<strong>长程攻击</strong>（或者叫历史攻击）。</p>
+<h4 id="粉碎攻击">粉碎攻击</h4>
+<p>粉碎攻击（grinding attack）是一种<strong>利用系统内部随机性机制漏洞</strong>，来获得不正当利益的攻击方式。攻击者可以尝试操控系统内随机数的方式，控制区块内容，增加自己未来出块的机会。例如如果出块的随机数种子为上一个区块的哈希，假设攻击者为当前区块的出块人，那么他可以尝试构造多个区块，以期待找到一个区块使自己仍然成为下一个区块的构造者。</p>
+<p>我们可以通过杜绝区块中的随机字段来防御粉碎攻击，例如区块中不包含任何可以自由设置字段，这样出块的节点就不能尝试构造多个区块；或者我们在取随机数种子的是由尽量不依赖区块本身的信息，例如选取某个节点的公钥作为随机数的种子。</p>
+<h4 id="无权益攻击">无权益攻击</h4>
+<p>无权益攻击（nothing-at-stake）是指在权益证明里，验证者在质押区块的时候不需要付出任何成本，因此验证者更倾向于<strong>在一个高度的多个分叉上下注</strong>，只要有一个区块被选中，自己就能获得奖励。例如假设现在在100高有两个分叉区块A和B，A被选做最长链的概率是0.4，B被选作最长链的概率是0.6；如果所质押的区块被选作最长链后，验证者可以以获得5个代币。那么我们可以简单的算出，验证者质押A区块的期望是2个代币，质押B区块的期望是3个代币，而两者都质押的期望是5个代币，并且没有任何风险。虽然实际质押中质押奖励可能跟质押的代币数量有关，但是无论如何同时质押所有分支的奖励永远是风险最低，现金流最稳定的选择。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/45785720/1725006958210-47892ae0-70d4-4996-810b-0e9d6e1600ea.png" alt></p>
+<p>如果验证者都同时质押所有分支的所有区块，那么网络内将很难达成共识。网络内的区块链将多个分叉同时存在，并且所有分支齐头并进，这些分支永远不可能合并。因此，在权益证明中，我们要求所有验证者只能选择他认为将是最长链的分支进行押注。所有验证者在押注时都需要提交一定数量的保证金，如果网络内的其他节点发现有验证者质押同一高度的多个区块，则没收其保证金。以太坊的Slasher协议中和Tendermint中的Slasher协议都是这个机制的具体实现。</p>
+<p>在私有链中，我们也可以通过提供<strong>可信执行环境</strong>（Trusted Execution Environment，TEE）来保证同一个高度只能由一个区块被生成，这样就不存在一个验证者可以同时质押多个区块的情况。</p>
+<h4 id="长程攻击">长程攻击</h4>
+<p>长程攻击（long-range attack），又叫历史攻击（history attack），是通过<strong>贿赂区块链历史中大的权益持有者，从而改写整个区块链历史</strong>的攻击。长程攻击即权益证明里的51%攻击，即如果一个人单独持有网络内51%的代币，那么他就可以从某一个历史区块后重新生成后续所有区块，从而覆盖掉现存的最长链。虽然网络中很难由节点能拥有整个网络51%的权益，但是攻击者可以尝试贿赂区块链历史中拥有大量权益的节点，来合作发动长程攻击。特别是当网络中有的节点在历史中拥有大量代币，并且（因为拥有大量代币而）成为过出块节点，但是现在又将大量代币花出时，这些节点会有更大的动力参与合作，发动长程攻击。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/jpeg/45785720/1725936794553-cb9fd23e-8c11-4426-bd5d-217650a8a696.jpeg" alt></p>
+<p>防御长程攻击的手段常见的有<strong>移动检查点机制</strong>和<strong>密钥演进加密技术</strong>。移动检查点机制是指将历史中某一个高度区块的检点定为检查点，并且强行规定检查点前的区块都不可更改。以太坊中的Casper协议就使用了类似的机制。密钥演进加密技术是指节点需要随着时不断演变自己的私钥，这样当攻击者即使盗取了某个节点的私钥时，也不能伪造过去的签名，无法利用节点的历史权益发动长程攻击。</p>
+<h3 id="委托权益证明">委托权益证明</h3>
+<p>委托权益证明（Delegated Proof of Stake, DPoS）主要思路是通过投票机制，减少参与共识的节点的数量。参与共识节点的数量减少可以加快共识的速度，降低分叉的概率。委托权益证明的主要思路如下：</p>
+<ol>
+<li>网络中的节点可以通过用手中代币投票的方式选出一部分节点组成委员会。</li>
+<li>委员会内的节点再利用权益证明的随机算法选出出块节点。</li>
+<li>若被选中的出块节点在给定时间内未完成出块，将被移出委员会，同时收到一定惩罚（例如扣除押金）。</li>
+<li>如果有委员会节点尝试攻击网络，发布恶意区块，则不但该节点需要收到惩罚，所有选出该代表的节点也要收到惩罚。</li>
+</ol>
+<h2 id="主链共识">主链共识</h2>
+<p>主链共识是指对分叉的区块达成一致的机制。当网络中在同一高度出现多个分叉节点时，我们需要依赖主链共识机制来达成一致，选择<strong>一个一致的分叉作为网络中的共识</strong>。我们一般把主链共识大致分为<strong>强一致性共识</strong>和<strong>弱****一致性共识</strong>，强一致性共识提供确定性共识，即网络内的区块一旦确定，就不可再更改。例如在部分权益证明的协议（例如以太坊的共识协议）中，我们引入检查点机制，一但一个新区块被确定，那么就将检查点移动到这个区块，并且规定检查点前的所有区块都不可更改。弱一致性共识提供概率性共识，即区块以一定概率达成一致，并且一般随着时间的推移逐渐提高，但理论上来说区块链内的任何区块都有被更改的可能，尽管可能性很小。例如在比特币的工作量证明中，我们一般建议大额交易即使被打包了，也到等待6个区块再确认交易，因为只有等待6个区块后，区块再被回滚的几率就才相对很小。</p>
+<h3 id="概率性共识">概率性共识</h3>
+<h4 id="最长链法则">最长链法则</h4>
+<p>最常见的概率性共识协议即比特币中的“最长链法则”，即网络中所有矿工应该选择该网络中<strong>最长的区块链分支作为主链</strong>。最长链法则最早于中本聪白皮书中提出，如果按照中本聪白皮书中理想的挖矿情景“one CPU one vote（一个CPU一票）”，那么选择最长链实际上是选择网络中最多人投票的区块链，即与网络中绝大多数人保持一致。最长链法则的性能收到实际参数和网络环境的影响，但是过快的出块速度可能会导致网络内区块频繁分叉，从而消弱网络整体安全性（即攻击者只需要掌握网络内更少的算力就可以构造一条比现在主链更长的链）。</p>
+<h4 id="ghost协议">GHOST协议</h4>
+<p>GHOST（Greedy Heaviest-Observed Sub-Tree，贪婪最重可观察子树）协议规定网络中的矿工应该<strong>选择网络中的最重子树作为主链</strong>，因为最重的子树代表了网络中最多人投票的分支。这个协议是为了针对因为加快网络出块速度而导致的频繁分叉问题而设计的。当网络中共识速度低于出块速度时——新出的区块在网络中没有充分传播和被认可，下一个区块已经生成——就会出现频繁分叉。GHOST协议规定将分叉的区块也纳入主链区块选取规则当中，协议名称中的最重子树，即拥有最多区块的子树（包括分叉区块）。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/45785720/1725000583006-e0c38ffc-586e-431e-baea-1e1bfc5fdf28.png" alt></p>
+<p>例如在上例中，假设现在节点同步到了0号区块，那么根据最重子树的协议，他应该选择1B区块作为他本地的下一个区块，因为1B后有11个区块（连同分叉区块一起），而另外一条分叉只有5个区块，因此1B及其后的区块是一个“更重”的子树。而当他到达1B号区块时，他应该选择2C号区块做为下一个区块，因为2D后有3个区块，而2C后有4个区块，因此2C以及其后面的区块构成一个“更重”的子树。以此类推，他左后选择的链应该是：0，1B，2C，3D，4B。</p>
+<p>GHOST协议中最重的子树的区块构成主链，又被称为最重链。“最重链”即代表了网络中最多人投票（权益加权后的投票）的区块，因为其拥有网络中最多的子区块。</p>
+<h4 id="包容性协议">包容性协议</h4>
+<p>包容性协议是针对GHOST协议的改进。由于出块速度太快而导致网络中区块不能充分传播而出现大量分叉，这些分叉很有可能只聚集于网络中的一小部分区域在，只在一小部分区域内传播，其代表了网络中<strong>部分区域内的共识</strong>。因此，将<strong>分叉区块纳入主链</strong>中是非常有价值的，能加快网络共识速度，提高网络的包容性。包容性协议首先利用GHOST协议选出主链，在遍历主链区块的多个分支父区块，如果分叉块中的交易和主链交易没有冲突，那么将分叉区块也纳入主链中。</p>
+<h4 id="spectre协议-和-dag">SPECTRE协议 和 DAG</h4>
+<p>SPECTRE用DAG（Directed Acyclic Graph，有向无环图）的概念代替了传统区块链中的主链。图是由顶点和连接顶点的边构成的一种数据结构，而有向图是指连接顶点的边是由有向的边组成的图。有向无环图DAG是指一个没有循环的、有限的有向图。下图是一个有向无环图的比较例子：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/jpeg/45785720/1725007283608-6e67b23f-6cdc-4708-8c93-d45316df9a3c.jpeg" alt></p>
+<p>在上例中，所有的节点都是由有向的边连接而成的，因此他们都是有向的。上图最左边的有向树（浅棕色）不可以被称作是一个有向无环图，因为在有向图中，一个节点可以由多个父节点；而在有向树中，所有节点有且只有一个父节点。上图中间的例子（蓝色）可以被称作是一个有向无环图，而最右边的例子（绿色），则违反了“无环”的定义，因为在这个例子（绿色）左下角的三个节点中相互之间存在相互指向的关系，因此他只是一个有向图。下图是一个更复杂的、区块中更常见到的有向无环图的概念表示：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/45785720/1725007021696-e3441a7e-3c64-49dc-aca4-814efc4b3446.png" alt></p>
+<p>上图是SPECTRE中DAG状区块链形状示意图，在SPECTRE中，一个区块可以有多个父区块，形成有向无环图，并在此基础上运行投票规则。假设区块 x 个区块 y 是一对包含冲突交易的区块，接下来的区块 z 将基于以下规则对冲突的区块进行投票：</p>
+<ol>
+<li>如果 z 是 x 的后代区块，如是 y 的后代区块，z 区块则投票给 x，表示为 x &lt; y</li>
+<li>如果 z 区块同时是 x 和 y 的后代区块，则根据本区快之前的有向无环图的区块投票结果确定。如果投票数量相等，则根据预定义的规则决定（例如区块哈希的字典顺序）。</li>
+<li>如果 z 既不是 x 的后代区块，也不是 y 的后代区块，则根据本区块之后的有向无环图区块投票结果确定，如果投票数量相等，则根据预定义的规则决定。</li>
+</ol>
+<h4 id="conflux">Conflux</h4>
+<p>Conflux也是基于有向无环图的共识算法之一，但是与SPECTRE不同的是，Conflux只基于有向无环图生成区块，在生成后，仍会将所有区块根据GHAST算法聚合成一条单独的主链。</p>
+<p>在Conflux中，矿工基于DAG结构并行生成区块，每个区块都可以引用多个父区块，这些引用关系构成了一个复杂的DAG结构。接着矿工根据GHAST（Greedy Heaviest Adaptive Sub-Tree）计算每个区块的的权重，然后遍历整个DAG，找到权重最大的子树，将整个子树聚合成一个主链区块（集合时剔除重复的交易）。聚合时会按照每个DAG块中的权重和时间顺序合并到到最终主链区块中。</p>
+<h3 id="确定性共识">确定性共识</h3>
+<p><strong>概率性共识在交易延迟与安全性的问题上存在天然的权衡问题</strong>，如果缩短出块时间，网络内就会出现大量分叉，降低网络的安全性。概率性共识是通过竞争的方式选出出块节点的，因此在每个阶段可能出现多个节点同时“中奖”，因此会出现分叉；而在确定性共识中，在同一高度只有一个确定的节点负责出块，因此不会存在分叉。但是确定性共识在出块前需要“就谁出块”达成共识，可能会消耗额外的时间。确定性共识不需要用户等待较长的时间确保交易的安全性，同时在同一高度仅有一个合法区块，因此不用再分叉区块上浪费计算资源。确定性共识通常需要和选举机制向结合，以确保每个区块只有唯一一个合法区块。最常用的确定性共识协议一般有实用拜占庭容错协议（practical Byzantine Fault Tolerant，pBFT），但是使用拜占庭协议并不能直接使用到区块链系统中来，因为区块链系统通常网络节点多、节点数量不固定，并不支持多轮广播。因此拜占庭协议需要采取相应改进才能应用到区块链系统中。这里将分别讨论许可链中的和非许可链中的拜占庭协议。</p>
+<h4 id="非许可链拜占庭容错协议">非许可链拜占庭容错协议</h4>
+<p>非许可链的拜占庭协议通常需要让多个节点构成委员会，然后在委员会中运行拜占庭容错协议，对新区块达成一致。组委会的成员通常随时间变化。</p>
+<h5 id="algorand">Algorand</h5>
+<p>Algorand所使用共识协议是一种结<strong>合了权益证明和拜占庭容错协议的协议</strong>，Algorand使用随机函数权益证明选出一组出块节点，接着每个节点发起区块投案（block proposal）并且广播，各个提案附有随机优先级，每个节点只保留优先级最高的区块。随后，节点再运行一轮拜占庭一致性协议，将自己收到的最高的优先级区块最为输入，对区块达成共识。拜占庭一致性协议的答题流程如下：</p>
+<p>拜占庭一致性协议分为两个阶段，分别是规约（reduction）和二进制一致性（binary agreement）。在规约阶段：</p>
+<ol>
+<li>节点广播自己本地优先级最高的区块的哈希值。</li>
+<li>接收到其他节点的哈希值后，每个节点统计每个区块的票数。</li>
+<li>认定最高的区块为优先级最高的区块。</li>
+<li>在没有得票数最高的区块时，使用二进制一致性协议达成一致。二进制一致性协议如下：
+<ol>
+<li>出块节点选举环节发起 区块提案的节点形成组委会,对规约阶段的区块投票。</li>
+<li>区块收到一定数量的票数后，就被认为是最终区块。</li>
+</ol>
+</li>
+</ol>
+<h5 id="byzcoin">Byzcoin</h5>
+<p>Byzcoin利用<strong>工作量证明机制选举出块节点</strong>、生成区块、并且广播。<strong>随后再利用使用拜占庭协议对新区块达成确定性共识</strong>，其流程如下：</p>
+<ol>
+<li>一段时间内的出块节点构成委员会（可以是一天，或者是一周）。</li>
+<li>每个成员手中的票数等于其再这个间隔内出块的数量。</li>
+<li>组委会成员验证区块无误后返回签名作为投票。</li>
+<li>出块节点要至少收集 2/3 的票数后，广播委员会内成员的签名。</li>
+<li>委员会收到广播信息后，再次返回签名，表示同意将该区块写入区块链中。</li>
+<li>出块节点再手机 2/3 的票数后，再次广播区块，并写入区块链中。</li>
+</ol>
+<h4 id="许可链拜占庭容错协议">许可链拜占庭容错协议</h4>
+<p>许可链因为身份固定，有身份检查，因此更适合拜占庭协议。</p>
+<h5 id="honeybadger">HoneyBadger</h5>
+<p>HoneyBadger中的节点的身份都是已知的且数量固定，并且节点两两之间通过认证过的可信的信道沟通。HoneyBadger没有任何出块节点选举机制，其中节点再每轮出块阶段开支，从本地交易池直接选择部分交易进行广播，并且HoneyBadger不广播交易本身，而是广播门限加密后的交易密文。</p>
+<h5 id="tendermint">Tendermint</h5>
+<p>Tendermint采用确定轮询机制决定出块节点，并且验证者需要提交一定数量的保证金后才能开始质押。被提出的区块需要得到 2/3 的票数才能成为确定区块。</p>
+<h2 id="详细共识协议研究">详细共识协议研究</h2>
+<h3 id="gasper">Gasper</h3>
+<p>Gasper协议最早应用于以太坊的信标链中，是以太坊转向权益证明后最早使用的共识协议之一，用于保证链的安全以及及时合并分支。Gasper是由两个协议组合而成，分别是GHOST协议以及Casper FFG协议。Gasper协议中使用的协议是在两个原有协议上的变体，分别是HLMD GHOST协议以及修改过后的Casper FFG协议。HLMD GHOST协议规定了<strong>分叉选择规则</strong>，其规定了验证在在遭遇分叉区块时，应该如何给分叉的区块投票；而Casper FFG协议是负责给特定区块标记为“最终”的协议，用于<strong>提供确定最终性</strong>，即在被标记为检查点的区块前的区块，都一定不可更改。Casper协议于共识算法相互独立，可以和任意 工作量证明 或者 权益证明算法相结合。</p>
+<h4 id="lmd-ghost">LMD GHOST</h4>
+<p>LMD GHOST协议是Lastest Message Driven Greediest Heaviest Observed SubTree（基于最新消息的最重贪婪可观察到的子树）的缩写。LMD GHOST协议乐观得认为最重得子树就是正确的子树，最重子树意味着有更多的人给正确的分叉投票，即LMD GHOST乐观的认为在每个节点的视图中，诚实的节点占大多数。GHOST协议的具体内容在上文中已经有具体阐述，即按照<strong>每个分叉后所有区块权重的多少来计算分叉的“重量”</strong>，更重的子树会被选作主链。</p>
+<p><img src="https://i.stack.imgur.com/d9uR6.png" alt><img src="https://i.stack.imgur.com/d9uR6.png" alt><img src="https://cdn.nlark.com/yuque/0/2024/png/45785720/1725358270985-07291656-28c6-4ef9-9598-27d578530ca3.png" alt></p>
+<p>LMD GHOST则在GHOST协议的基础上，修改了统计“重量”的规则。在LMD GHOST中，只统计最新一轮的投票结果作为分支的“重量”。例如在上图中，图中的圆圈代表了最新一轮的投票结果，那么从左到右：</p>
+<ul>
+<li>分支【5，3】的重量是 3；（即最新一轮有三个人给这条分支投票）</li>
+<li>分支【5，1，1】的重量是1；</li>
+<li>分支【5，1】的重量是1；</li>
+<li>分支【3，3，1】的重量是1；</li>
+<li>分支【3，3，2，2，1】的重量是2；</li>
+</ul>
+<p>这样，我们应该选择分支【5，3】作为我们的主链，即根据最新投票结果我们应该选择图中蓝紫色的链为主链。</p>
+<h4 id="casper">Casper</h4>
+<p>Casper是用于提供<strong>确定最终性</strong>的工具。Casper 将将区块用区块高度标记，区块的高度等于其距离创世区块的区块数量，例如创世区块后的第一个区块的高度是1，创世区块后的第二个区块高度是2……以此类推。同时Casper协议中还存在检查点机制，检查点是特殊高度的区块，例如我们规定高度为100，200，300……的区块为检查点，位于检查点前的区块都不可再更改（以此提供确定最终性）。检查点也有自己的高度，按照上例，高度在100的检查点的检查点高度为1，高度在200的检查点的检查点高度为2……以此类推。Casper协议把每个出块间隔叫做一个slot，在理想状态下每个slot产生一个新的区块；每隔100个slot算作一个epoch——这个数字是跟上面检查点对应的，理想情况下每个epoch会产生一个检查点。同时由于以太坊中使用的Casper协议是于权益证明机制相结合的，因此Casper协议中不管是出块还是移动检查点，都是通过权益加权后的投票产生的。</p>
+<p>上面所有例子中一个检查点的高度是100的倍数，而在Gasper协议中，以太坊做出了一些修改，将这个数字改成了64，即一个epoch因该有64个slot。在每个epoch中，网络内的验证者会伪随机算法被平均分成64个委员会，每个委员会对应了一个slot，负责在这个epoch中出一个区块。每个委员会内的成员数量是大致相等的，并且每个委员会至少要有128个验证者以及一个 Proposer，Proposer负责产生新的区块，而其他验证者负责验证区块，做出投票。</p>
+<p>Casper协议中规定验证者需要按照一定规则投票，如果违反了投票规则，其保证金需要被罚没。这些规则主要是防止验证者发起无权益攻击或者长程攻击，其规则如下：</p>
+<ol>
+<li>一个验证者不能同时给两个高度相同的区块投票。</li>
+<li>一个验证者不能在两条支链上给投出存在包含关系的票，例如验证者甲在两条子链上分别给 101 和 110 区块投票，但是又在另一条子链上给107、108区块投票，这是不可以的。</li>
+</ol>
+<p>在每个slot中，其对应委员会中的一个验证者（通常是整个委员会第一个验证者，也是上述Proposer）需要“提出一个新区块”，在了理想的情况下，每个slot会产生一个新区块，而每个epoch产生一个检查点，这个检查点通常是每个epoch的最后一个区块。如果有一个slot没有新区块产生，那么这个slot的区块就是上一个slot的区块；而同样如果每个epoch也没有新区块产生，那么每个epoch的检查点也是上一个区块的检查点。Proposer的“提出”消息中包括：</p>
+<ul>
+<li>当前slot序号</li>
+<li>指向父区块的哈希指针</li>
+<li>新的投票，这些投票没有在父区块中出现过</li>
+<li>其他数据，例如跟交易相关的数据</li>
+</ul>
+<p>接着这个委员会内的其他验证者需要根据HLMD GHOST协议给他们认为的区块头投票。HLMD GHOST协议比LMD GHOST协议多一个H，这个H代表 Head，这意味着在HLMD GHOST中，在计算分支重量的时候，有且仅考虑拥有<strong>最新链头信息的分支</strong>。验证者投票的信息包括：</p>
+<ul>
+<li>当前slot序号</li>
+<li>投票的区块</li>
+<li>以及对前两个检查点的投票。例如假设上一个检查点是a，上一个检查点的上一个检查点是b，那么投票的内容为“b检查点后面的检查点是a”。如果在整个epoch的最后，网络内所有验证者有超过 2/3 的验证者投出了这样的票，那个b检查点就从justified变为finalised，此时b检查点前所有区块都不可再改变；同时a检查点变为justified，等待下一个epoch内的验证者将他finalized。</li>
+</ul>
+<p>网络中所有投票都是以广播的形式传播出去的，如果一个验证者只收到对某个区块的投票而没有收到任何区块，则忽略这个投票。网络中的验证者和Proposer都属于虚拟挖矿者，在产出一个合法区块并且被大众接受后，这些人都可以获得挖矿奖励。验证者获得的奖励少，但是如果做出不诚实的验证就会收到惩罚；而Proposer轮到他提出区块了，但是他在一定时间内没有提出一个合法的区块，那么他也要收到惩罚。</p>
+<p>网络内的所有区块都是可验证的，后来的人只需要跟据伪随机算法找到当初验证这些区块的人，再比对其签名，就能验证某个区块的合法性。</p>
+<h3 id="实用拜占庭容错协议-pbft">实用拜占庭容错协议（pBFT）</h3>
+<p>实用拜占庭协议（practical Byzantine Fault Tolerance, pBFT）是最早践行拜占庭协议的的协议之一，用于保证分布式系统在恶意节点的干扰下，仍能达成一致。实用拜占庭协议最早并不是为区块链系统的状态复制而设计的，其最早用于分布式系统对外提供BFT服务，主要用于响应客户端请求。在这种分布式系统中，客户端负责发送状态转换的请求，而分布式系统需要根据请求，达成一致，而后回复客户端已经完成状态转换的证明。</p>
+<p>在实用拜占庭协议中，我们假设节点消息是可以通过数字签名或者消息验证码MAC等密码学手段保证其来源可信的。同时我们假设网络是至少为半同步网络，即网络中的消息有可能会有很大延迟，但是消息一定会到达。我们还假设网络中恶意的节点不多于总节点数的 33%。在拜占庭协议中，我们通常用 n = 3f + 1来表示网络中所有验证者的人数，用 2f + 1 来表示网络中诚实节点的人数，f 表示网络中恶意节点的数量。网络中的恶意节点可能通过冒充其他节点、或者故意发送错误消息来破坏网络，我们把破坏网络的行为叫做拜占庭故障，发起恶意攻击的节点叫做拜占庭故障节点，也简述为拜占庭节点。</p>
+<h4 id="法定人系统-和-证书">法定人系统 和 证书</h4>
+<p>在分布式系统中，我们引入法定人数系统（Quorum）的概念。Quorum是网络中所有节点的一个子集（即网络中的一部分节点的集合），并且其满足：</p>
+<ul>
+<li>相交性：任意两个Quorum的交集至少包含一个正确节点。</li>
+<li>可用性：至少有一个正确节点构成的Quarum</li>
+</ul>
+<p>在拜占庭协议中，我们假设所有节点中诚实的节点有2f+1个，那么在拜占庭协议中，一个Quorum的节点数量至少为 2f + 1 个。在拜占庭协议中，每个节点在处理完协议后需要往网络内发送一条回复，表明已经处理了消息，这些消息收集起来便可以作为协议的一个Quorum证书 （QC， Quorum Certificate）。如果协议至少被f+１个节点处理了（即至少有一个诚实节点处理了对某个区块的认证），那么我们称这个协议拥有一个<strong>弱证书</strong>；如果协议至少被２f+１个节点处理过了（即至少有f+１个诚实节点处理过对某个区块的验证了），我们称这个协议拥有一个<strong>强证书</strong>。</p>
+<h4 id="协议流程">协议流程</h4>
+<p>实用拜占庭协议是一个<strong>主－从架构（Primary-Backup）的协议</strong>，每一轮只有一个主节点发号施令，而其他节点都是从节点，只负责执行命令。这个概念类似于在区块链中，只有一个节点负责产生区块，而其他节点都只负责验证区块。实用拜占庭协议中还有视图（view）的概念，这个概念类似于区块链中，“每一轮产生区块”中的轮数。在pBFT中，主节点是根据确定视图轮换的，例如网络中一共有n个节点，那么在视图v中，第 $ v\ mod\ n $个节点为负责出块的主节点。以下是pBFT协议的大致流程图：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/45785720/1725515929373-9de70eea-6124-4478-ab02-b5113cb47c3f.png" alt></p>
+<p>pBFT大致分为五个阶段，分别是 Request （请求）阶段、Pre-prepare（预准备）阶段、Prepare（准备）阶段、Commit（提交）阶段，以及最后的Reply（回复）阶段。上图中C代表了当前视图的客户端，而0、1、2、3号节点代表了参与状态机复制的复制者。其协议流程大致如下：</p>
+<ol>
+<li>在 <strong>Request</strong> 阶段，客户端向主节点发出状态变换请求，请求内包含</li>
+</ol>
+<p><hexopostrendercodeblock><figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">{</span> </span><br><span class="line">  Request（表明这是一条request阶段的消息，以下同理），</span><br><span class="line">  状态变换请求，</span><br><span class="line">  时间戳，</span><br><span class="line">  客户端ID（即自己ID），</span><br><span class="line">  客户端签名（自己签名）</span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure></hexopostrendercodeblock></p>
+<ol start="2">
+<li>在<strong>Pre-prepare</strong>阶段，主节点（在上图中是 0 号节点）为客户请求分配一个序号 n（这个序列号类似于区块链中的高度，是由旧到新，由低到高递增的），然后组播给所有从节点一条消息，并且附加到消息日志，消息形式为</li>
+</ol>
+<p><hexopostrendercodeblock><figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">{</span> </span><br><span class="line">  Pre-prepare，</span><br><span class="line">  当前视图序号，</span><br><span class="line">  客户请求序号n，</span><br><span class="line">  客户消息摘要，</span><br><span class="line">  客户消息</span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure></hexopostrendercodeblock></p>
+<ol start="3">
+<li>从节点收到主节点消息后，进行以下检查，通过后接受该消息：
+<ul>
+<li>签名，摘要 是否正确</li>
+<li>当前是否在同一视图</li>
+<li>从节点在当前视图没有接受过序列号为n且摘要不同的prepare消息</li>
+<li>序列号n 在高低水位之间 (h &lt; n &lt;= H，这个下面会讲)</li>
+</ul>
+</li>
+<li>如果从节点检查通过后，就会组播给其他从节点一条<strong>prepare</strong>消息，prepare消息包括</li>
+</ol>
+<p><hexopostrendercodeblock><figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  Prepare，</span><br><span class="line">  当前视图序号，</span><br><span class="line">  客户请求序号，</span><br><span class="line">  客户消息摘要，</span><br><span class="line">  自己ID，</span><br><span class="line">  自己的签名</span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure></hexopostrendercodeblock></p>
+<ol start="5">
+<li>从节点在进入<strong>commit</strong>阶段之前，需要检查是否网络中至少有2f个其他节点也正在准备commit，即检查是否收到了2f个两两相应的pre-prepare和prepare消息。</li>
+<li>接着所有从节点进入commit阶段，其互相组播一条commit消息，其消息为</li>
+</ol>
+<p><hexopostrendercodeblock><figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  Commit，</span><br><span class="line">  当前视图序号，</span><br><span class="line">  请求序号，</span><br><span class="line">  客户消息摘要 D(m)，</span><br><span class="line">  自己ID，</span><br><span class="line">  自己签名</span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure></hexopostrendercodeblock></p>
+<p>如果某一个节点接收到了至少2f个commit消息，则执行请求中的操作，并给请求客户端返回 reply 消息。</p>
+<ol start="7">
+<li>在** Reply **阶段，网络中所有完成消息的节点会返回消息</li>
+</ol>
+<p><hexopostrendercodeblock><figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  Reply，</span><br><span class="line">  当前视图号，</span><br><span class="line">  时间戳，</span><br><span class="line">  客户端ID，</span><br><span class="line">  回复人ID，</span><br><span class="line">  以及状态变换的结果，</span><br><span class="line">  回复人签名（即自己的签名）</span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure></hexopostrendercodeblock></p>
+<h4 id="检查点">检查点</h4>
+<p>网络中的所有消息都会被保存在节点的<strong>消息日志</strong>中，如果一个节点知道某个请求至少被f+1个诚实节点执行，且能向其他节点提供执行证明后，才可以将其相关消息删除。由于生成证明的开销较大，可以通过周期性生成证明来降低生成证明的总体开销，我们把周期生成的证明叫做检查点——这与Gasper协议中的检查点是类似的，Gasper协议就是每隔100个区块生成一个检查点。同时所有节点都要在本地维护一个稳定的检查点以及多个不稳定的检查点，稳定检查前所有请求的相关消息都可以从本地消息日志中删除，实现<strong>垃圾回收</strong>。当节点 i 生成一个检查点的时候，他需要组播一条消息 ：</p>
+<p><hexopostrendercodeblock><figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">{</span> </span><br><span class="line">  Checkpoint，</span><br><span class="line">  检查点前最后一条消息的序列号n，</span><br><span class="line">  状态摘要（类似于以太坊中的状态树哈希值），</span><br><span class="line">  自己的ID，</span><br><span class="line">  自己的签名</span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure></hexopostrendercodeblock></p>
+<p>当一个节点收到2f+1个关于相同检查点的消息后，就可以生成一个Quorum证书，然后把这个不稳定的检查点设置为稳定的检查点了。上面提到的高低水位，其中的低水位就是指最新稳定检查点的高度；而高水位，则设定为低水位后k个高度，用于保证消息高度不会太离谱。</p>
+<h4 id="超时机制">超时机制</h4>
+<p>上述协议可以保证 从节点中及时出现故障节点或者恶意节点，只要数量不超过总节点数量的 33%，整个系统能正常运行。而一旦主节点故障，整个系统将停滞不前，因此我们需要<strong>超时机制以防主节点故障</strong>，即当主节点在某个视图开始后的规定时间内没有发出任何Pre-prepare请求，整个系统将自动进入下一个视图，轮换到另一个主节点。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/45785720/1725523491843-3b11e6d4-44ad-4a75-8275-f14cd58671ce.png" alt></p>
+<p>切换到下一个视图的请求是view-change消息，当一个节点率先发现主节点超时后，会组播一条view-change消息给网络中的其他节点，该消息形式为</p>
+<p><hexopostrendercodeblock><figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  View-change，</span><br><span class="line">  下一轮视图序号，</span><br><span class="line">  最新稳定检查点序号，</span><br><span class="line">  最新稳定检查点证书，</span><br><span class="line">  证书内容</span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure></hexopostrendercodeblock></p>
+<p>当下一个视图的主节点收到2f+1条视图转换的消息时，会向网络中组播下一个视图的pre-prepare消息。</p>
+<h3 id="hotstuff">HotStuff</h3>
+<p>Hotstuff协议是对pBFT协议的改进，在pBFT重达成共识需要节点之间互相 广播 / 组播 消息，通信的复杂度是$ O(n^2) <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>；而在</mtext><mi>H</mi><mi>o</mi><mi>t</mi><mi>s</mi><mi>t</mi><mi>u</mi><mi>f</mi><mi>f</mi><mtext>中，只有主节点需要广播</mtext><mi mathvariant="normal">/</mi><mtext>组播，而其他的节点（子节点）只需要跟主节点通信就能完成共识，因此其通信复杂度是</mtext></mrow><annotation encoding="application/x-tex">；而在Hotstuff中，只有主节点需要 广播 / 组播，而其他的节点（子节点）只需要跟主节点通信就能完成共识，因此其通信复杂度是</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord cjk_fallback">；而在</span><span class="mord mathnormal">Ho</span><span class="mord mathnormal">t</span><span class="mord mathnormal">s</span><span class="mord mathnormal">t</span><span class="mord mathnormal">u</span><span class="mord mathnormal" style="margin-right:0.10764em;">ff</span><span class="mord cjk_fallback">中，只有主节点需要广播</span><span class="mord">/</span><span class="mord cjk_fallback">组播，而其他的节点（子节点）只需要跟主节点通信就能完成共识，因此其通信复杂度是</span></span></span></span> O(n) $。因此Hotstuff相比于pBFT是一个更高效的共识协议，同时Hotstuff还支持流水线式的共识，能大大加快共识速度。</p>
+<p>Hotstuff 中共识的流程大致如下图所示（可以跟上面pBFT的图相比较，明显Hotstuff比较简洁）：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/45785720/1725593196502-04dfbda8-1fd7-4870-b689-5fb55864942d.png" alt></p>
+<p>Hotstuff 每个视图分为4个阶段，分别是Prepare阶段、Precommit阶段、Commit阶段、以及Decide阶段。同时4个阶段，每两个阶段之间会生成一个法定人数证书（下称QC，Quorum Certificate），分别是上图中的PrepareQC（Prepare阶段产生的QC，下同），PrecommitQC，以及CommitQC。每个视图以成功提交一个提案或者超时而进入下一个视图。QC是网络中有超过66%节点认可的证明，其一般包括四个字段：</p>
+<ul>
+<li>QC 的 类型，可能为 Prepare / Pre-commit / Commit</li>
+<li>当前视图序号（即当前是第几轮投票）</li>
+<li>Prepare阶段要提议的区块</li>
+<li>对这条消息的<strong>门限签名</strong>，在Hotstuff中，门限签名代表了网络内有超过 66% 的节点都认可了这条消息。</li>
+</ul>
+<p>&gt; 门限签名（Threshold Signature Scheme ，TSS）是一种加密数字签名协议。在一组签名者中间，一部分签名者可以代替整个组对消息进行签名。这能极大的提升数字签名系统的安全性和隐私性。<br>
+&gt;<br>
+&gt; 门限签名系统中，首先会生成一个私钥，但是这个私钥不会发送给任何签名者。每个签名者只能拿到私钥的一部分。达到一定数量的签名者，能够代替整个签名组，对某条消息进行签名。但是一小部分签名者是无法进行签名的。<br>
+&gt;</p>
+<p>上图中的箭头代表着广播的消息，消息大多都包括：</p>
+<ul>
+<li>消息的类型，分别为 Prepare / Pre-commit / Commit / Decide / New-view</li>
+<li>当前视图序号 viewNumber</li>
+<li>Prepare阶段特有的 提议的区块</li>
+<li>可选字段 justify，主节点发送的消息中为QC，从节点回复的消息中则为其本地最新的PrepareQC</li>
+</ul>
+<h4 id="共识协议内容">共识协议内容</h4>
+<p>其协议步骤可以大致描述如下：</p>
+<ol>
+<li>在 Prepare 阶段，<strong>主节点</strong>要收集网络中至少 2f + 1 个从答应上一个view切换到这一个view的New-view消息，打包新的区块，并且将其作为这个view的提案广播出去。即消息内包含内容为：</li>
+</ol>
+<p><hexopostrendercodeblock><figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  Prepare<span class="punctuation">,</span></span><br><span class="line">  当前view序号<span class="punctuation">,</span></span><br><span class="line">  提案的区块<span class="punctuation">,</span></span><br><span class="line">  <span class="number">2</span>f+<span class="number">1</span>个New-view消息中能找到的最大的之前的prepareQC（即能找到的最长合法链），并且将其中的区块当作当前要出区块的父区块</span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure></hexopostrendercodeblock></p>
+<ol start="2">
+<li>还在Prepare阶段，<strong>从节点</strong>收到当前 view 主节点的提案，检查提案区块的合法性。如果合法，则返回对这个提案的投票：</li>
+</ol>
+<p><hexopostrendercodeblock><figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  提案信息（就是从节点刚刚接受到的消息）<span class="punctuation">,</span></span><br><span class="line">  对提案信息的投票，本质上是门限签名中的Partial Signature</span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure></hexopostrendercodeblock></p>
+<ol start="3">
+<li>主节点接收到2f+1个投票，将这些投票合成一个PrepareQC，然后广播一条Pre-commit消息：</li>
+</ol>
+<p><hexopostrendercodeblock><figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  Precommit<span class="punctuation">,</span></span><br><span class="line">  当前视图序号，</span><br><span class="line">  空，</span><br><span class="line">  刚刚合成的PrepareQC</span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure></hexopostrendercodeblock></p>
+<ol start="4">
+<li>网络中其他从节点对这个节点进行投票，依然是回复刚刚收到的消息以及门限签名。</li>
+<li>同上，主节点接受到2f+1个投票，将这些投票合成一个PrecommitQC，然后广播：</li>
+</ol>
+<p><hexopostrendercodeblock><figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  commit，</span><br><span class="line">  当前视图序号，</span><br><span class="line">  空，</span><br><span class="line">  刚刚合成的PrecommitQC</span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure></hexopostrendercodeblock></p>
+<ol start="6">
+<li>其他从节点投票，回复刚刚收到的commit消息以及对该消息的门限签名。</li>
+<li>主节点接受2f+1 个投票，合成一个CommitQC，和广播一条Decide消息m</li>
+<li>从节点收到Decide消息，返回进入下一个view的消息，进入下一个阶段。消息包含：</li>
+</ol>
+<p><hexopostrendercodeblock><figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  New-view<span class="punctuation">,</span></span><br><span class="line">  当前视图<span class="punctuation">,</span></span><br><span class="line">  空<span class="punctuation">,</span></span><br><span class="line">  PrepareQC</span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure></hexopostrendercodeblock></p>
+<h4 id="链式hotstuff">链式Hotstuff</h4>
+<p>Hotstuff每个共识视图分为四个阶段，并且四个阶段高度重复，因此我们可以引入链式Hotstuff，流水线式的进行共识协议。例如在第一个视图进行完Prepare阶段后，就可以开始下一个视图的Prepare阶段了，这时下一个视图的Prepare阶段和第一个视图的Precommit阶段是同时进行的。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/45785720/1725606763668-80001dae-909e-4cab-b326-43b8c303149d.png" alt></p>
+<p>同时我们还可以将多个证书合并，例如第三个View的Precommit阶段产生的证书既可以当作的第三个View的Precommit证书，又可以当作第二个view的Commit证书，又可以当作第一个阶段的Decide证书。由于在链式Hotstuff里面，一个证书有多个作用，因此我们把Hotstuff里面的证书统一成为GenericQC。链式Hotstuff中每一轮广播都能确定一个区块以及产生一个新区块，相比较 pBFT 三轮广播才能出一个新区块而言，效率大大提高了。</p>
+<h3 id="narwhal-tusk">Narwhal + Tusk</h3>
+<p>Narwhal协议是一种内存池协议，其利用BFT协议与DAG，将<strong>交易的可靠传播任务于交易排序任务分开</strong>，实现了高性能的拜占庭容错共识。Narwhal协议不仅能大幅度提高网络共识速度，还能够容忍异步网络，即使网络出现故障，Narwhal协议也能高效运行。Narwhal协议还设计了完整的垃圾回收机制与水平扩展机制，提高总体性能表现与可扩展性。</p>
+<h4 id="narwhal内存池协议">Narwhal内存池协议</h4>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/45785720/1725615175837-f11ba93a-fc0a-4302-8612-2b92caaaeec7.png" alt></p>
+<p>Narwhal协议以轮（Round）为单位进行共识，这里“轮”的概念和前面的pBFT协议中的视图（View）的概念是类似的。在Narwhal协议中，网络中的每个验证者都可以都可以创造一个属于自己的创世区块，创建创世区块的证书是事先规定的。从创世区块开始，一个区块至少要引用至少2f+1个前一轮的的区块才能生成一个新的区块。生成的区块的区块头被广播/组播给网络中其他的验证者，只有当一个区块收集到至少2f+1个数量的投票后才能生成证书并且广播证书，这里证书的概念和pBFT中的法定人数证书（QC，Quorum Certificate） 是一个概念。</p>
+<p>Narwhal协议的运行过程如下：</p>
+<ol>
+<li>每一轮的区块通过引用上一轮的（至少2f+1个）证书生成一个合法的区块，这个区块包括：</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">这个区块属于第几轮</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">这个区块是由谁生成的</td>
+</tr>
+<tr>
+<td style="text-align:center">引用的证书（至少2f+1个）</td>
+</tr>
+<tr>
+<td style="text-align:center">所有交易</td>
+</tr>
+<tr>
+<td style="text-align:center">区块生成验证者的签名</td>
+</tr>
+</tbody>
+</table>
+<ol start="2">
+<li>区块广播新生成的区块的区块头，并且收集投票，在收集到至少2f+1个投票后，可以生成一个证书，证书中的内容如下：</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">证书的轮数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">是由那个验证者生成的</td>
+</tr>
+<tr>
+<td style="text-align:center">至少2f个有效其他验证者的签名</td>
+</tr>
+</tbody>
+</table>
+<p>以上两个步骤构成了Narwhal协议中完整的一轮，一个区块只有满足以下条件，才是一个合法的区块：</p>
+<ul>
+<li>区块包含出块节点的有效签名</li>
+<li>区块轮数和本节点区块轮数相同</li>
+<li>区块至少包含上一轮2f+1个块的证书（如果是创世区块，则另有规则）</li>
+<li>之前没有收到同轮同验证者的区块</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/jpeg/45785720/1725801876311-981ca42d-bf3a-468e-bee8-7ef045f3e230.jpeg" alt></p>
+<p>Narwhal内存池还采用Primary-Worker架构以实现方便的纵向扩展。Narwhal内存池由一组Worker和一个Primary组成：<font style="color:rgb(0, 0, 0);">Worker打包交易批次，worker之间对交易批次进行验证 、签名，出批次的worker收集签名并打包成证书；Primary打包</font><strong>批次摘要</strong><font style="color:rgb(0, 0, 0);">出块，Primary之间对区块验证、 签名，出块的Primary收集签名并打包成证书。</font>每个worker根据均衡负载机制接受从其他节点发来的需要打包的交易，Worker将交易打包成批次，求取每个批次交易的哈希值，将批次交易的哈希值交给Primary，然后Primary在进行出块的活动。对于不同验证者节点上的Worker，Worker1只会把消息发送到其他验证者节点上的Worker1，同理Worker2也只会把消息发送到其他验证者节点上的Worker2。</p>
+<h4 id="tusk">Tusk</h4>
+<p>Tusk协议通过确定的DAG算法，决定哪些批次的交易可以被打包上链 。Tusk 会将该 Wave 中被确认的 batch 组合起来，生成一个新的区块，并将其添加到区块链上。  Tusk协议能保证网络中不同的验证者，通过相同的算法，总能得到相同的打包结果。这就避免了需要选举出单个验证者打包交易的步骤，实现了<strong>交易的可靠传播任务和交易排序任务</strong>的分离</p>
+<p>在Tusk协议中，将出块的时间分为“波”（wave），一个完整的Wave包含了Narwhal协议中3个Round，其中：</p>
+<ol>
+<li>在第一个Round，生成区块并且广播他们</li>
+<li>在第二个Round，Validator通过引用之前一轮产出的Block的形式进行投票</li>
+<li>在第三个Round，通过随机算法决定第一轮中的领导提案</li>
+<li>根据提交规则，决定是否提交第一轮的领导提案</li>
+<li>最后垃圾回收</li>
+</ol>
+</body></html></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://Nie-Tianyi.github.io">nty</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://nie-tianyi.github.io/2025/09/14/%E5%85%B1%E8%AF%86%E5%8D%8F%E8%AE%AE/">https://nie-tianyi.github.io/2025/09/14/%E5%85%B1%E8%AF%86%E5%8D%8F%E8%AE%AE/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://Nie-Tianyi.github.io" target="_blank">nty的技术博客</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/images/avatar.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/09/14/%E4%BB%A5%E5%A4%AA%E5%9D%8A/" title=""><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2"></div></div><div class="info-2"><div class="info-item-1">以太坊诞生于2014年。2014年，19岁的Vitalik Buterin率先在一片文章中提出针对比特币的改进以及对区块链未来的构想。这篇文章中提出可以针对比特币的脚本验证中所使用的栈虚拟机做出改进，以建造一个图灵完备的虚拟机。这样，区块链中的虚拟机将不再局限于脚本的验证，而是可以执行任何计算机能完成的程序。这样的区块链可以作为其他区块链应用的载体，还可以支持一条链上不同区块链应用之间的互相操作。这个想法得到了Gavin Wood的支持，并且在同年2014年上半年，Gavin Wood发表了一份详细的关于新区块链的技术规范，并且在2014年下半年，Gavin...</div></div></div></a><a class="pagination-related" href="/2025/09/14/Python%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95%E6%8B%BE%E9%81%97/" title=""><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2"></div></div><div class="info-2"><div class="info-item-1">## Python装饰器 ### 装饰函数  Python装饰器类似与Rust的过程宏（Procedural Macro），用于**动态生成代码**。其基础语法如下： 1234567891011121314151617def decorator_function(original_function):    def wrapper(*args, **kwargs):        # 这里是在调用原始函数前添加的新功能        before_call_code()                result = original_function(*args, **kwargs)                # 这里是在调用原始函数后添加的新功能        after_call_code()                return result    return wrapper# 使用装饰器@decorator_functiondef target_function(arg1, arg2):    pass  #...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">nty</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Nie-Tianyi"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%80%A7%E8%B4%A8"><span class="toc-number">1.</span> <span class="toc-text">网络性质</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-number">2.</span> <span class="toc-text">链的分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A0%94%E7%A9%B6%E6%96%B9%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">研究方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BA%E5%9D%97%E8%8A%82%E7%82%B9%E9%80%89%E4%B8%BE"><span class="toc-number"></span> <span class="toc-text">出块节点选举</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E9%87%8F%E8%AF%81%E6%98%8E"><span class="toc-number">1.</span> <span class="toc-text">工作量证明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E9%87%8F%E8%AF%81%E6%98%8E%E7%BC%BA%E7%82%B9%E4%BB%A5%E5%8F%8A%E6%94%B9%E8%BF%9B"><span class="toc-number">2.</span> <span class="toc-text">工作量证明缺点以及改进</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AE%97%E5%8A%9B%E4%B8%AD%E5%BF%83%E5%8C%96"><span class="toc-number">2.1.</span> <span class="toc-text">算力中心化</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%AF%86%E9%9B%86%E5%9E%8B%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0"><span class="toc-number">2.1.1.</span> <span class="toc-text">内存密集型哈希函数</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E6%B5%AA%E8%B4%B9"><span class="toc-number">2.2.</span> <span class="toc-text">资源浪费</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9C%89%E7%94%A8%E5%B7%A5%E4%BD%9C%E9%87%8F%E8%AF%81%E6%98%8E"><span class="toc-number">2.2.1.</span> <span class="toc-text">有用工作量证明</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E8%AF%81%E6%98%8E"><span class="toc-number">2.2.2.</span> <span class="toc-text">其他证明</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%87%BA%E5%9D%97%E6%80%A7%E8%83%BD%E5%B7%AE"><span class="toc-number">2.3.</span> <span class="toc-text">出块性能差</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E5%87%BA%E5%9D%97%E8%8A%82%E7%82%B9%E6%9C%BA%E5%88%B6"><span class="toc-number">2.3.1.</span> <span class="toc-text">修改出块节点机制</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%94%B9%E8%BF%9B%E6%96%B9%E6%A1%88%E7%9A%84%E9%99%90%E5%88%B6"><span class="toc-number">2.4.</span> <span class="toc-text">改进方案的限制</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%83%E7%9B%8A%E8%AF%81%E6%98%8E"><span class="toc-number">3.</span> <span class="toc-text">权益证明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E9%9A%8F%E6%9C%BA%E5%87%BD%E6%95%B0%E7%9A%84%E6%9D%83%E7%9B%8A%E8%AF%81%E6%98%8E"><span class="toc-number">4.</span> <span class="toc-text">基于随机函数的权益证明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%83%E7%9B%8A%E8%AF%81%E6%98%8E%E7%9A%84%E7%BC%BA%E7%82%B9%E4%BB%A5%E5%8F%8A%E6%94%B9%E8%BF%9B"><span class="toc-number">5.</span> <span class="toc-text">权益证明的缺点以及改进</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B2%89%E7%A2%8E%E6%94%BB%E5%87%BB"><span class="toc-number">5.1.</span> <span class="toc-text">粉碎攻击</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A0%E6%9D%83%E7%9B%8A%E6%94%BB%E5%87%BB"><span class="toc-number">5.2.</span> <span class="toc-text">无权益攻击</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%95%BF%E7%A8%8B%E6%94%BB%E5%87%BB"><span class="toc-number">5.3.</span> <span class="toc-text">长程攻击</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A7%94%E6%89%98%E6%9D%83%E7%9B%8A%E8%AF%81%E6%98%8E"><span class="toc-number">6.</span> <span class="toc-text">委托权益证明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E9%93%BE%E5%85%B1%E8%AF%86"><span class="toc-number"></span> <span class="toc-text">主链共识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A6%82%E7%8E%87%E6%80%A7%E5%85%B1%E8%AF%86"><span class="toc-number">1.</span> <span class="toc-text">概率性共识</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%80%E9%95%BF%E9%93%BE%E6%B3%95%E5%88%99"><span class="toc-number">1.1.</span> <span class="toc-text">最长链法则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ghost%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.2.</span> <span class="toc-text">GHOST协议</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8C%85%E5%AE%B9%E6%80%A7%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.3.</span> <span class="toc-text">包容性协议</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#spectre%E5%8D%8F%E8%AE%AE-%E5%92%8C-dag"><span class="toc-number">1.4.</span> <span class="toc-text">SPECTRE协议 和 DAG</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#conflux"><span class="toc-number">1.5.</span> <span class="toc-text">Conflux</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A1%AE%E5%AE%9A%E6%80%A7%E5%85%B1%E8%AF%86"><span class="toc-number">2.</span> <span class="toc-text">确定性共识</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9D%9E%E8%AE%B8%E5%8F%AF%E9%93%BE%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%AE%B9%E9%94%99%E5%8D%8F%E8%AE%AE"><span class="toc-number">2.1.</span> <span class="toc-text">非许可链拜占庭容错协议</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#algorand"><span class="toc-number">2.1.1.</span> <span class="toc-text">Algorand</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#byzcoin"><span class="toc-number">2.1.2.</span> <span class="toc-text">Byzcoin</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%B8%E5%8F%AF%E9%93%BE%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%AE%B9%E9%94%99%E5%8D%8F%E8%AE%AE"><span class="toc-number">2.2.</span> <span class="toc-text">许可链拜占庭容错协议</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#honeybadger"><span class="toc-number">2.2.1.</span> <span class="toc-text">HoneyBadger</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#tendermint"><span class="toc-number">2.2.2.</span> <span class="toc-text">Tendermint</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%A6%E7%BB%86%E5%85%B1%E8%AF%86%E5%8D%8F%E8%AE%AE%E7%A0%94%E7%A9%B6"><span class="toc-number"></span> <span class="toc-text">详细共识协议研究</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#gasper"><span class="toc-number">1.</span> <span class="toc-text">Gasper</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#lmd-ghost"><span class="toc-number">1.1.</span> <span class="toc-text">LMD GHOST</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#casper"><span class="toc-number">1.2.</span> <span class="toc-text">Casper</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%94%A8%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%AE%B9%E9%94%99%E5%8D%8F%E8%AE%AE-pbft"><span class="toc-number">2.</span> <span class="toc-text">实用拜占庭容错协议（pBFT）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%95%E5%AE%9A%E4%BA%BA%E7%B3%BB%E7%BB%9F-%E5%92%8C-%E8%AF%81%E4%B9%A6"><span class="toc-number">2.1.</span> <span class="toc-text">法定人系统 和 证书</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%8F%E8%AE%AE%E6%B5%81%E7%A8%8B"><span class="toc-number">2.2.</span> <span class="toc-text">协议流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5%E7%82%B9"><span class="toc-number">2.3.</span> <span class="toc-text">检查点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B6%85%E6%97%B6%E6%9C%BA%E5%88%B6"><span class="toc-number">2.4.</span> <span class="toc-text">超时机制</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hotstuff"><span class="toc-number">3.</span> <span class="toc-text">HotStuff</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B1%E8%AF%86%E5%8D%8F%E8%AE%AE%E5%86%85%E5%AE%B9"><span class="toc-number">3.1.</span> <span class="toc-text">共识协议内容</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%93%BE%E5%BC%8Fhotstuff"><span class="toc-number">3.2.</span> <span class="toc-text">链式Hotstuff</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#narwhal-tusk"><span class="toc-number">4.</span> <span class="toc-text">Narwhal + Tusk</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#narwhal%E5%86%85%E5%AD%98%E6%B1%A0%E5%8D%8F%E8%AE%AE"><span class="toc-number">4.1.</span> <span class="toc-text">Narwhal内存池协议</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#tusk"><span class="toc-number">4.2.</span> <span class="toc-text">Tusk</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/14/Axum/" title="无标题">无标题</a><time datetime="2025-09-14T06:40:12.091Z" title="发表于 2025-09-14 14:40:12">2025-09-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/14/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" title="无标题">无标题</a><time datetime="2025-09-14T06:39:55.736Z" title="发表于 2025-09-14 14:39:55">2025-09-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/14/Lecture%201/" title="无标题">无标题</a><time datetime="2025-09-14T06:39:36.085Z" title="发表于 2025-09-14 14:39:36">2025-09-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/14/Raft%E5%8D%8F%E8%AE%AE/" title="无标题">无标题</a><time datetime="2025-09-14T06:39:13.792Z" title="发表于 2025-09-14 14:39:13">2025-09-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/14/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C's%20Gradient/" title="无标题">无标题</a><time datetime="2025-09-14T06:38:35.914Z" title="发表于 2025-09-14 14:38:35">2025-09-14</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By nty</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (false) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

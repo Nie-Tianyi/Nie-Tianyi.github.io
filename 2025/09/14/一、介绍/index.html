@@ -1,0 +1,213 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>nty的技术博客 | nty的技术博客</title><meta name="author" content="nty"><meta name="copyright" content="nty"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="机器学习是让计算机自动寻找规律的学科，也是人工智能的基础。例如房价和面积的规律——通常来讲面积越大的房子，售价越高，并且存在简单的线性关系——假设该小区的房价为10000人民币&#x2F;平方米，那么一个80平方的房子售价大概率在80万元上下。反的来说，机器学习算法可以通过过往该小区房子售价和面积的数据，推导出每平方米售价在1万元，进而能预测一个面积为120平米的房子售价大概在120万元。当然这是一个比较简">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nty的技术博客">
+<meta property="og:url" content="https://nie-tianyi.github.io/2025/09/14/%E4%B8%80%E3%80%81%E4%BB%8B%E7%BB%8D/index.html">
+<meta property="og:site_name" content="nty的技术博客">
+<meta property="og:description" content="机器学习是让计算机自动寻找规律的学科，也是人工智能的基础。例如房价和面积的规律——通常来讲面积越大的房子，售价越高，并且存在简单的线性关系——假设该小区的房价为10000人民币&#x2F;平方米，那么一个80平方的房子售价大概率在80万元上下。反的来说，机器学习算法可以通过过往该小区房子售价和面积的数据，推导出每平方米售价在1万元，进而能预测一个面积为120平米的房子售价大概在120万元。当然这是一个比较简">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://nie-tianyi.github.io/images/avatar.png">
+<meta property="article:published_time" content="2025-09-14T06:37:57.480Z">
+<meta property="article:modified_time" content="2025-09-14T06:37:57.481Z">
+<meta property="article:author" content="nty">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://nie-tianyi.github.io/images/avatar.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "",
+  "url": "https://nie-tianyi.github.io/2025/09/14/%E4%B8%80%E3%80%81%E4%BB%8B%E7%BB%8D/",
+  "image": "https://nie-tianyi.github.io/images/avatar.png",
+  "datePublished": "2025-09-14T06:37:57.480Z",
+  "dateModified": "2025-09-14T06:37:57.481Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "nty",
+      "url": "https://nie-tianyi.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://nie-tianyi.github.io/2025/09/14/%E4%B8%80%E3%80%81%E4%BB%8B%E7%BB%8D/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'nty的技术博客',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"><link href="https://cdn.bootcss.com/KaTeX/0.11.1/katex.min.css" rel="stylesheet" /></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">nty的技术博客</span></a><a class="nav-page-title" href="/"><span class="site-name">nty的技术博客</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">无标题</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-09-14T06:37:57.480Z" title="发表于 2025-09-14 14:37:57">2025-09-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-09-14T06:37:57.481Z" title="更新于 2025-09-14 14:37:57">2025-09-14</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><html><head></head><body>机器学习是让计算机自动寻找规律的学科，也是人工智能的基础。例如房价和面积的规律——通常来讲面积越大的房子，售价越高，并且存在简单的线性关系——假设该小区的房价为10000人民币/平方米，那么一个80平方的房子售价大概率在80万元上下。反的来说，机器学习算法可以通过过往该小区房子售价和面积的数据，推导出每平方米售价在1万元，进而能预测一个面积为120平米的房子售价大概在120万元。当然这是一个比较简单的例子，机器学习算法不仅能推导简单的关系，还能处理复杂的问题，例如房子的售价不仅与面积相关，还跟房间是否朝阳、装修是否老旧、房间内噪音多少等多个变量相关，机器学习算法同样能处理多个变量之间的复杂关系。甚至更复杂的，假设最终房价和一百多个变量相关，每个变量或多或少都影响着最终房价，机器学习算法同样能精准的推导每个变量和最终房价之间的关系，最终做出精准的预测。
+<p>现有的机器学习的算法根据训练的方式通常会被划分成三个大类，分别是：有监督学习（supervised-learning）、无监督学习（unsupervised-learning）以及强化学习（reinforcement-learning）。尽管被划分为了三个大类，各类中的算法既有交叉，也有互补。例如，著名的神经网络算法不仅在监督学习中用于预测，还在无监督学习中用于异常检测，也在强化学习中用于帮助机器人在未知的环境下做出决策。监督学习通常指我们在训练前准备好标注好的数据，然后用算法拟合数据（也可以叫做训练算法），最后再用训练好的模型用于预测。例如在监督学习中我们通常会准备很多条标注好的数据，例如我们想要预测房价，我们通常会准备以下数据：</p>
+<table>
+<thead>
+<tr>
+<th>面积（平方米）</th>
+<th>是否朝阳</th>
+<th>噪音分贝（分贝）</th>
+<th>售价（万人民币）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>96</td>
+<td>是</td>
+<td>32</td>
+<td>107</td>
+</tr>
+<tr>
+<td>80</td>
+<td>否</td>
+<td>69</td>
+<td>69</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody>
+</table>
+<p>面积、是否朝阳、噪音分贝将是算法的输入，而售价则是算法的输出。这里想要预测的变量“售价”在数据集中是提前收集好的，这样的数据我们就可以用于训练算法，训练完算法后，我们就可将房屋的面积、是否朝阳、噪音分贝三个变量输入算法，最后算法会输出预测房屋的售价。监督学习在训练前通常要求研究人员手动标注数据，例如这里的“售价”变量。标注工作通常是一个枯燥乏味的“苦力活”，例如在计算机视觉中，标注数据通常需要研究人员手动框出图片中想要识别的物体，这通常耗费大量的人力和时间。常见的监督学习算法有分类算法、预测数据，如果将上例中的预测目标改为售价是否高于100万，预测结果只有“是”或者“不是”，上面的问题就会变成一个分类问题（更准确的说是一个二分类问题）。</p>
+<p>无监督学习中我们通常没有所谓的“标注数据”，无监督学习可以帮助我们发现数据中不曾知道的规律。常见的无监督学习算法有聚类算法、异常检测。例如在聚类算法中，我们只需要将数据直接交给算法，接着算法会根据我们提前设定的规则，将数据分为符合直觉的多个类别。</p>
+<p>强化学习能够让模型在不确定的环境中自主进化出完成任务的能力，适用于我们没法给出最优解的任务，于是我们让模型自主探索出如何完成目标。在强化学习中，我们会提前规定一系列的奖励和惩罚规则，然后让模型不断试错——如果模型做出更接近目标的动作，则奖励模型；如果模型做出的决策偏离了我们设定的目标，则惩罚模型。通过不断的奖励和惩罚，让神经网络模型学习如何自主完成我们规定的目标。</p>
+<p>最常用的强化学习算法叫DQL（Deep Q-Learning，强化Q学习），DQL中的核心算法也是神经网络算法，神经网络的输入为环境中的各种数据，而输出则为我们的模型在这种环境中应该做出的决策。常见的强化学习应用包括让机器人、机器狗自主学习走路跑步，让火星车登陆火星后自主完成科研任务。最早开发机器狗的公司波士顿动力最开始就是使用强化学习算法来让机器狗学习如何走路、越障、甚至完成后空翻等杂技动作。</p>
+<p>机器学习发展到今天远远不能用三个类别就简单概括所有算法，现有的机器学习算法通常使用多种算法结合在一起完成目标——例如有的大语言模型可能先使用监督学习预训练模型，然后再用强化学习强化模型完成任务的能力；或者是一个机器学习算法使用了多个模型算法，每个模型都用不同的方式训练而来，完成任务的时候同时使用多个模型共同决策。</p>
+<p>机器学习的应用充斥着我们的生活，从几乎到处都有的人脸识别系统、语音转文字应用、信达雅的中英文翻译软件，到短视频的推荐算法、自动驾驶、以及火爆出圈的大语言模型，都是由一个个最基础的机器学习算法驱动。学习机器学习不仅能让你学习这些神奇的应用背后的原理，还能让你有机会亲手构建这些像魔法一样的应用，让你走在人工智能发展的最前沿。</p>
+</body></html></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://Nie-Tianyi.github.io">nty</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://nie-tianyi.github.io/2025/09/14/%E4%B8%80%E3%80%81%E4%BB%8B%E7%BB%8D/">https://nie-tianyi.github.io/2025/09/14/%E4%B8%80%E3%80%81%E4%BB%8B%E7%BB%8D/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://Nie-Tianyi.github.io" target="_blank">nty的技术博客</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/images/avatar.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/09/14/numba/" title=""><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2"></div></div><div class="info-2"><div class="info-item-1">numba是一个python的JIT编译器，用numba加速的Python函数可以达到接近于机器码的运行速度。只用在python函数上加上 `@jit`的装饰器，就可以将该函数编译到本地机器码运行。numba甚至还支持cuda目标，将python代码编译到cuda平台。 numba效果 12345678910111213141516171819202122232425import numbaimport numpy as np# 普通的 Python 函数 - 计算数组平方和def sum_squares(arr):    result = 0.0    for i in range(len(arr)):        result += arr[i] ** 2    return result# 使用 Numba JIT 加速@numba.njit  # 使用 “no-python” 模式获得最大速度def sum_squares_numba(arr):    result = 0.0    for i in range(len(arr)):        result +=...</div></div></div></a><a class="pagination-related" href="/2025/09/14/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92's%20Gradient/" title=""><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2"></div></div><div class="info-2"><div class="info-item-1">## 损失函数和代价函数 在线性回归中，我们通常使用MSE（Mean Square Error, 均方误差） 作为我们算法的损失函数，其基本思想为衡量预测值和真实结果之间的绝对距离。MSE的公式为：$ MSE = \frac{1}{2m} \sum^m_{i=1}(f_{\vec{w},b}(\vec{x}^{(i)})-y^{(i)})^2 $。同时我们为了防止函数过拟合，我们引入正则表达式。在这里，我们先用L2正则表达式作为例子，L2正则表达式为：$ \frac{\lambda}{2m}\sum^n_{j=1}{w^2_j} $。结合这两项，我们函数的代价函数可以表达为： $ J(\vec{w},b) = \frac{1}{2m} \sum^m_{i=1}(f_{\vec{w},b}(\vec{x}^{(i)})-y^{(i)})^2 + \frac{\lambda}{2m}\sum^n_{j=1}{w^2_j} $。 在反向传播中，我们需要计算梯度，以更新算法的权重： $ w_j’ = w_j- \alpha \frac{\partial...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">nty</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Nie-Tianyi"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/14/Axum/" title="无标题">无标题</a><time datetime="2025-09-14T06:40:12.091Z" title="发表于 2025-09-14 14:40:12">2025-09-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/14/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" title="无标题">无标题</a><time datetime="2025-09-14T06:39:55.736Z" title="发表于 2025-09-14 14:39:55">2025-09-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/14/Lecture%201/" title="无标题">无标题</a><time datetime="2025-09-14T06:39:36.085Z" title="发表于 2025-09-14 14:39:36">2025-09-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/14/Raft%E5%8D%8F%E8%AE%AE/" title="无标题">无标题</a><time datetime="2025-09-14T06:39:13.792Z" title="发表于 2025-09-14 14:39:13">2025-09-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/14/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C's%20Gradient/" title="无标题">无标题</a><time datetime="2025-09-14T06:38:35.914Z" title="发表于 2025-09-14 14:38:35">2025-09-14</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By nty</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (false) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

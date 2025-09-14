@@ -1,0 +1,341 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>nty的技术博客 | nty的技术博客</title><meta name="author" content="nty"><meta name="copyright" content="nty"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="numba是一个python的JIT编译器，用numba加速的Python函数可以达到接近于机器码的运行速度。只用在python函数上加上 &#96;@jit&#96;的装饰器，就可以将该函数编译到本地机器码运行。numba甚至还支持cuda目标，将python代码编译到cuda平台。 numba效果 12345678910111213141516171819202122232425import numbaimp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nty的技术博客">
+<meta property="og:url" content="https://nie-tianyi.github.io/2025/09/14/numba/index.html">
+<meta property="og:site_name" content="nty的技术博客">
+<meta property="og:description" content="numba是一个python的JIT编译器，用numba加速的Python函数可以达到接近于机器码的运行速度。只用在python函数上加上 &#96;@jit&#96;的装饰器，就可以将该函数编译到本地机器码运行。numba甚至还支持cuda目标，将python代码编译到cuda平台。 numba效果 12345678910111213141516171819202122232425import numbaimp">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://nie-tianyi.github.io/images/avatar.png">
+<meta property="article:published_time" content="2025-09-14T06:37:47.745Z">
+<meta property="article:modified_time" content="2025-09-14T06:37:47.746Z">
+<meta property="article:author" content="nty">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://nie-tianyi.github.io/images/avatar.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "",
+  "url": "https://nie-tianyi.github.io/2025/09/14/numba/",
+  "image": "https://nie-tianyi.github.io/images/avatar.png",
+  "datePublished": "2025-09-14T06:37:47.745Z",
+  "dateModified": "2025-09-14T06:37:47.746Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "nty",
+      "url": "https://nie-tianyi.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://nie-tianyi.github.io/2025/09/14/numba/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'nty的技术博客',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"><link href="https://cdn.bootcss.com/KaTeX/0.11.1/katex.min.css" rel="stylesheet" /></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">nty的技术博客</span></a><a class="nav-page-title" href="/"><span class="site-name">nty的技术博客</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">无标题</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-09-14T06:37:47.745Z" title="发表于 2025-09-14 14:37:47">2025-09-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-09-14T06:37:47.746Z" title="更新于 2025-09-14 14:37:47">2025-09-14</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><html><head></head><body>numba是一个python的JIT编译器，用numba加速的Python函数可以达到接近于机器码的运行速度。只用在python函数上加上 `@jit`的装饰器，就可以将该函数编译到本地机器码运行。numba甚至还支持cuda目标，将python代码编译到cuda平台。
+<h2 id="numba效果">numba效果</h2>
+<p><hexopostrendercodeblock><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numba</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># 普通的 Python 函数 - 计算数组平方和</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">sum_squares</span>(<span class="params">arr</span>):</span><br><span class="line">    result = <span class="number">0.0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(arr)):</span><br><span class="line">        result += arr[i] ** <span class="number">2</span></span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 Numba JIT 加速</span></span><br><span class="line"><span class="meta">@numba.njit  </span><span class="comment"># 使用 “no-python” 模式获得最大速度</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">sum_squares_numba</span>(<span class="params">arr</span>):</span><br><span class="line">    result = <span class="number">0.0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(arr)):</span><br><span class="line">        result += arr[i] ** <span class="number">2</span></span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个大型数组</span></span><br><span class="line">large_array = np.random.rand(<span class="number">10000000</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试速度</span></span><br><span class="line">%timeit sum_squares(large_array)  <span class="comment"># 纯 Python，通常较慢</span></span><br><span class="line">%timeit sum_squares_numba(large_array)  <span class="comment"># Numba 编译后，通常快很多倍</span></span><br><span class="line">%timeit np.<span class="built_in">sum</span>(large_array ** <span class="number">2</span>)  <span class="comment"># 对比优化的 NumPy 向量化操作</span></span><br></pre></td></tr></tbody></table></figure></hexopostrendercodeblock></p>
+<p>&gt; <strong>954 ms ± 2.87 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)</strong><br>
+&gt;<br>
+&gt; <strong>3.83 ms ± 14.7 µs per loop (mean ± std. dev. of 7 runs, 1 loop each)</strong><br>
+&gt;<br>
+&gt; <strong>15.7 ms ± 103 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)</strong><br>
+&gt;</p>
+<p>这个结果还是相当优秀的，用numba加速函数的速度可以赶上C语言写的numpy。</p>
+<p>（这个表现跟CPU也有很大的关系，在我的M3 Pro芯片上，第二个和第三个表现是差不多的，都是6.27ms/loop上下；然而在我的x86架构的9800X3D芯片上，numba加速效果甚至比numpy操作还快很多。）</p>
+<p>（实测瓶颈在内存带宽上，M系芯片内存带宽400GB/s而9800X3D内存带宽只有96GB/s，将<code>np.sum(large_array ** 2)</code> 替换成 <code>np.dot(large_array, large_array)</code>后，9800X3D的速度提升到 161 µs/loop，而M芯片上仅提升到 923 µs/loop）</p>
+<p>&gt; 内存带宽瓶颈 vs 计算优化<br>
+&gt;<br>
+&gt; 1. 原始NumPy: ████████████████ 15.7ms (内存带宽受限)<br>
+&gt; 2. Numba:       ████            3.86ms (单核计算优化)<br>
+&gt; 3. 点积:           ▏               0.16ms (多核+内存+计算全优化)<br>
+&gt;</p>
+<h2 id="numba用处">numba用处</h2>
+<p>Numba 在加速特定类型的 Python 代码时效果惊人，但对另一些类型的代码则效果有限，甚至可能适得其反。理解其优势和局限性对于有效利用 Numba 至关重要。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">代码特征</th>
+<th style="text-align:left">Numba 效果</th>
+<th style="text-align:left">原因/备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>密集数值循环</strong></td>
+<td style="text-align:left">⭐⭐⭐⭐⭐</td>
+<td style="text-align:left">核心优势，消除循环开销，向量化。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>NumPy 数组操作</strong></td>
+<td style="text-align:left">⭐⭐⭐⭐</td>
+<td style="text-align:left">理解内存布局，避免临时数组。复杂操作尤佳。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>math</code><strong>/</strong><code>numpy</code>** 数学函数**</td>
+<td style="text-align:left">⭐⭐⭐⭐</td>
+<td style="text-align:left">内联为高效指令。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>明确静态类型</strong></td>
+<td style="text-align:left">⭐⭐⭐⭐</td>
+<td style="text-align:left">编译优化的基础。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>可并行循环 (独立迭代)</strong></td>
+<td style="text-align:left">⭐⭐⭐</td>
+<td style="text-align:left"><code>parallel=True</code> 或 <code>@vectorize</code> 可加速。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>I/O 操作 (文件/网络/DB)</strong></td>
+<td style="text-align:left">⭐</td>
+<td style="text-align:left">瓶颈不在 CPU，编译无用。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>操作 Python list/dict/str</strong></td>
+<td style="text-align:left">⭐ (或 🐢)</td>
+<td style="text-align:left"><code>@njit</code> 不支持或受限；<code>@jit</code> 回退对象模式，<strong>极慢</strong>。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>调用 Pandas/Sklearn 等库</strong></td>
+<td style="text-align:left">⭐ (或 🐢)</td>
+<td style="text-align:left">无法编译库代码，触发回退对象模式，<strong>极慢</strong>。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>频繁异常处理 (</strong><code>try/except</code><strong>)</strong></td>
+<td style="text-align:left">⭐</td>
+<td style="text-align:left">编译代码中异常开销大，非常规控制流。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>动态/多变类型</strong></td>
+<td style="text-align:left">⭐</td>
+<td style="text-align:left">多次编译开销或回退对象模式。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>非常小的/单次调用函数</strong></td>
+<td style="text-align:left">⭐ (或 ⚠️)</td>
+<td style="text-align:left"><strong>编译开销 &gt; 执行收益</strong>。第一次调用特别慢。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>深度递归</strong></td>
+<td style="text-align:left">⭐</td>
+<td style="text-align:left">支持有限，可能栈溢出或低效。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>复杂 OOP (虚函数/多态)</strong></td>
+<td style="text-align:left">⭐</td>
+<td style="text-align:left">不适合 Numba 的编译模型。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>复杂字符串处理</strong></td>
+<td style="text-align:left">⭐</td>
+<td style="text-align:left">支持有限，效率通常不高。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>最佳实践：</strong></p>
+<ol>
+<li><strong>Profile First:</strong> 先用性能分析工具（如 <code>cProfile</code>, <code>line_profiler</code>）找出真正的计算瓶颈。只优化热点函数。</li>
+<li><strong>瞄准循环和数组：</strong> 优先尝试用 <code>@njit</code> 加速包含密集数值计算和 NumPy 数组操作的循环。</li>
+<li><strong>坚持 <strong><code>@njit</code></strong> (nopython):</strong> 这是获得最大加速的关键。如果 <code>@njit</code> 失败，仔细阅读错误信息调整代码或提供类型签名，尽量避免回退到 <code>object mode</code>。</li>
+<li><strong>避免外部调用：</strong> 尽量在 JIT 函数内部使用 Numba 支持的特性（<code>math</code>, 有限 <code>np</code> 函数, 基本控制流）。将不支持的调用移到 JIT 函数外部。</li>
+<li><strong>处理编译开销：</strong> 对于会被反复调用的小型 JIT 函数，可以考虑在程序初始化时预先“热身”调用一次（用典型输入）来支付编译开销。对于一次性函数，纯 Python 可能更好。</li>
+<li><strong>类型稳定性：</strong> 确保函数内部变量类型一致且明确。必要时使用 Numba 的类型注解。</li>
+</ol>
+<p><strong>简而言之：Numba 是数值计算循环和 NumPy 数组处理的加速神器。它不适合加速涉及大量 I/O、复杂 Python 对象操作或调用外部库的代码。</strong> 明智地选择应用场景是发挥其威力的关键。</p>
+<h2 id="jit">@jit</h2>
+<p>最常用的装饰器，用<code>@jit</code>装饰的函数，numba会尝试将其编译为LLVM IR，最后编译为你机器的本地机器码。使用这个装饰器装饰的函数，numba会默认优先尝试<code>nopython</code>模式，将代码编译为本地机器码，但是如果遇到numba无法理解的代码（例如pandas代码），则会退化为<code>object</code>模式，使用python解释器执行代码（这样我们就失去了numba带来的优化）。</p>
+<p>jit支持以下配置：</p>
+<h3 id="nopython">nopython</h3>
+<p>强制启用nopython模式，如果遇到了numba理解不了的代码，则会直接报错。</p>
+<p>同时也可以启用<code>forceobj=True</code>强制启用object模式，虽然这样没有什么意义。</p>
+<p>在numba 0.59 版本后可以使用 <code>@njit</code>简写替换<code>@jit(nopython=True)</code> （最新的numba版本为0.61）。</p>
+<h3 id="nogil">nogil</h3>
+<p>释放python的GIL，这样我们的代码在多线程环境内运行的时候速度会变快。</p>
+<p>这个功能不会自动将函数计算内容并行化，而是在多线程环境中调用这个函数时，函数不再会受到GIL的约束。</p>
+<h3 id="cache">cache</h3>
+<p><font style="color:rgb(64, 64, 64);background-color:rgb(252, 252, 252);">为避免每次调用 Python 程序时都进行编译，您可以指示 Numba 将函数编译结果写入基于文件的缓存。</font></p>
+<ul>
+<li>已编译函数的缓存不是按函数逐个进行的。被缓存的是主 jit 函数，而所有次级函数（由主函数调用的函数）都会被纳入主函数的缓存中。</li>
+<li>缓存失效机制无法识别不同文件中定义的函数变更。这意味着当一个主 jit 函数调用了从其他模块导入的函数时，这些模块中的更改将不会被检测到，缓存也不会更新。这存在在计算中使用&quot;旧&quot;函数代码的风险。</li>
+<li>全局变量被视为常量。缓存会记住编译时全局变量的值。在缓存加载时，缓存函数不会重新绑定到全局变量的新值。</li>
+</ul>
+<h3 id="parallel">parallel</h3>
+<p><font style="color:rgb(64, 64, 64);background-color:rgb(252, 252, 252);">自动利用多核CPU的功能并行化计算，隐含了</font><code>&lt;font style=&quot;color:rgb(64, 64, 64);background-color:rgb(252, 252, 252);&quot;&gt;nogil&lt;/font&gt;</code><font style="color:rgb(64, 64, 64);background-color:rgb(252, 252, 252);">。</font></p>
+<p><font style="color:rgb(64, 64, 64);background-color:rgb(252, 252, 252);">这个功能会自动将函数需要计算的内容放到多个核心上去计算，以此加速计算。</font></p>
+<h3 id="font-style-color-rgb-64-64-64-background-color-rgb-252-252-252-fastmath-font"><font style="color:rgb(64, 64, 64);background-color:rgb(252, 252, 252);">fastmath</font></h3>
+<p>允许编译器进行更激进的浮点运算优化，以牺牲部分 IEEE 754 标准的严格合规性为代价（牺牲精度），换取更高的计算性能。</p>
+<p>适用于需要极致性能以及可以接收微小精度损失的场景，例如科学计算、深度学习。</p>
+<p>不适用需要高精度的场景，例如金融数据计算、高精度科学模拟。</p>
+<h3 id="函数签名">函数签名</h3>
+<p>numba支持在装饰器上指定函数参数的类型和返回值的类型，这样<strong>能大大减少编译时间</strong>。</p>
+<p><hexopostrendercodeblock><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> numba <span class="keyword">import</span> jit, int32</span><br><span class="line"></span><br><span class="line"><span class="meta">@jit(<span class="params">int32(<span class="params">int32, int32</span>)</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">f</span>(<span class="params">x, y</span>):</span><br><span class="line">    <span class="comment"># A somewhat trivial example</span></span><br><span class="line">    <span class="keyword">return</span> x + y</span><br></pre></td></tr></tbody></table></figure></hexopostrendercodeblock></p>
+<p>常见的类型有</p>
+<ul>
+<li><code>**&lt;font style=&quot;color:rgb(64, 64, 64);background-color:rgb(236, 236, 236);&quot;&gt;void&lt;/font&gt;**</code><font style="color:rgb(64, 64, 64);"> 是没有返回值的函数的返回类型（当从 Python 调用时，这些函数实际上返回 </font><code>**&lt;font style=&quot;color:rgb(64, 64, 64);background-color:rgb(236, 236, 236);&quot;&gt;None&lt;/font&gt;**</code><font style="color:rgb(64, 64, 64);">）。</font></li>
+<li><code>**&lt;font style=&quot;color:rgb(64, 64, 64);background-color:rgb(236, 236, 236);&quot;&gt;intp&lt;/font&gt;**</code><font style="color:rgb(64, 64, 64);"> 和 </font><code>**&lt;font style=&quot;color:rgb(64, 64, 64);background-color:rgb(236, 236, 236);&quot;&gt;uintp&lt;/font&gt;**</code><font style="color:rgb(64, 64, 64);"> 是指针大小的整数（分别表示有符号和无符号）。</font></li>
+<li><code>**&lt;font style=&quot;color:rgb(64, 64, 64);background-color:rgb(236, 236, 236);&quot;&gt;intc&lt;/font&gt;**</code><font style="color:rgb(64, 64, 64);"> 和 </font><code>**&lt;font style=&quot;color:rgb(64, 64, 64);background-color:rgb(236, 236, 236);&quot;&gt;uintc&lt;/font&gt;**</code><font style="color:rgb(64, 64, 64);"> 分别等同于 C 语言中的 </font><code>**&lt;font style=&quot;color:rgb(64, 64, 64);background-color:rgb(236, 236, 236);&quot;&gt;int&lt;/font&gt;**</code><font style="color:rgb(64, 64, 64);"> 和 </font><code>**&lt;font style=&quot;color:rgb(64, 64, 64);background-color:rgb(236, 236, 236);&quot;&gt;unsigned int&lt;/font&gt;**</code><font style="color:rgb(64, 64, 64);"> 整数类型。</font></li>
+<li><code>**&lt;font style=&quot;color:rgb(64, 64, 64);background-color:rgb(236, 236, 236);&quot;&gt;int8&lt;/font&gt;**</code><font style="color:rgb(64, 64, 64);">, </font><code>**&lt;font style=&quot;color:rgb(64, 64, 64);background-color:rgb(236, 236, 236);&quot;&gt;uint8&lt;/font&gt;**</code><font style="color:rgb(64, 64, 64);">, </font><code>**&lt;font style=&quot;color:rgb(64, 64, 64);background-color:rgb(236, 236, 236);&quot;&gt;int16&lt;/font&gt;**</code><font style="color:rgb(64, 64, 64);">, </font><code>**&lt;font style=&quot;color:rgb(64, 64, 64);background-color:rgb(236, 236, 236);&quot;&gt;uint16&lt;/font&gt;**</code><font style="color:rgb(64, 64, 64);">, </font><code>**&lt;font style=&quot;color:rgb(64, 64, 64);background-color:rgb(236, 236, 236);&quot;&gt;int32&lt;/font&gt;**</code><font style="color:rgb(64, 64, 64);">, </font><code>**&lt;font style=&quot;color:rgb(64, 64, 64);background-color:rgb(236, 236, 236);&quot;&gt;uint32&lt;/font&gt;**</code><font style="color:rgb(64, 64, 64);">, </font><code>**&lt;font style=&quot;color:rgb(64, 64, 64);background-color:rgb(236, 236, 236);&quot;&gt;int64&lt;/font&gt;**</code><font style="color:rgb(64, 64, 64);">, </font><code>**&lt;font style=&quot;color:rgb(64, 64, 64);background-color:rgb(236, 236, 236);&quot;&gt;uint64&lt;/font&gt;**</code><font style="color:rgb(64, 64, 64);"> 是相应位宽（8位、16位、32位、64位）的</font><strong><font style="color:rgb(64, 64, 64);">固定宽度整数</font></strong><font style="color:rgb(64, 64, 64);">（分别表示有符号和无符号）。</font></li>
+<li><code>**&lt;font style=&quot;color:rgb(64, 64, 64);background-color:rgb(236, 236, 236);&quot;&gt;float32&lt;/font&gt;**</code><font style="color:rgb(64, 64, 64);"> 和 </font><code>**&lt;font style=&quot;color:rgb(64, 64, 64);background-color:rgb(236, 236, 236);&quot;&gt;float64&lt;/font&gt;**</code><font style="color:rgb(64, 64, 64);"> 分别是</font><strong><font style="color:rgb(64, 64, 64);">单精度</font></strong><font style="color:rgb(64, 64, 64);">和</font><strong><font style="color:rgb(64, 64, 64);">双精度浮点数</font></strong><font style="color:rgb(64, 64, 64);">。</font></li>
+<li><code>**&lt;font style=&quot;color:rgb(64, 64, 64);background-color:rgb(236, 236, 236);&quot;&gt;complex64&lt;/font&gt;**</code><font style="color:rgb(64, 64, 64);"> 和 </font><code>**&lt;font style=&quot;color:rgb(64, 64, 64);background-color:rgb(236, 236, 236);&quot;&gt;complex128&lt;/font&gt;**</code><font style="color:rgb(64, 64, 64);"> 分别是</font><strong><font style="color:rgb(64, 64, 64);">单精度</font></strong><font style="color:rgb(64, 64, 64);">和</font><strong><font style="color:rgb(64, 64, 64);">双精度复数</font></strong><font style="color:rgb(64, 64, 64);">。</font></li>
+<li><font style="color:rgb(64, 64, 64);">数组类型可以通过索引任何数字类型来指定，例如：</font>
+<ul>
+<li><code>**&lt;font style=&quot;color:rgb(64, 64, 64);background-color:rgb(236, 236, 236);&quot;&gt;float32[:]&lt;/font&gt;**</code><font style="color:rgb(64, 64, 64);"> </font><font style="color:rgb(64, 64, 64);">表示一个一维单精度浮点数数组</font></li>
+<li><code>**&lt;font style=&quot;color:rgb(64, 64, 64);background-color:rgb(236, 236, 236);&quot;&gt;int8[:,:]&lt;/font&gt;**</code><font style="color:rgb(64, 64, 64);"> 表示一个二维 8 位有符号整数数组。</font></li>
+</ul>
+</li>
+</ul>
+<h2 id="njit">@njit</h2>
+<p><code>@njit</code>装饰器是<code>@jit(nopython=True)</code>的缩写，效果一样，遇到不能理解的代码直接报错。</p>
+<h2 id="vectorize-guvectorize">@vectorize &amp; @guvectorize</h2>
+<p>numpy 的通用函数一般分为两种，<font style="color:rgb(64, 64, 64);background-color:rgb(252, 252, 252);">一种是作用于标量的，称为“通用函数”或 ufuncs；另一种是作用于高维数组和标量的，称为“广义通用函数”或 gufuncs。</font></p>
+<p><font style="color:rgb(64, 64, 64);background-color:rgb(252, 252, 252);">Numba 的 vectorize 功能允许将接收标量输入参数的 Python 函数用作 NumPy 通用函数。</font></p>
+<h3 id="font-style-color-rgb-64-64-64-background-color-rgb-252-252-252-函数签名-font"><font style="color:rgb(64, 64, 64);background-color:rgb(252, 252, 252);">函数签名</font></h3>
+<p><font style="color:rgb(64, 64, 64);background-color:rgb(252, 252, 252);">vectorize() 如果在定义的时候后标注明了函数签名，则会直接编译；如果没有注明函数签名，则会在调用的时候，每一次遇到新类型，重新编译一份代码。</font></p>
+<p><font style="color:rgb(64, 64, 64);background-color:rgb(252, 252, 252);">一个vertorize的函数可以有一份签名或者多分签名：</font></p>
+<p><hexopostrendercodeblock><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 一份签名</span></span><br><span class="line"><span class="meta">@vectorize(<span class="params">[float64(<span class="params">float64, float64</span>)]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">f</span>(<span class="params">x, y</span>):</span><br><span class="line">    <span class="keyword">return</span> x + y</span><br><span class="line"></span><br><span class="line"><span class="comment"># 多份签名，每个签名编译一份源代码</span></span><br><span class="line"><span class="meta">@vectorize(<span class="params">[int32(<span class="params">int32, int32</span>),</span></span></span><br><span class="line"><span class="params"><span class="meta">            int64(<span class="params">int64, int64</span>),</span></span></span><br><span class="line"><span class="params"><span class="meta">            float32(<span class="params">float32, float32</span>),</span></span></span><br><span class="line"><span class="params"><span class="meta">            float64(<span class="params">float64, float64</span>)]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">f</span>(<span class="params">x, y</span>):</span><br><span class="line">    <span class="keyword">return</span> x + y</span><br></pre></td></tr></tbody></table></figure></hexopostrendercodeblock></p>
+<h2 id="stencil">@stencil</h2>
+<h2 id="jitclass">@jitclass</h2>
+<h2 id="cfunc">@cfunc</h2>
+<h2 id="overload">@overload</h2>
+</body></html></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://Nie-Tianyi.github.io">nty</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://nie-tianyi.github.io/2025/09/14/numba/">https://nie-tianyi.github.io/2025/09/14/numba/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://Nie-Tianyi.github.io" target="_blank">nty的技术博客</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/images/avatar.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/09/14/PyO3/" title=""><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2"></div></div><div class="info-2"><div class="info-item-1"># Overview PyO3 是一个用于 rust 和 python 代码互操作的库，可以用来给 python 代码写加速库，提升Python的运行速度。 123456789101112131415161718192021222324252627use pyo3::prelude::*;#[pyfunction]pub fn double(x: usize) -&gt; usize {    x * 2}#[pyclass]struct Number(i32);#[pymethods]impl Number {    #[new]    fn new(value: i32) -&gt; i32 {        Number(value)    }}/// 这是一个文档#[pymodule]#[pyo3(name = “add_as_string”)]fn my_extension(m: &amp;Bound&lt;’_, PyModule&gt;) -&gt; PyResult&lt;()&gt; {   ...</div></div></div></a><a class="pagination-related" href="/2025/09/14/%E4%B8%80%E3%80%81%E4%BB%8B%E7%BB%8D/" title=""><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2"></div></div><div class="info-2"><div class="info-item-1">...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">nty</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Nie-Tianyi"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#numba%E6%95%88%E6%9E%9C"><span class="toc-number">1.</span> <span class="toc-text">numba效果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#numba%E7%94%A8%E5%A4%84"><span class="toc-number">2.</span> <span class="toc-text">numba用处</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#jit"><span class="toc-number">3.</span> <span class="toc-text">@jit</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#nopython"><span class="toc-number">3.1.</span> <span class="toc-text">nopython</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nogil"><span class="toc-number">3.2.</span> <span class="toc-text">nogil</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cache"><span class="toc-number">3.3.</span> <span class="toc-text">cache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#parallel"><span class="toc-number">3.4.</span> <span class="toc-text">parallel</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#font-style-color-rgb-64-64-64-background-color-rgb-252-252-252-fastmath-font"><span class="toc-number">3.5.</span> <span class="toc-text">fastmath</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E7%AD%BE%E5%90%8D"><span class="toc-number">3.6.</span> <span class="toc-text">函数签名</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#njit"><span class="toc-number">4.</span> <span class="toc-text">@njit</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#vectorize-guvectorize"><span class="toc-number">5.</span> <span class="toc-text">@vectorize &amp; @guvectorize</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#font-style-color-rgb-64-64-64-background-color-rgb-252-252-252-%E5%87%BD%E6%95%B0%E7%AD%BE%E5%90%8D-font"><span class="toc-number">5.1.</span> <span class="toc-text">函数签名</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#stencil"><span class="toc-number">6.</span> <span class="toc-text">@stencil</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#jitclass"><span class="toc-number">7.</span> <span class="toc-text">@jitclass</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cfunc"><span class="toc-number">8.</span> <span class="toc-text">@cfunc</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#overload"><span class="toc-number">9.</span> <span class="toc-text">@overload</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/14/Axum/" title="无标题">无标题</a><time datetime="2025-09-14T06:40:12.091Z" title="发表于 2025-09-14 14:40:12">2025-09-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/14/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" title="无标题">无标题</a><time datetime="2025-09-14T06:39:55.736Z" title="发表于 2025-09-14 14:39:55">2025-09-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/14/Lecture%201/" title="无标题">无标题</a><time datetime="2025-09-14T06:39:36.085Z" title="发表于 2025-09-14 14:39:36">2025-09-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/14/Raft%E5%8D%8F%E8%AE%AE/" title="无标题">无标题</a><time datetime="2025-09-14T06:39:13.792Z" title="发表于 2025-09-14 14:39:13">2025-09-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/14/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C's%20Gradient/" title="无标题">无标题</a><time datetime="2025-09-14T06:38:35.914Z" title="发表于 2025-09-14 14:38:35">2025-09-14</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By nty</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (false) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
