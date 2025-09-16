@@ -1,0 +1,412 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>nty的技术博客 | nty的技术博客</title><meta name="author" content="nty"><meta name="copyright" content="nty"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="SDSC6015_lec1.pdf 向量的范数 norm 我们用符号双竖杠来表示向量范数，例如![image](images&#x2F;Lecture 1&#x2F;d4d91bf45772101f2957c050fbe58a3d.svg)来表示向量![image](images&#x2F;Lecture 1&#x2F;712ecf7894348e92d8779c3ee87eeeb0.svg)的范数。向量的范数是我们可以用来衡量向量“大">
+<meta property="og:type" content="website">
+<meta property="og:title" content="nty的技术博客">
+<meta property="og:url" content="https://nie-tianyi.github.io/draft/output/Lecture%201_preprocessed.html">
+<meta property="og:site_name" content="nty的技术博客">
+<meta property="og:description" content="SDSC6015_lec1.pdf 向量的范数 norm 我们用符号双竖杠来表示向量范数，例如![image](images&#x2F;Lecture 1&#x2F;d4d91bf45772101f2957c050fbe58a3d.svg)来表示向量![image](images&#x2F;Lecture 1&#x2F;712ecf7894348e92d8779c3ee87eeeb0.svg)的范数。向量的范数是我们可以用来衡量向量“大">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://nie-tianyi.github.io/images/avatar.png">
+<meta property="article:published_time" content="2025-09-16T17:30:42.451Z">
+<meta property="article:modified_time" content="2025-09-16T17:30:42.451Z">
+<meta property="article:author" content="nty">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://nie-tianyi.github.io/images/avatar.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://nie-tianyi.github.io/draft/output/Lecture%201_preprocessed.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'nty的技术博客',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'page'
+}</script><meta name="generator" content="Hexo 7.3.0"><link href="https://cdn.bootcss.com/KaTeX/0.11.1/katex.min.css" rel="stylesheet" /></head><body><div class="page" id="body-wrap"><header class="not-home-page" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">nty的技术博客</span></a></span><div id="menus"></div></nav><div id="page-site-info"><h1 id="site-title"></h1></div></header><main class="layout" id="content-inner"><div id="page"><div class="container" id="article-container"><p><a target="_blank" rel="noopener" href="https://www.yuque.com/attachments/yuque/0/2025/pdf/45785720/1756999996300-9e40150e-caf4-455e-8498-5d17e66c1fb4.pdf">SDSC6015_lec1.pdf</a></p>
+<h2 id="向量的范数-norm">向量的范数 norm</h2>
+<p>我们用符号双竖杠来表示向量范数，例如![image](images/Lecture 1/d4d91bf45772101f2957c050fbe58a3d.svg)来表示向量![image](images/Lecture 1/712ecf7894348e92d8779c3ee87eeeb0.svg)的范数。向量的范数是我们可以用来衡量向量“大小”或者“长度”的一个指标。其定义形式如下，我们通常说一个向量![image](images/Lecture 1/712ecf7894348e92d8779c3ee87eeeb0.svg)的![image](images/Lecture 1/e6f2361c27180fa4ad45ff46135e54f6.svg)-norm为：</p>
+<p>![image](images/Lecture 1/0cc7c0768cd539fb5fc89cafa41df86e.svg)</p>
+<p><strong>其中</strong>![image](images/Lecture 1/d4cd21d60552e207f237e82def9029b6.svg)<strong>为一个大于1的实数</strong></p>
+<p>如果![image](images/Lecture 1/9af3acf106aaeba29d00cd5d581c26a0.svg)，那么![image](images/Lecture 1/712ecf7894348e92d8779c3ee87eeeb0.svg)的范数就是我们熟知的曼哈顿距离的公式：</p>
+<p>![image](images/Lecture 1/15f4c718e589b9c7f98a1dfea44945bd.svg)</p>
+<p>如果![image](images/Lecture 1/645a0f501112e81811324600f76f1bce.svg)，那么![image](images/Lecture 1/712ecf7894348e92d8779c3ee87eeeb0.svg)的范数就是我们熟知的欧几里得距离，他描述了向量的长度：</p>
+<p>![image](images/Lecture 1/be98cd77b65604c2a3c4b3172185471a.svg)</p>
+<p>如果我们没有注明![image](images/Lecture 1/d4cd21d60552e207f237e82def9029b6.svg)的值，通常我们默认![image](images/Lecture 1/645a0f501112e81811324600f76f1bce.svg)，即![image](images/Lecture 1/19719f8e1f3102fe8875b1e229cb7cdb.svg)</p>
+<blockquote>
+<p>![image](images/Lecture 1/645a0f501112e81811324600f76f1bce.svg)时，范数描述了向量![image](images/Lecture 1/712ecf7894348e92d8779c3ee87eeeb0.svg)的长度，假设![image](images/Lecture 1/712ecf7894348e92d8779c3ee87eeeb0.svg)是一个二维的向量，那么![image](images/Lecture 1/712ecf7894348e92d8779c3ee87eeeb0.svg)的范数![image](images/Lecture 1/91ed6c2d893be71df693792851991bcb.svg)描绘![image](images/Lecture 1/712ecf7894348e92d8779c3ee87eeeb0.svg)在平面上的长度；如果![image](images/Lecture 1/712ecf7894348e92d8779c3ee87eeeb0.svg)是一个三维的向量，那么![image](images/Lecture 1/712ecf7894348e92d8779c3ee87eeeb0.svg)的范数![image](images/Lecture 1/ece7c1a690a3b4df6071816fa7512977.svg)描述了向量![image](images/Lecture 1/712ecf7894348e92d8779c3ee87eeeb0.svg)在空间中的长度；由此推广，当![image](images/Lecture 1/712ecf7894348e92d8779c3ee87eeeb0.svg)在四维、五维，甚至更高维度的空间内时，范数描述了向量![image](images/Lecture 1/712ecf7894348e92d8779c3ee87eeeb0.svg)在更高维空间中的长度。</p>
+</blockquote>
+<p>而当![image](images/Lecture 1/d4cd21d60552e207f237e82def9029b6.svg)趋于![image](images/Lecture 1/ded19e461c6fc600ca2fdb1aef1faeb0.svg)的时候，向量![image](images/Lecture 1/712ecf7894348e92d8779c3ee87eeeb0.svg)的范数趋向于![image](images/Lecture 1/712ecf7894348e92d8779c3ee87eeeb0.svg)中绝对值最大的分量，即：</p>
+<p>![image](images/Lecture 1/b2c28eccd1f1a6fa166088eec36cff5f.svg)</p>
+<h2 id="柯西-施瓦茨不等式（Cauchy-Schwarz-inequality）">柯西-施瓦茨不等式（Cauchy-Schwarz inequality）</h2>
+<p>柯西不等式公式为：</p>
+<p>![image](images/Lecture 1/5b13b33161cf4eaba862581a36cbe980.svg)</p>
+<p>或者进一步可以写为：</p>
+<p>![image](images/Lecture 1/3b6f6db80e85ca634ebcf8c7d4a4a06d.svg)</p>
+<blockquote>
+<p>回忆一下向量乘法的规则：</p>
+<p>![image](images/Lecture 1/ebf2ea4515f9b68db40d1b6c10501da8.svg)</p>
+<p>所以柯西不等式式其实只是在另一个方面论证了一个简单的事实 :![image](images/Lecture 1/d68087b966c4099ef583d67a20999c14.svg)</p>
+</blockquote>
+<h2 id="赫尔德不等式（Holder’s-Inequality）">赫尔德不等式（Holder’s Inequality）</h2>
+<p>赫尔德不等式是柯西不等式的推广形式，其公式如下：</p>
+<p>如果有一个![image](images/Lecture 1/d4cd21d60552e207f237e82def9029b6.svg)和![image](images/Lecture 1/34c7b563b30bde3c748139530686798e.svg)，满足![image](images/Lecture 1/f9b9ea2cf76be380f78f1b3decf640d5.svg)，那么对于向量![image](images/Lecture 1/712ecf7894348e92d8779c3ee87eeeb0.svg)和![image](images/Lecture 1/bf98c0ddcbe9c1e535f767c78c3aa813.svg)，以下不等式成立：</p>
+<p>![image](images/Lecture 1/e4379106d9c4a19cbd173beaac0a7313.svg)</p>
+<p>当![image](images/Lecture 1/d4cd21d60552e207f237e82def9029b6.svg)和![image](images/Lecture 1/34c7b563b30bde3c748139530686798e.svg)都等于 2 时，赫尔德不等式就是柯西不等式。换句话说，柯西不等式就是赫尔德不等式的特殊情况。</p>
+<h2 id="凸集（Convex-Set）定义">凸集（Convex Set）定义</h2>
+<p>对于集合中任意两点的连线，线上所有点仍然都在集合内的集合，叫做凸集（Convex Set）。例如：</p>
+<p>对于任何在集合C内的两点![image](images/Lecture 1/61921f50517416c4aa57c55a0c40f050.svg)，有：</p>
+<p>![image](images/Lecture 1/c03104fc17d5e30c5d27a9d55605b2b0.svg)</p>
+<p>![image](images/Lecture 1/ba10acc8106d60d1272f278965b7ff9f.svg)</p>
+<p>![](images/Lecture 1/1757144763448-29917914-2998-4574-8432-691cf087ebea.png)</p>
+<p>例如在上图中第一个图形是一个典型的凸集，因为图形内包括图形边线上任意两点的连线始终都在图形内；第二个图形是一个典型的非凸集，因为我们可以找到两个图形中的点，这两点的连线上的点并不是全在图形中；第三个图形也不是凸集，因为正方形边线上的点的连线可以不在集合内。</p>
+<p>还有一些特殊的凸集，例如一个无限延展的二维平面或者三维空间，集合中任意两点的连线都在集合内；一条直线分割的平面的两个部分也都可以算作凸集。</p>
+<h3 id="凸集性质一：凸集的交集仍然是凸集">凸集性质一：<strong>凸集的交集仍然是凸集</strong></h3>
+<h3 id="凸集性质二：非膨胀性（Non-expensiveness）">凸集性质二：非膨胀性（Non-expensiveness）</h3>
+<p>凸集外的任意两点，在凸集上的投影之间的距离，不会比两点本身之间的距离更远。用数学表示为：</p>
+<p>![image](images/Lecture 1/680d1a7e074c2b4004a457a9599bdbd3.svg)</p>
+<p>画图表示为：</p>
+<p>![](images/Lecture 1/1757147188698-2d0697e3-af5e-4b07-82e0-ba393fa745ac.png)</p>
+<p>我们把这种性质叫做“Non-expensiveness”，非膨胀性。</p>
+<p>什么是凸集外一点在凸集上的投影？例如上图中点![image](images/Lecture 1/712ecf7894348e92d8779c3ee87eeeb0.svg)在凸集![image](images/Lecture 1/a42a4fc28b384cc408de066beed57485.svg)上的投影为：在凸集![image](images/Lecture 1/a42a4fc28b384cc408de066beed57485.svg)中，我们能找到的距离![image](images/Lecture 1/712ecf7894348e92d8779c3ee87eeeb0.svg)最近的点，用数学公式可以表示为：</p>
+<p>![image](images/Lecture 1/51ffca25d84e23a0342f08983119ff5d.svg)</p>
+<p>这样的投影有一个性质：<strong>如果集合满足非空、闭集、凸集，集合外任意一点在集合上的投影是唯一的。</strong></p>
+<h2 id="利普希茨条件-L-Lipschitz">利普希茨条件 L-Lipschitz</h2>
+<p>我们说一个函数![image](images/Lecture 1/60375689081979940e65fd27a12da27b.svg)是L-Lipschitz的，如果其满足：</p>
+<p>![image](images/Lecture 1/1e30d2604c7041ad6c962cf2d4fe0b18.svg)</p>
+<p>利普希茨的条件在高维空间中也成立，其在高维空间的表示为：</p>
+<blockquote>
+<p>对于一个函数![image](images/Lecture 1/62973e66d1dc3ed94c3f4c83dab3ae48.svg)是L-Lipschitz的，如果其满足:</p>
+<p>![image](images/Lecture 1/eb9c1ae80fb602b3a7b2140aab0a869c.svg)</p>
+</blockquote>
+<p>其中![image](images/Lecture 1/c895173d3be4872abf206be4268a58cb.svg)是一个常数，如果![image](images/Lecture 1/c895173d3be4872abf206be4268a58cb.svg)是小于等于1的，那么我们说函数![image](images/Lecture 1/18f3c2855f0e85a1ac2257f64d917144.svg)是 non-expensiveness 的。</p>
+<p>L-Lipschitz衡量了一个函数最快变化能有多快：例如![image](images/Lecture 1/46aa3791356d4d790c86502c13b6e977.svg)，在这样的情况下，![image](images/Lecture 1/3818937ac554603003e6727783932e9f.svg)就是一个在二维平面上的函数，此时![image](images/Lecture 1/c895173d3be4872abf206be4268a58cb.svg)表示了![image](images/Lecture 1/3818937ac554603003e6727783932e9f.svg)斜率的最大值，即函数的导数存在上界![image](images/Lecture 1/c895173d3be4872abf206be4268a58cb.svg)，![image](images/Lecture 1/589b1f1d1e8a9aee0793289c9ff63a51.svg)。</p>
+<h2 id="L-光滑（L-Smooth）">L-光滑（L-Smooth）</h2>
+<p>我们说一个函数![image](images/Lecture 1/18f3c2855f0e85a1ac2257f64d917144.svg)是L-光滑的（L-Smooth）如果函数![image](images/Lecture 1/18f3c2855f0e85a1ac2257f64d917144.svg)符合以下条件：</p>
+<ol>
+<li>![image](images/Lecture 1/18f3c2855f0e85a1ac2257f64d917144.svg)是 “continuously differentiable”，或者说函数![image](images/Lecture 1/18f3c2855f0e85a1ac2257f64d917144.svg)的梯度![image](images/Lecture 1/b3fc10bbb333ca4469fe5c9ed95d493b.svg)<strong>存在</strong>且<strong>连续</strong>。</li>
+<li>![image](images/Lecture 1/b102179df240c558349700d14584425c.svg)</li>
+</ol>
+<p>这条定理其实描述了函数![image](images/Lecture 1/18f3c2855f0e85a1ac2257f64d917144.svg)的<strong>二阶导数</strong>是有上界![image](images/Lecture 1/c895173d3be4872abf206be4268a58cb.svg)的，即![image](images/Lecture 1/57f7349025cff4684c5c66ec88a099dd.svg)。</p>
+<p>再进一步思考，如果一个函数的二阶导数是有上界的，那么其一定存在一个二次函数，作为函数![image](images/Lecture 1/18f3c2855f0e85a1ac2257f64d917144.svg)的上界（upper bound）以及一个二次函数，作为函数![image](images/Lecture 1/18f3c2855f0e85a1ac2257f64d917144.svg)的下届（lower bound）。</p>
+<h2 id="可导">可导</h2>
+<blockquote>
+<h3 id="可导和连续">可导和连续</h3>
+<p>**连续的定义：**如果函数![image](images/Lecture 1/18f3c2855f0e85a1ac2257f64d917144.svg)在点![image](images/Lecture 1/48d05334b5b0710d63edb6b4b3ac631c.svg)处连续，那么对于任意![image](images/Lecture 1/746d91c3f5e4b385b9d96c7ece1332bc.svg)，总存在一个![image](images/Lecture 1/482b2a0401321628d99873b0944cb7bf.svg)，使得对于所有满足![image](images/Lecture 1/4631bb7e1249d68eeaaca3bc3e9db0ee.svg)的![image](images/Lecture 1/712ecf7894348e92d8779c3ee87eeeb0.svg)，有：</p>
+<p>![image](images/Lecture 1/ad09b03ec31d05b2f1f3832fd83addac.svg)</p>
+<p>这个定义描述了函数![image](images/Lecture 1/18f3c2855f0e85a1ac2257f64d917144.svg)在![image](images/Lecture 1/48d05334b5b0710d63edb6b4b3ac631c.svg)出不能“跳跃”。即满足以下三个条件:</p>
+<ol>
+<li>函数在![image](images/Lecture 1/48d05334b5b0710d63edb6b4b3ac631c.svg)处有定义。</li>
+<li>函数在![image](images/Lecture 1/48d05334b5b0710d63edb6b4b3ac631c.svg)处有的极限存在。</li>
+<li>并且极限值等于其函数值</li>
+</ol>
+<p>**可导的定义：**函数 ![image](images/Lecture 1/18f3c2855f0e85a1ac2257f64d917144.svg) 在点 ![image](images/Lecture 1/48d05334b5b0710d63edb6b4b3ac631c.svg) 处可导，如果存在一个实数 ![image](images/Lecture 1/c895173d3be4872abf206be4268a58cb.svg)（这个 ![image](images/Lecture 1/c895173d3be4872abf206be4268a58cb.svg) 就是导数 ![image](images/Lecture 1/8b803bf3a563eb891218128389fe7fa3.svg))，使得对于任意给定的 ![image](images/Lecture 1/746d91c3f5e4b385b9d96c7ece1332bc.svg)，总存在一个 ![image](images/Lecture 1/482b2a0401321628d99873b0944cb7bf.svg)，使得对于所有满足 ![image](images/Lecture 1/1e0725071acd8e736f39dcdf0145b9dc.svg) 的 ![image](images/Lecture 1/67df0f404d0960fadcc99f6258733f22.svg)，都有：</p>
+<p>![image](images/Lecture 1/fc94abd2b3545a5cba95cfce6c5c0bca.svg)</p>
+<p>或者说，函数![image](images/Lecture 1/18f3c2855f0e85a1ac2257f64d917144.svg)在![image](images/Lecture 1/48d05334b5b0710d63edb6b4b3ac631c.svg)处可导，如果以下极限存在：</p>
+<p>![image](images/Lecture 1/7cf3dc67df0d0b7c136993fb4ed06ada.svg)</p>
+<p>或者我们还可以从左极限右极限的角度定义可导：</p>
+<p>如果一个![image](images/Lecture 1/48d05334b5b0710d63edb6b4b3ac631c.svg)的左极限和右极限都存在并且相等，那么![image](images/Lecture 1/18f3c2855f0e85a1ac2257f64d917144.svg)在![image](images/Lecture 1/48d05334b5b0710d63edb6b4b3ac631c.svg)处可导。</p>
+<p>可导意味着函数在![image](images/Lecture 1/48d05334b5b0710d63edb6b4b3ac631c.svg)处存在“瞬时斜率”，即在![image](images/Lecture 1/48d05334b5b0710d63edb6b4b3ac631c.svg)存在唯一一条、非垂直的切线。</p>
+<p>不可导一般意味着函数在![image](images/Lecture 1/48d05334b5b0710d63edb6b4b3ac631c.svg)处不存在“瞬时斜率”，通常不可导的原因有：</p>
+<ul>
+<li>该点左极限 ≠ 右极限</li>
+<li>该点极限无穷大</li>
+<li>该点极限完全不收敛</li>
+</ul>
+</blockquote>
+<p><strong>可导一定连续，但是连续不一定可导</strong></p>
+<blockquote></blockquote>
+<p>如果一个函数在其定义域内处处可导，那么我们称这个函数是一个可导的函数（differentiable function）。可导函数上任意一点都可以找到一条非垂直的、经过该点的切线。假设我们的函数![image](images/Lecture 1/3818937ac554603003e6727783932e9f.svg)可导，那么其在![image](images/Lecture 1/48d05334b5b0710d63edb6b4b3ac631c.svg)点上的切线为：</p>
+<p>![image](images/Lecture 1/280b022390b432ef66245df14bae4cd2.svg)</p>
+<h2 id="凸函数（Convex-Funtion）">凸函数（Convex Funtion）</h2>
+<p>一个函数![image](images/Lecture 1/18f3c2855f0e85a1ac2257f64d917144.svg)是凸函数如果其满足：</p>
+<ol>
+<li>函数的<strong>定义域</strong>是一个凸集。</li>
+<li>函数上任意两点的连线都大于等于函数本身。</li>
+</ol>
+<p>用数学的语言来描述则为：dom(![image](images/Lecture 1/18f3c2855f0e85a1ac2257f64d917144.svg))是一个 凸集，而且对于任何![image](images/Lecture 1/5cdbcddd065b4cc20e9241ca127cfffe.svg)，以及任意![image](images/Lecture 1/45a29d09108d588dddf034014b9e5fb4.svg)，有：</p>
+<p>![image](images/Lecture 1/f7e8fa4a4501be499771bc6fe15b8135.svg)</p>
+<p>用图像可以表示为：</p>
+<p>![](images/Lecture 1/1757273069107-d932e826-3113-4f49-8eb5-104e6ca7a9fc.png)</p>
+<p>常见的凸函数例如![image](images/Lecture 1/78f60782ca614e86d5a24efce34c149d.svg)、![image](images/Lecture 1/f0018a878cd7ce35767bcc413a7028a6.svg)、![image](images/Lecture 1/d7b5f722738416b5b26aaf6b64637305.svg)。</p>
+<p>吧所有的范数函数![image](images/Lecture 1/3a8ebdcd7aa969f847b92ff4540e149a.svg)也都是凸函数。范数函数满足两点性质：一是<strong>三角不等式（Triangle Inequality）</strong>![image](images/Lecture 1/46f91a3e13f84a5b9f18ef686388f334.svg)；二是<strong>绝对其次性（Absolute Homogeneity）</strong>![image](images/Lecture 1/1076ab1cce1c19469d997363b8500cfd.svg)。因此我们可以证明：</p>
+<p>![image](images/Lecture 1/4cb84a9149c20dc707613a4776e49e8a.svg)</p>
+<p>这正好是凸函数的定义。</p>
+<h3 id="函数图像（Graph）和上方图（Epigraph）">函数图像（Graph）和上方图（Epigraph）</h3>
+<p>我们定义一个函数的图像（graph）为构成函数的线条，定义为</p>
+<p>![image](images/Lecture 1/423cc825ada1ff4ff19dce246be0546a.svg)</p>
+<p>而一个函数上方图（epigraph）为构成函数的线条以及其上方的空间组成的平面，定义为</p>
+<p>![image](images/Lecture 1/66f135c25c813cd237e53acb7e4a6c51.svg)</p>
+<p>一个函数的图像为构成函速的线条（下图中的深黑色线条），而epigraph为线条以及线条上方围成的面积组成：</p>
+<p>![](images/Lecture 1/1757332354755-1ba96872-40dc-4751-b3e0-cd7016bc9379.png)</p>
+<p>我们可以观察到如果一个函数是凸函数，那么其的epigraph是一个凸集，反之亦然。</p>
+<p>![image](images/Lecture 1/18f3c2855f0e85a1ac2257f64d917144.svg)is convex function![image](images/Lecture 1/8466cc7a29f1a0b5d1c7c38bfc60ff97.svg)![image](images/Lecture 1/5a3a76f9bf45ad0231dc86868e810d10.svg)is convex set</p>
+<h3 id="琴生不等式（Jensen’s-Inequality）">琴生不等式（Jensen’s Inequality）</h3>
+<p>对于凸函数![image](images/Lecture 1/18f3c2855f0e85a1ac2257f64d917144.svg)来说，如有![image](images/Lecture 1/0e4e63de26fe8fccf7acfd3d6cb75232.svg)![image](images/Lecture 1/018e54f72d456a97a4a3a4c97ccfaf0c.svg)，并且![image](images/Lecture 1/e1fbd57f9cbd2eb0861083451bd777cf.svg)，则存在：</p>
+<p>![image](images/Lecture 1/0c612fc939b52ddd65d91199e0181fc6.svg)</p>
+<details class="lake-collapse"><summary id="u3f3c6c44"><span class="ne-text" style="color: #DF2A3F">证明TODO</span></summary><p id="ub657d48c" class="ne-p"><span class="ne-text">根据凸函数的一阶性质，我们有：</span></p><p id="ub86c7d5b" class="ne-p" style="text-align: center"><span id="M3Vdz" class="ne-math"><img src="images/Lecture 1/51bcc3018244cde9791cfef049b8c771.svg"></span></p><p id="uda51e3b6" class="ne-p"><span class="ne-text">我们令 </span><span id="zxzxM" class="ne-math"><img src="images/Lecture 1/61ed83efadf38129b3c546b774407f36.svg"></span><span class="ne-text">   ，</span><span id="BOyWZ" class="ne-math"><img src="images/Lecture 1/a8043fa71071bc865c36cb11effef098.svg"></span><span class="ne-text">，于是我们有：</span></p><p id="ub9d76705" class="ne-p" style="text-align: center"><span id="Enipd" class="ne-math"><img src="images/Lecture 1/0163e2c325f5f679b0b2e301917e97e4.svg"></span></p><p id="ubf0baf7e" class="ne-p"><span class="ne-text">两边乘以一个整数</span><span id="XiUYZ" class="ne-math"><img src="images/Lecture 1/6130e424a91207a7f061ba57a6166a3b.svg"></span><span class="ne-text">得到：</span></p><p id="ue284e98a" class="ne-p" style="text-align: center"><span id="ZHPXV" class="ne-math"><img src="images/Lecture 1/f1407cda82aedd4e50b6f0332285caf6.svg"></span></p><p id="u37ff6aa5" class="ne-p"><span class="ne-text">加起来所有式子，得到：</span></p><p id="ub04dbddd" class="ne-p"><span id="HfxiS" class="ne-math"><img src="images/Lecture 1/4ac00b7e48732134d167fb9c9a23f980.svg"></span></p><p id="u717384cb" class="ne-p"><span id="F9z84" class="ne-math"><img src="images/Lecture 1/e1fbd57f9cbd2eb0861083451bd777cf.svg"></span><span class="ne-text">，所以</span><span id="zUk8s" class="ne-math"><img src="images/Lecture 1/1cfc20a323982c8be0f1301b1c8db355.svg"></span><span class="ne-text">：</span></p><p id="u225d829b" class="ne-p" style="text-align: center"><span id="liZZG" class="ne-math"><img src="images/Lecture 1/580365ff44c5c7a99649c82b3b31866a.svg"></span></p><p id="uea285daa" class="ne-p" style="text-align: center"><span id="MWqTc" class="ne-math"><img src="images/Lecture 1/bab91478a7b29bb57953dd57fb888d13.svg"></span><span class="ne-text"> </span></p></details>
+### 凸函数的一阶性质
+**如果函数的定义域**![image](images/Lecture 1/479d081de7c573c940864d6e4fb2eb98.svg)**是凸集，而且函数**![image](images/Lecture 1/18f3c2855f0e85a1ac2257f64d917144.svg)**处处可导，那么有：**
+<p>![image](images/Lecture 1/18f3c2855f0e85a1ac2257f64d917144.svg)<strong>是凸函数</strong>![image](images/Lecture 1/8466cc7a29f1a0b5d1c7c38bfc60ff97.svg)![image](images/Lecture 1/51bcc3018244cde9791cfef049b8c771.svg)</p>
+<p>这基本上就是在另一个方面定义了凸函数，一个函数如果是凸函数，那么他大于等于自己的每一条切线。用图像可以表示为：</p>
+<p>![](images/Lecture 1/1757345662268-a6bad33a-028a-424a-b82f-7646ea1fcea6.png)</p>
+<h3 id="凸函数的二阶性质">凸函数的二阶性质</h3>
+<p><strong>如果函数的定义域</strong>![image](images/Lecture 1/479d081de7c573c940864d6e4fb2eb98.svg)<strong>是凸集，而且函数</strong>![image](images/Lecture 1/18f3c2855f0e85a1ac2257f64d917144.svg)<strong>二阶可导（即</strong>![image](images/Lecture 1/824b6ce730e5d9493a3111f0cff8deb3.svg)<strong>Hessian矩阵存在），那么有：</strong></p>
+<p>![image](images/Lecture 1/18f3c2855f0e85a1ac2257f64d917144.svg)**是凸函数 **![image](images/Lecture 1/8466cc7a29f1a0b5d1c7c38bfc60ff97.svg)![image](images/Lecture 1/57bb290dd060bd05d06c1f29deeee28f.svg)</p>
+<blockquote>
+<p>我们说一个矩阵A是半正定的（Positive Semidefinite），用符号表示为![image](images/Lecture 1/12695d204964213f1022fdca1c402f87.svg)，如果对于所有非零实向量，都满足 ![image](images/Lecture 1/0da7f0f0fd5ab41e927e1e05d3973817.svg)</p>
+</blockquote>
+<h3 id="凸函数操作">凸函数操作</h3>
+<ol>
+<li><strong>如果有</strong>![image](images/Lecture 1/06bd52849cb504398c390c5f296c8447.svg)<strong>多个凸函数，</strong>![image](images/Lecture 1/6d715e006c4e4c37c7cecd2515241fb6.svg)<strong>，那么函数</strong>![image](images/Lecture 1/a99b00213f873346597c7ba014aa715e.svg)<strong>在定义域</strong>![image](images/Lecture 1/d22b723f7449184b9f80548cd7000f1a.svg)<strong>上也是凸函数。</strong></li>
+</ol>
+<details class="lake-collapse"><summary id="ue2340e1a"><span class="ne-text">证明 </span></summary><p id="ud9276137" class="ne-p"><span class="ne-text">取</span><span id="Jln5M" class="ne-math"><img src="images/Lecture 1/60a54572d14f32d4ba6e344db8cd677b.svg"></span><span class="ne-text">，因为</span><span id="E8o8L" class="ne-math"><img src="images/Lecture 1/06bd52849cb504398c390c5f296c8447.svg"></span><span class="ne-text">是凸函数，我们有对于</span><span id="JAIj6" class="ne-math"><img src="images/Lecture 1/a037eed18a5a9ac6eeb8f923a226e864.svg"></span><span class="ne-text">：</span></p><p id="u1b5457a4" class="ne-p" style="text-align: center"><span id="xZtGL" class="ne-math"><img src="images/Lecture 1/3533d2b95908d8abe7ea4cf64734aa52.svg"></span></p><p id="u46b3c854" class="ne-p"><span class="ne-text">两边同时乘以一个正数</span><span id="w6ocQ" class="ne-math"><img src="images/Lecture 1/6130e424a91207a7f061ba57a6166a3b.svg"></span><span class="ne-text">，我们有：</span></p><p id="u2e8e7c91" class="ne-p" style="text-align: center"><span id="XTIJj" class="ne-math"><img src="images/Lecture 1/3c908fec2432d6c80423cf4903d98777.svg"></span></p><p id="u0f7ac596" class="ne-p"><span class="ne-text">把所有式子加起来，我们有：</span></p><p id="u8c6b41a7" class="ne-p" style="text-align: center"><span id="uBtoB" class="ne-math"><img src="images/Lecture 1/8de460f5f98840d103039503081c8fd6.svg"></span></p><p id="u05a9c671" class="ne-p"><span class="ne-text">即：</span></p><p id="ua7c0db9b" class="ne-p" style="text-align: center"><span id="uO47t" class="ne-math"><img src="images/Lecture 1/b6d4c3982eb2d1a94528f63974122aa1.svg"></span></p><p id="u86b81327" class="ne-p"><span class="ne-text">即：</span></p><p id="ue82dbd42" class="ne-p" style="text-align: center"><span id="gRR0W" class="ne-math"><img src="images/Lecture 1/a99b00213f873346597c7ba014aa715e.svg"></span><span class="ne-text">是凸函数</span></p></details>
+2. **如果**![image](images/Lecture 1/18f3c2855f0e85a1ac2257f64d917144.svg)**是一个定义在**![image](images/Lecture 1/c6eaabe1bcb33bdd7165c1ee80c44141.svg)**上的凸函数，而**![image](images/Lecture 1/0e36ae51870644a186d418d8699de833.svg)**是一个仿射函数（affine function）**![image](images/Lecture 1/deae103cb7ceead0afd33f739c9340db.svg)**，那么复合函数**![image](images/Lecture 1/f2e96c250a560f60ad6e9353dab19c8d.svg)**也是一个凸函数（在复合函数定义域**![image](images/Lecture 1/0c03b232ec92a1c53c233bf15d1f6a1c.svg)**内）**
+<details class="lake-collapse"><summary id="u5e31288e"><span class="ne-text">证明</span></summary><p id="ua057bc87" class="ne-p"><span class="ne-text">因为</span><span id="cAziC" class="ne-math"><img src="images/Lecture 1/3818937ac554603003e6727783932e9f.svg"></span><span class="ne-text">是一个凸函数，所以我们有：</span></p><p id="u276a5c34" class="ne-p"><span id="SwCxX" class="ne-math"><img src="images/Lecture 1/f3c28926d11cd5407aded28eb8d7658a.svg"></span></p><p id="u5e14ada1" class="ne-p"><span class="ne-text">因为</span><span id="g5sHb" class="ne-math"><img src="images/Lecture 1/55ba3b4ecaffd878543e762f3ce0d49b.svg"></span><span class="ne-text">是一个仿射函数，</span><span id="ac6bX" class="ne-math"><img src="images/Lecture 1/deae103cb7ceead0afd33f739c9340db.svg"></span><span class="ne-text">:</span></p><p id="ub603e748" class="ne-p"><span id="KBjXM" class="ne-math"><img src="images/Lecture 1/9e33d53f4e88d45417d19ed87498a2ce.svg"></span></p><p id="u44ec3d87" class="ne-p"><span class="ne-text">所以</span></p><p id="u91051523" class="ne-p" style="text-align: center"><span id="gTB95" class="ne-math"><img src="images/Lecture 1/f2e96c250a560f60ad6e9353dab19c8d.svg"></span><span class="ne-text">也是一个凸函数</span></p></details>
+## <font style="color:#000000;">局部和全局最小值</font>
+我们说点![image](images/Lecture 1/712ecf7894348e92d8779c3ee87eeeb0.svg)是![image](images/Lecture 1/87acb7d7c091fd4c42edf300c3fff34c.svg)的局部最小值（Local Minima），如果存在一个![image](images/Lecture 1/746d91c3f5e4b385b9d96c7ece1332bc.svg)使得：
+<p>![image](images/Lecture 1/293b4ea8faba7958c8386acc17fa9559.svg)</p>
+<h3 id="凸函数的局部最小值即为全局最小值">凸函数的局部最小值即为全局最小值</h3>
+<p>**任何凸函数的局部最小值都是全局最小值（Global Minima）。**用数学语言表示为，如果![image](images/Lecture 1/712ecf7894348e92d8779c3ee87eeeb0.svg)是凸函数![image](images/Lecture 1/708300c9e99829859bf05310df7348f3.svg)的局部最小值（Local Minima），那么![image](images/Lecture 1/712ecf7894348e92d8779c3ee87eeeb0.svg)是这个函数的全局最小值（Global Minima），意味着![image](images/Lecture 1/d57e50982e4bb3a563ada87d79d6d395.svg)</p>
+<h3 id="凸函数梯度为0的点即为其全局最小值">凸函数梯度为0的点即为其全局最小值</h3>
+<p>**如果一个凸函数可导，那么其梯度为0的点就是其全局最小值。**用数学语言表示为，如果函数![image](images/Lecture 1/18f3c2855f0e85a1ac2257f64d917144.svg)可导并且是凸函数，而且定义在一个开放的域中。那么如果存在一个![image](images/Lecture 1/712ecf7894348e92d8779c3ee87eeeb0.svg)使得![image](images/Lecture 1/1c2e972bf89e43e03c7e411782b26a00.svg)，那么![image](images/Lecture 1/712ecf7894348e92d8779c3ee87eeeb0.svg)是一个全局最小值。</p>
+<h2 id="严格凸函数">严格凸函数</h2>
+<p>一个函数![image](images/Lecture 1/87acb7d7c091fd4c42edf300c3fff34c.svg)是严格凸函数（Strictly Convex）如果其满足：</p>
+<ul>
+<li>函数定义域![image](images/Lecture 1/479d081de7c573c940864d6e4fb2eb98.svg)是一个凸集</li>
+<li>对于所有![image](images/Lecture 1/905c7cd58c704396f6e8d57d805fc9c1.svg)以及 ![image](images/Lecture 1/48636b8b77255759e2abd98090d6c1fe.svg)来说，我们有：</li>
+</ul>
+<p>![image](images/Lecture 1/b327371dc961950cc0891c9e43ffe9e5.svg)</p>
+<p>例如下图中左图不是严格凸函数，而右图是严格凸函数：</p>
+<p>![](images/Lecture 1/1757399507888-79977fdc-c47d-4907-88c4-14eb42c481f4.png)</p>
+<h3 id="严格凸函数最多只有一个全局最小值">严格凸函数最多只有一个全局最小值</h3>
+<h2 id="最小值点">最小值点</h2>
+<p>设 ![image](images/Lecture 1/29df562074f1348713ca26b800ace1e4.svg) 为一个凸函数，且 ![image](images/Lecture 1/a402ce5d02405ad7c10909da7f003448.svg) 为一个凸集。点 ![image](images/Lecture 1/a589dbb8c70a0bce001b8c055bfef9e1.svg) 是函数 ![image](images/Lecture 1/18f3c2855f0e85a1ac2257f64d917144.svg) 在集合 ![image](images/Lecture 1/94e79ad0c1aabeafef9e2fc4af6adf66.svg) 上的<strong>最小化点（Minimizer）</strong>，若其满足：</p>
+<p>![image](images/Lecture 1/79cc6d7f39f7e7db77b9e91be55025d6.svg)</p>
+<h3 id="求最小化点">求最小化点</h3>
+<p>设函数 ![image](images/Lecture 1/29df562074f1348713ca26b800ace1e4.svg) 是凸函数且在其开定义域 ![image](images/Lecture 1/0ca2985f69b426bcd05ea82829d9e66b.svg)上可微，并设 ![image](images/Lecture 1/a402ce5d02405ad7c10909da7f003448.svg) 为一个凸集。点 ![image](images/Lecture 1/148704abef4a064f2f77cc5e83ae1401.svg) 是函数 ![image](images/Lecture 1/18f3c2855f0e85a1ac2257f64d917144.svg) 在集合 ![image](images/Lecture 1/94e79ad0c1aabeafef9e2fc4af6adf66.svg) 上的<strong>最小化点</strong>，<strong>当且仅当</strong>满足以下条件：</p>
+<p>![image](images/Lecture 1/2e11f8077ed7675fb80eb8805e31a81c.svg)</p>
+<h2 id="下水平集（Sublevel-Set）">下水平集（Sublevel Set）</h2>
+<p>如果有一个函数![image](images/Lecture 1/9963fff7a9077167b23c33afe21a09bd.svg)，我们说集合![image](images/Lecture 1/d0b5028c706213285fb5320a34c7f456.svg)是函数![image](images/Lecture 1/18f3c2855f0e85a1ac2257f64d917144.svg)的![image](images/Lecture 1/18d25ca4f77a9bbed9812e2bb0b350a5.svg)-下水平集（![image](images/Lecture 1/18d25ca4f77a9bbed9812e2bb0b350a5.svg)-sublevel set）。</p>
+<p>用图像可以表示成：</p>
+<p>![](images/Lecture 1/1757492266504-42ede357-e068-4cf1-9445-5b61bd4ab7f7.png)</p>
+<h2 id="凸优化（Convex-Optimization）">凸优化（Convex Optimization）</h2>
+<p>最后我们定义凸优化问题：</p>
+<p>![image](images/Lecture 1/3cc7bc82f4cbc45522f37d2a866388b4.svg)</p>
+<ul>
+<li>![image](images/Lecture 1/3818937ac554603003e6727783932e9f.svg)是一个凸函数。</li>
+<li>![image](images/Lecture 1/4d8484a9479998c412c674c6b337dbbc.svg)是一个凸集。</li>
+</ul>
+<p>凸优化问题有以下我们梦寐以求的性质：</p>
+<ul>
+<li>在凸优化问题中，每一个局部最小值都是全局最小值。</li>
+</ul>
+<h1>课后思考</h1>
+<h2 id="最小二乘法">最小二乘法</h2>
+<p>回忆一下我们在线性回归中使用的损失函数，![image](images/Lecture 1/3067b6bfcc29ce61627a5263636f4682.svg)，其中![image](images/Lecture 1/f8accfb477283d578611bfcfa9d43c2e.svg)。</p>
+</div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">nty</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">38</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Nie-Tianyi"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/14/%E4%BB%80%E4%B9%88%E6%98%AFHadoop_preprocessed/" title="Hadoop">Hadoop</a><time datetime="2025-09-14T12:46:25.000Z" title="发表于 2025-09-14 20:46:25">2025-09-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/12/Raft%E5%8D%8F%E8%AE%AE_preprocessed/" title="Raft协议">Raft协议</a><time datetime="2025-09-12T12:46:25.000Z" title="发表于 2025-09-12 20:46:25">2025-09-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/07/Lecture%201_preprocessed/" title="凸函数优化笔记（1）">凸函数优化笔记（1）</a><time datetime="2025-09-07T12:46:25.000Z" title="发表于 2025-09-07 20:46:25">2025-09-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/27/%E7%BA%BF%E6%80%A7%E5%87%BD%E6%95%B0%E5%AE%9A%E4%B9%89_preprocessed/" title="线性函数定义">线性函数定义</a><time datetime="2025-08-27T12:46:25.000Z" title="发表于 2025-08-27 20:46:25">2025-08-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/16/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C's%20Gradient_preprocessed/" title="神经网络's Gradient">神经网络's Gradient</a><time datetime="2025-08-16T12:46:25.000Z" title="发表于 2025-08-16 20:46:25">2025-08-16</time></div></div></div></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/Hadoop/" style="font-size: 1.1em; color: #999">Hadoop</a> <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" style="font-size: 1.1em; color: #999">人工智能</a> <a href="/tags/Python/" style="font-size: 1.3em; color: #99a1ac">Python</a> <a href="/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/" style="font-size: 1.1em; color: #999">异步编程</a> <a href="/tags/%E4%BA%8C%E5%B1%82%E6%89%A9%E5%B1%95/" style="font-size: 1.1em; color: #999">二层扩展</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 1.1em; color: #999">性能优化</a> <a href="/tags/PostgreSQL/" style="font-size: 1.1em; color: #999">PostgreSQL</a> <a href="/tags/%E7%BA%BF%E6%80%A7%E5%87%BD%E6%95%B0/" style="font-size: 1.1em; color: #999">线性函数</a> <a href="/tags/%E4%BB%A5%E5%A4%AA%E5%9D%8A/" style="font-size: 1.2em; color: #999da3">以太坊</a> <a href="/tags/PyO3/" style="font-size: 1.1em; color: #999">PyO3</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 1.1em; color: #999">大数据</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/" style="font-size: 1.1em; color: #999">编程基础</a> <a href="/tags/%E5%85%B1%E8%AF%86%E5%8D%8F%E8%AE%AE/" style="font-size: 1.1em; color: #999">共识协议</a> <a href="/tags/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" style="font-size: 1.1em; color: #999">线性回归</a> <a href="/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" style="font-size: 1.4em; color: #99a5b6">区块链</a> <a href="/tags/%E6%95%B0%E5%AD%A6/" style="font-size: 1.1em; color: #999">数学</a> <a href="/tags/%E6%AF%94%E7%89%B9%E5%B8%81/" style="font-size: 1.1em; color: #999">比特币</a> <a href="/tags/Rust/" style="font-size: 1.4em; color: #99a5b6">Rust</a> <a href="/tags/Web%E6%A1%86%E6%9E%B6/" style="font-size: 1.1em; color: #999">Web框架</a> <a href="/tags/%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81/" style="font-size: 1.1em; color: #999">加密货币</a> <a href="/tags/SQL/" style="font-size: 1.1em; color: #999">SQL</a> <a href="/tags/Axum/" style="font-size: 1.1em; color: #999">Axum</a> <a href="/tags/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/" style="font-size: 1.4em; color: #99a5b6">梯度下降</a> <a href="/tags/%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/" style="font-size: 1.1em; color: #999">智能合约</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6/" style="font-size: 1.1em; color: #999">数据科学</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" style="font-size: 1.3em; color: #99a1ac">分布式系统</a> <a href="/tags/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/" style="font-size: 1.1em; color: #999">逻辑回归</a> <a href="/tags/Raft/" style="font-size: 1.1em; color: #999">Raft</a> <a href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" style="font-size: 1.1em; color: #999">线程池</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 1.1em; color: #999">并发编程</a> <a href="/tags/numba/" style="font-size: 1.1em; color: #999">numba</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 1.1em; color: #999">数据库</a> <a href="/tags/Python%E8%AF%AD%E6%B3%95/" style="font-size: 1.1em; color: #999">Python语法</a> <a href="/tags/%E5%85%B1%E8%AF%86%E7%AE%97%E6%B3%95/" style="font-size: 1.1em; color: #999">共识算法</a> <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 1.1em; color: #999">神经网络</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 1.5em; color: #99a9bf">机器学习</a> <a href="/tags/Tokio/" style="font-size: 1.1em; color: #999">Tokio</a> <a href="/tags/%E5%87%B8%E5%87%BD%E6%95%B0%E4%BC%98%E5%8C%96/" style="font-size: 1.1em; color: #999">凸函数优化</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      <a class="card-more-btn" href="/archives/"
+            title="查看更多">
+            <i class="fas fa-angle-right"></i>
+          </a>
+    </div>
+  
+    <ul class="card-archive-list">
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/09/">
+            <span class="card-archive-list-date">
+              九月 2025
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/08/">
+            <span class="card-archive-list-date">
+              八月 2025
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/07/">
+            <span class="card-archive-list-date">
+              七月 2025
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/06/">
+            <span class="card-archive-list-date">
+              六月 2025
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/05/">
+            <span class="card-archive-list-date">
+              五月 2025
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/03/">
+            <span class="card-archive-list-date">
+              三月 2025
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/10/">
+            <span class="card-archive-list-date">
+              十月 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/09/">
+            <span class="card-archive-list-date">
+              九月 2024
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">19</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总浏览量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2025-09-16T17:46:14.948Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By nty</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>nty的技术博客 | nty的技术博客</title><meta name="author" content="nty"><meta name="copyright" content="nty"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="损失函数和代价函数 我们使用交叉熵损失（Cross Entropy Loss）函数作为逻辑回归算法的损失函数，其公式如下 ![image](images&#x2F;逻辑回归’s Gradient&#x2F;7c9f0d29be9da57f2349f49f538e080d.svg) 其中, ![image](images&#x2F;逻辑回归’s Gradient&#x2F;1bce09fbf65f0fcf4cf55aec95d479cb.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="nty的技术博客">
+<meta property="og:url" content="https://nie-tianyi.github.io/draft/output/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92's%20Gradient_preprocessed.html">
+<meta property="og:site_name" content="nty的技术博客">
+<meta property="og:description" content="损失函数和代价函数 我们使用交叉熵损失（Cross Entropy Loss）函数作为逻辑回归算法的损失函数，其公式如下 ![image](images&#x2F;逻辑回归’s Gradient&#x2F;7c9f0d29be9da57f2349f49f538e080d.svg) 其中, ![image](images&#x2F;逻辑回归’s Gradient&#x2F;1bce09fbf65f0fcf4cf55aec95d479cb.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://nie-tianyi.github.io/images/avatar.png">
+<meta property="article:published_time" content="2025-09-16T17:30:12.524Z">
+<meta property="article:modified_time" content="2025-09-16T17:30:12.524Z">
+<meta property="article:author" content="nty">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://nie-tianyi.github.io/images/avatar.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://nie-tianyi.github.io/draft/output/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92's%20Gradient_preprocessed.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'nty的技术博客',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'page'
+}</script><meta name="generator" content="Hexo 7.3.0"><link href="https://cdn.bootcss.com/KaTeX/0.11.1/katex.min.css" rel="stylesheet" /></head><body><div class="page" id="body-wrap"><header class="not-home-page" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">nty的技术博客</span></a></span><div id="menus"></div></nav><div id="page-site-info"><h1 id="site-title"></h1></div></header><main class="layout" id="content-inner"><div id="page"><div class="container" id="article-container"><h2 id="损失函数和代价函数">损失函数和代价函数</h2>
+<p>我们使用交叉熵损失（Cross Entropy Loss）函数作为逻辑回归算法的损失函数，其公式如下</p>
+<p>![image](images/逻辑回归’s Gradient/7c9f0d29be9da57f2349f49f538e080d.svg)</p>
+<p>其中, ![image](images/逻辑回归’s Gradient/1bce09fbf65f0fcf4cf55aec95d479cb.svg)为 Sigmoid 函数，通过计算给出的输入和自身权重乘积（以及加上偏置），经过Sigmoid函数的处理，最后计算出一个处于(0,1）之间的概率，这个概率表示预测为真的概率。Sigmoid函数公式如下：</p>
+<p>![image](images/逻辑回归’s Gradient/46322849aacf5fe105678ef3096c0686.svg)</p>
+<blockquote>
+<p>其中 ![image](images/逻辑回归’s Gradient/bdce11e5c8a8691160f094a699fdd149.svg)与 ![image](images/逻辑回归’s Gradient/a2c32b77dad2e922ed80307378232c7f.svg)等价，都是计算 ![image](images/逻辑回归’s Gradient/87998e99d3dda05e4f45c7850710eb1d.svg)，只不过前者为矩阵写法，表示一个一维矩阵![image](images/逻辑回归’s Gradient/5e293cf754c9e3a9ad8af0b4c8b6971f.svg)的转置（transpose）乘以另外一个一维矩阵![image](images/逻辑回归’s Gradient/1100b198878cf618864989a0e841e099.svg)，而后者是常见的求和公式。使用矩阵写法不仅在书写上更方便，也更符合我们需要在NumPy中需要写的代码。</p>
+</blockquote>
+<p>一个小细节：为什么机器学习中总是习惯性的写成![image](images/逻辑回归’s Gradient/04fc4bfd1647f8ba0ca31a20fa7183fb.svg)，而不是![image](images/逻辑回归’s Gradient/717ec016851b38dc8e80a4bfe3d06442.svg)？因为在机器学习中，我们习惯性的将![image](images/逻辑回归’s Gradient/5e293cf754c9e3a9ad8af0b4c8b6971f.svg)和 ![image](images/逻辑回归’s Gradient/9bc21b9ec0ce99019d63120115080c9e.svg)视作形状为 ![image](images/逻辑回归’s Gradient/29cf1c9370447f71e2d6410da3551d32.svg)的列向量（column vector） ，于是![image](images/逻辑回归’s Gradient/f90656db63cc39782e3cb15df962c0b9.svg)实际上是一个形状![image](images/逻辑回归’s Gradient/29cf1c9370447f71e2d6410da3551d32.svg)，求转置后，成为一个形状为![image](images/逻辑回归’s Gradient/bd518381539e2259a8109c52beec3257.svg)的矩阵，然后乘以另一个形状为 ![image](images/逻辑回归’s Gradient/29cf1c9370447f71e2d6410da3551d32.svg)的矩阵。如果你足够了解矩阵乘法，那么你就会知道前者的计算结果是一个形状为![image](images/逻辑回归’s Gradient/5ce90cfd5dec8b917254288b23aebdb7.svg)的矩阵；而后者的计算结果是一个![image](images/逻辑回归’s Gradient/88a5675269d6d4cd8b9e592baf7a7adc.svg)的矩阵。在这里我们只想要得到一个标量，而不需要一个矩阵。</p>
+<blockquote></blockquote>
+<p>交叉熵损失函数如果写成一行公式，则可以表示为（以下这个公式和上面的损失函数是完全等价的）：</p>
+<p>![image](images/逻辑回归’s Gradient/6a22a570b8aeac10ac39d98c4b247808.svg)</p>
+<p>而整个数据集的代价函数，加上L2正则化项，则可以表示为：</p>
+<p>![image](images/逻辑回归’s Gradient/f9b8a88efcb519cb3e8465b68cf07a45.svg)</p>
+<h2 id="计算梯度">计算梯度</h2>
+<p>由于逻辑回归的损失函数是一个非常复杂的复合函数，我们使用链式法则对这个函数求导，以计算得到梯度。首先我们求在代价函数在![image](images/逻辑回归’s Gradient/e962475aca62e7f210f40004870bd692.svg)方向上的梯度：</p>
+<p>![image](images/逻辑回归’s Gradient/8cc922b2b952fb64fce5215d5ef99653.svg)</p>
+<p>我们把![image](images/逻辑回归’s Gradient/7e699a62a70fdd19bb1600a07511085f.svg)单独拎出来计算，并且用![image](images/逻辑回归’s Gradient/a5e8faa212780fd7d755593138757279.svg)代替![image](images/逻辑回归’s Gradient/85f49526bb68877fbe04c8f2d9b50f86.svg)（仅仅是为了书写简单）。根据链式法则我们有：</p>
+<p>![image](images/逻辑回归’s Gradient/4ae59cb8b2dbcf04065d4a5aebef4bdf.svg)</p>
+<p>通常这里的![image](images/逻辑回归’s Gradient/f421c9630300dab712200995d269df5a.svg)函数的底可以是任意实数，但是为了我们计算简便，我们使用自然常数![image](images/逻辑回归’s Gradient/c9a277d40d3a0b3afb85cdb557908945.svg)作为底：</p>
+<p>![image](images/逻辑回归’s Gradient/92b74d943cba97e7ad81bf019f1fcb43.svg)</p>
+<p>接着我们求![image](images/逻辑回归’s Gradient/600ddbe3dc21ae85d9b9534449177464.svg)，我们设![image](images/逻辑回归’s Gradient/82d02b6c28f1dcd23a500b2d4ec5390f.svg)，根据链式法则我们有：</p>
+<p>![image](images/逻辑回归’s Gradient/1fb0d2711bf80975dddb18b0dd1407fd.svg)</p>
+<blockquote>
+<p>关于 Sigmoid 函数求导，其过程如下：</p>
+<p>![image](images/逻辑回归’s Gradient/4c1ec75e41c227ccc28a7a3be9ff16c1.svg)</p>
+<p>即 ![image](images/逻辑回归’s Gradient/eb32eef974f48e16cf8cab2b6bf6003d.svg)</p>
+</blockquote>
+<p>于是我们有：</p>
+<p>![image](images/逻辑回归’s Gradient/40970d1dd0f8461199ee376856e4ecd1.svg)</p>
+<p>结果非常的amazing啊，交叉熵损失函数CEL的求导结果竟然和我们在线性回归中使用的损失函数MSE的求导结果一模一样。我们将这个求导结果带入代价函数，得到代价函数在![image](images/逻辑回归’s Gradient/e962475aca62e7f210f40004870bd692.svg)方向上的梯度：</p>
+<p>![image](images/逻辑回归’s Gradient/ae05ac0eee608ad58755fadcd9593423.svg)</p>
+<p>我们接着计算这个损失函数在 ![image](images/逻辑回归’s Gradient/d29c2e5f4926e5b0e9a95305650f6e54.svg)方向上的偏导，求导过程几乎和上面展示的一样，唯一的不同是 ![image](images/逻辑回归’s Gradient/2aedcfe13a0c055783d346c5e49d7894.svg)而 ![image](images/逻辑回归’s Gradient/098584dc24ace58ef778ec466d6512e8.svg)(假设 ![image](images/逻辑回归’s Gradient/82d02b6c28f1dcd23a500b2d4ec5390f.svg))：</p>
+<p>![image](images/逻辑回归’s Gradient/38bbb4b9ddc54dfa09003121a60eba51.svg)</p>
+<p>于是我们更新梯度的公式为：</p>
+<p>![image](images/逻辑回归’s Gradient/e3b89e5f83178817c0a3fc210041ac9f.svg)</p>
+<h2 id="多项式逻辑回归">多项式逻辑回归</h2>
+<p>逻辑回归只能处理二分类问题，如果想要预测有多个标签的结果，单个逻辑回归模型就无能为力了。处理多标签分类问题时，最直观、最容易想到的办法是先将其中几个聚集为一类，分类，然后再在每个子类内继续分类。例如我们现在需要分类的结果有 [0, 1, 2, 3] 四类，那么我们可以先将0和1分为一类，3和4分为另一类，这样问题就简化成了多个二分类问题：</p>
+<p>![](images/逻辑回归’s Gradient/1752349137934-5b2912db-74f7-47d0-9531-7f2f0acae18e.png)</p>
+<blockquote>
+<p>在处理多分类的问题的时候，我们首先需要将预测标签编码成 one-hot 编码。例如在上例中，我们想要预测的结果有四类[0, 1, 2, 3]，但是我们实际的标签——假设这条数据的类别是2——则是[0, 0, 1, 0]，分别对应这[0, 1, 2, 3]。或者假设我们要预测的标签为 [红色， 绿色， 蓝色]，而这单条样本的标签为绿色，则我们需要将![image](images/逻辑回归’s Gradient/bf98c0ddcbe9c1e535f767c78c3aa813.svg)编码成 [0，1，0] （注意，我们所有的标签都需要遵循一样的次序）。</p>
+</blockquote>
+<p>这里我们需要连续训练三个逻辑回归模型，如果需要分的类别越多，则需要训练的模型也越多。有更简单的方法吗？有的！在面对多分类问题时，我们可以使用多项式逻辑回归（Polynomial Logistic Regression）。多项式逻辑回归的核心是 Softmax 函数，我们用 Softmax 函数取代而二项式逻辑回归中的 Sigmoid 函数：</p>
+<p>![image](images/逻辑回归’s Gradient/991302128cc8cc83c385ca18b5f07d6f.svg)</p>
+<p>这里的![image](images/逻辑回归’s Gradient/da8ba3ff388a4a17525f3d51358aebd1.svg)表示每个类别的输入和其权重的乘积再加上偏置，即![image](images/逻辑回归’s Gradient/97c493e04d4b888043c22f94bba7b65a.svg)。假设我们有三个类别需要分类，分别是 [0, 1, 2] 三个类别：</p>
+<ol>
+<li>我们首先初始化三组权重，分别是 ![image](images/逻辑回归’s Gradient/1f0b2c1a602f5a52f29bed25d3346115.svg)和![image](images/逻辑回归’s Gradient/ccd7921caa636e4b39239f38768dbc52.svg)、![image](images/逻辑回归’s Gradient/deb8257d4bfd5f75d99bc965a6088f98.svg)和![image](images/逻辑回归’s Gradient/1becf94a458da89497059c47a43c858a.svg)、![image](images/逻辑回归’s Gradient/7e5c604851fe7a8d19a97a5e63757c58.svg)和![image](images/逻辑回归’s Gradient/99b74c73e8f07cc892af007b651fce09.svg)；</li>
+<li>接着我们计算权重和输入的乘积 ![image](images/逻辑回归’s Gradient/ba32bbf550e9b4770785882c14921e25.svg)、![image](images/逻辑回归’s Gradient/c6f04b14150a8bb1a100eb16b5d91c64.svg)、![image](images/逻辑回归’s Gradient/0e41bae649b03a29e8c613fa2f833063.svg);</li>
+<li>最后我们通过 Softmax函数，计算出每个分类的概率![image](images/逻辑回归’s Gradient/39cdaec02c6d19112b5f870766d3e300.svg)、![image](images/逻辑回归’s Gradient/3da99999420353fda48faf744c988e15.svg)、![image](images/逻辑回归’s Gradient/9972f5a4aab8f6d74ec7220b90f1b686.svg)。这样我们就能得到三个概率，分别对应着预测为0、1、2三类的概率，并且![image](images/逻辑回归’s Gradient/fb1dd5af48470897a55b8cecb310d818.svg)。</li>
+</ol>
+<blockquote>
+<p>我们使用softmax函数主要是为了将预测的结果归一化为三个加起来等于1的概率，那为什么使用以 ![image](images/逻辑回归’s Gradient/c9a277d40d3a0b3afb85cdb557908945.svg)为底的 Softmax 函数，而不是直接使用![image](images/逻辑回归’s Gradient/3a962584124a21a32d4757332498aaa0.svg)呢？后者不也可以将多个输出归一到和为1的多个概率吗？使用以 ![image](images/逻辑回归’s Gradient/c9a277d40d3a0b3afb85cdb557908945.svg) 为底的指数函数的目的主要有两个：一个是可以保证结果中不会出现负数，二个是可以利用指数爆炸的性质，放大多个预测结果之间的差异，使其更贴合我们期望的“其中一个类别的预测结果趋近于1，而其他几个类别的预测结果接近于0”的预测结果。至于为什么底是![image](images/逻辑回归’s Gradient/c9a277d40d3a0b3afb85cdb557908945.svg)?当然是为了我们后面计算梯度的时候求导方便啦！</p>
+</blockquote>
+<p>这个时候我们得到了三个概率，那我们该怎么计算梯度，更新我们模型的权重参数呢？在多分类问题中，我们沿用逻辑回归中的损失函数 ![image](images/逻辑回归’s Gradient/30154f57030912fcbdcf346d646a82c6.svg)。假设数据的真实标签是0，那么我们期望我们的模型的输出为 [1, 0, 0]（分别对应![image](images/逻辑回归’s Gradient/c5940a3acff4f38f793a8ce19bdb8690.svg)![image](images/逻辑回归’s Gradient/091a44b6adf69464fa153ab4fb6b1d64.svg)![image](images/逻辑回归’s Gradient/764c1c88fba43c220e26e27403bf676f.svg)），但是我们模型实际输出为[0.34, 0.33, 0.33]，那么我们的模型这一轮训练的损失为![image](images/逻辑回归’s Gradient/65a313bfe1a63f7d6ac7f7d3d054640d.svg)。后面两项为0，这意味着在多项式分类中，我们只关心标签为真的项的损失。</p>
+<h2 id="计算多项式逻辑回归的梯度">计算多项式逻辑回归的梯度</h2>
+<p>跟之前求导梯度不一样的是，我们现在一共有![image](images/逻辑回归’s Gradient/38a3f4d664b7a723d138f9d57be0c783.svg)组权重，并且每组权重内有![image](images/逻辑回归’s Gradient/4760e2f007e23d820825ba241c47ce3b.svg)个权重以及一个偏置![image](images/逻辑回归’s Gradient/d29c2e5f4926e5b0e9a95305650f6e54.svg)。（假设我们预测的结果一共有![image](images/逻辑回归’s Gradient/38a3f4d664b7a723d138f9d57be0c783.svg)类，并且每条数据的维度为![image](images/逻辑回归’s Gradient/4760e2f007e23d820825ba241c47ce3b.svg)维）。</p>
+<p>![image](images/逻辑回归’s Gradient/b787123144017b9367197b79be0de230.svg)</p>
+<p>跟之前不同的是，之前的权重只有一个维度，而这里的权重成为了一个二维的矩阵，我们接下来要分别求出这个矩阵中每一个参数的梯度。在计算Softmax函数梯度之前，我们要根据标签![image](images/逻辑回归’s Gradient/bf98c0ddcbe9c1e535f767c78c3aa813.svg)的值分成两种情况，分别分成![image](images/逻辑回归’s Gradient/1951f9656e5e28af5edb9c326a2bfa91.svg) 的时候和 ![image](images/逻辑回归’s Gradient/e8cbef78c5f630a10a4ebd954dfb6649.svg)的时候。因为当![image](images/逻辑回归’s Gradient/0e30338d8bdf1ce3a92ee33809a7ae88.svg)的时候，Softmax函数的分子内包含我们要求的参数的偏导；而![image](images/逻辑回归’s Gradient/5ef5eebdaedab8a0d31a54532a9f9ef0.svg) 的时候，Softmax函数的分子内不包含我们要求的参数的梯度，因此我们可以将分子上的式子视作一个常数。</p>
+<p>由于我们需要根据标签的值分成多种情况求导，当预测标签的值不一样的时候，我们计算各个参数的梯度的方式也不一样。所以和之前不一样的是，我们需要先计算单个样本上的梯度，再将所有梯度总和起来，最后将总和起来的梯度更新到权重上去——而不是将所有样本总和在一起批量求得梯度。</p>
+<p>我们先求当![image](images/逻辑回归’s Gradient/0e30338d8bdf1ce3a92ee33809a7ae88.svg)的时候，![image](images/逻辑回归’s Gradient/46bdf85a6e2e7aacd135b250b69ec4a3.svg)和![image](images/逻辑回归’s Gradient/4345c351f6518a166eac8084f4808059.svg)的梯度（这里![image](images/逻辑回归’s Gradient/2443fbcfeb7e85e1d62b6f5e4f27207e.svg)表示![image](images/逻辑回归’s Gradient/b9c66c39e242967e2281353ebca824b2.svg)的第几组权重，而![image](images/逻辑回归’s Gradient/036441a335dd85c838f76d63a3db2363.svg)表示![image](images/逻辑回归’s Gradient/c74f73927a2412c78030b0639d60009d.svg)的每组权重中的第几个权重）：</p>
+<p>![image](images/逻辑回归’s Gradient/f05d3373d7175826f9c6fb7bc44a8f1f.svg)</p>
+<p>同理可得：</p>
+<p>![image](images/逻辑回归’s Gradient/810f462ad8ce651cb38a66c8948d0edb.svg)</p>
+<p>我们再求当 ![image](images/逻辑回归’s Gradient/e8cbef78c5f630a10a4ebd954dfb6649.svg)的时候，![image](images/逻辑回归’s Gradient/46bdf85a6e2e7aacd135b250b69ec4a3.svg)和![image](images/逻辑回归’s Gradient/4345c351f6518a166eac8084f4808059.svg)的梯度：</p>
+<p>![image](images/逻辑回归’s Gradient/c25c14a0fde3a120414759fb5ba8bc87.svg)</p>
+<p>同理可得：</p>
+<p>![image](images/逻辑回归’s Gradient/b426c0303c88d28328b882412e73178f.svg)</p>
+<blockquote>
+<p>![image](images/逻辑回归’s Gradient/390bbc9c93864a64b5bde28aedd14da9.svg) ，![image](images/逻辑回归’s Gradient/48e6989aee378b0671dcbc11187f8dd6.svg)代表了数据实际的标签，是一个[0,0,…,1,…,0,0] 的数组，所以所有 ![image](images/逻辑回归’s Gradient/48e6989aee378b0671dcbc11187f8dd6.svg)加起来等于一。<br>
+关于Softmax函数求导，其求导过程如下，当 ![image](images/逻辑回归’s Gradient/0e30338d8bdf1ce3a92ee33809a7ae88.svg)的时候：</p>
+<p>![image](images/逻辑回归’s Gradient/ea23f1a99916d59f3184c239fa128061.svg)</p>
+<p>当 ![image](images/逻辑回归’s Gradient/e8cbef78c5f630a10a4ebd954dfb6649.svg)的时候：</p>
+<p>![image](images/逻辑回归’s Gradient/df5e1256970e04457d0e9279dddc3e93.svg)</p>
+<p>其中 ![image](images/逻辑回归’s Gradient/52a4c57a062ca68a08ae3c6d9f9c030a.svg)</p>
+</blockquote>
+<p>![image](images/逻辑回归’s Gradient/413a4f26f2440e92cb1632aa98535235.svg)可以写成 ![image](images/逻辑回归’s Gradient/493aec845200dc42811a6f811d758180.svg)的形式，当 ![image](images/逻辑回归’s Gradient/1951f9656e5e28af5edb9c326a2bfa91.svg)的时候，![image](images/逻辑回归’s Gradient/8b8c97ae7efefd2990a03002a22291ee.svg)；而当![image](images/逻辑回归’s Gradient/e8cbef78c5f630a10a4ebd954dfb6649.svg)的时候，![image](images/逻辑回归’s Gradient/c65a0f115f2a74760d2933f44842f128.svg)。于是梯度计算又回到了我们熟悉的形式：</p>
+<p>![image](images/逻辑回归’s Gradient/e4ca05ecbdf467f0635c061a7c90619d.svg)</p>
+<p>![image](images/逻辑回归’s Gradient/89a8ebff4b2546fb46a2648757eab40e.svg)</p>
+</div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">nty</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">38</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Nie-Tianyi"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/14/%E4%BB%80%E4%B9%88%E6%98%AFHadoop_preprocessed/" title="Hadoop">Hadoop</a><time datetime="2025-09-14T12:46:25.000Z" title="发表于 2025-09-14 20:46:25">2025-09-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/12/Raft%E5%8D%8F%E8%AE%AE_preprocessed/" title="Raft协议">Raft协议</a><time datetime="2025-09-12T12:46:25.000Z" title="发表于 2025-09-12 20:46:25">2025-09-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/07/Lecture%201_preprocessed/" title="凸函数优化笔记（1）">凸函数优化笔记（1）</a><time datetime="2025-09-07T12:46:25.000Z" title="发表于 2025-09-07 20:46:25">2025-09-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/27/%E7%BA%BF%E6%80%A7%E5%87%BD%E6%95%B0%E5%AE%9A%E4%B9%89_preprocessed/" title="线性函数定义">线性函数定义</a><time datetime="2025-08-27T12:46:25.000Z" title="发表于 2025-08-27 20:46:25">2025-08-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/16/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C's%20Gradient_preprocessed/" title="神经网络's Gradient">神经网络's Gradient</a><time datetime="2025-08-16T12:46:25.000Z" title="发表于 2025-08-16 20:46:25">2025-08-16</time></div></div></div></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/Hadoop/" style="font-size: 1.1em; color: #999">Hadoop</a> <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" style="font-size: 1.1em; color: #999">人工智能</a> <a href="/tags/Python/" style="font-size: 1.3em; color: #99a1ac">Python</a> <a href="/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/" style="font-size: 1.1em; color: #999">异步编程</a> <a href="/tags/%E4%BA%8C%E5%B1%82%E6%89%A9%E5%B1%95/" style="font-size: 1.1em; color: #999">二层扩展</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 1.1em; color: #999">性能优化</a> <a href="/tags/PostgreSQL/" style="font-size: 1.1em; color: #999">PostgreSQL</a> <a href="/tags/%E7%BA%BF%E6%80%A7%E5%87%BD%E6%95%B0/" style="font-size: 1.1em; color: #999">线性函数</a> <a href="/tags/%E4%BB%A5%E5%A4%AA%E5%9D%8A/" style="font-size: 1.2em; color: #999da3">以太坊</a> <a href="/tags/PyO3/" style="font-size: 1.1em; color: #999">PyO3</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 1.1em; color: #999">大数据</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/" style="font-size: 1.1em; color: #999">编程基础</a> <a href="/tags/%E5%85%B1%E8%AF%86%E5%8D%8F%E8%AE%AE/" style="font-size: 1.1em; color: #999">共识协议</a> <a href="/tags/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" style="font-size: 1.1em; color: #999">线性回归</a> <a href="/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" style="font-size: 1.4em; color: #99a5b6">区块链</a> <a href="/tags/%E6%95%B0%E5%AD%A6/" style="font-size: 1.1em; color: #999">数学</a> <a href="/tags/%E6%AF%94%E7%89%B9%E5%B8%81/" style="font-size: 1.1em; color: #999">比特币</a> <a href="/tags/Rust/" style="font-size: 1.4em; color: #99a5b6">Rust</a> <a href="/tags/Web%E6%A1%86%E6%9E%B6/" style="font-size: 1.1em; color: #999">Web框架</a> <a href="/tags/%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81/" style="font-size: 1.1em; color: #999">加密货币</a> <a href="/tags/SQL/" style="font-size: 1.1em; color: #999">SQL</a> <a href="/tags/Axum/" style="font-size: 1.1em; color: #999">Axum</a> <a href="/tags/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/" style="font-size: 1.4em; color: #99a5b6">梯度下降</a> <a href="/tags/%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/" style="font-size: 1.1em; color: #999">智能合约</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6/" style="font-size: 1.1em; color: #999">数据科学</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" style="font-size: 1.3em; color: #99a1ac">分布式系统</a> <a href="/tags/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/" style="font-size: 1.1em; color: #999">逻辑回归</a> <a href="/tags/Raft/" style="font-size: 1.1em; color: #999">Raft</a> <a href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" style="font-size: 1.1em; color: #999">线程池</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 1.1em; color: #999">并发编程</a> <a href="/tags/numba/" style="font-size: 1.1em; color: #999">numba</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 1.1em; color: #999">数据库</a> <a href="/tags/Python%E8%AF%AD%E6%B3%95/" style="font-size: 1.1em; color: #999">Python语法</a> <a href="/tags/%E5%85%B1%E8%AF%86%E7%AE%97%E6%B3%95/" style="font-size: 1.1em; color: #999">共识算法</a> <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 1.1em; color: #999">神经网络</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 1.5em; color: #99a9bf">机器学习</a> <a href="/tags/Tokio/" style="font-size: 1.1em; color: #999">Tokio</a> <a href="/tags/%E5%87%B8%E5%87%BD%E6%95%B0%E4%BC%98%E5%8C%96/" style="font-size: 1.1em; color: #999">凸函数优化</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      <a class="card-more-btn" href="/archives/"
+            title="查看更多">
+            <i class="fas fa-angle-right"></i>
+          </a>
+    </div>
+  
+    <ul class="card-archive-list">
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/09/">
+            <span class="card-archive-list-date">
+              九月 2025
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/08/">
+            <span class="card-archive-list-date">
+              八月 2025
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/07/">
+            <span class="card-archive-list-date">
+              七月 2025
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/06/">
+            <span class="card-archive-list-date">
+              六月 2025
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/05/">
+            <span class="card-archive-list-date">
+              五月 2025
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/03/">
+            <span class="card-archive-list-date">
+              三月 2025
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/10/">
+            <span class="card-archive-list-date">
+              十月 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/09/">
+            <span class="card-archive-list-date">
+              九月 2024
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">19</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总浏览量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2025-09-16T17:46:14.948Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By nty</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

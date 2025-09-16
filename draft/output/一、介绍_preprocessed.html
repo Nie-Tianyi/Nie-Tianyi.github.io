@@ -1,0 +1,269 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>nty的技术博客 | nty的技术博客</title><meta name="author" content="nty"><meta name="copyright" content="nty"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="机器学习是让计算机自动寻找规律的学科，也是人工智能的基础。例如房价和面积的规律——通常来讲面积越大的房子，售价越高，并且存在简单的线性关系——假设该小区的房价为10000人民币&#x2F;平方米，那么一个80平方的房子售价大概率在80万元上下。反的来说，机器学习算法可以通过过往该小区房子售价和面积的数据，推导出每平方米售价在1万元，进而能预测一个面积为120平米的房子售价大概在120万元。当然这是一个比较简">
+<meta property="og:type" content="website">
+<meta property="og:title" content="nty的技术博客">
+<meta property="og:url" content="https://nie-tianyi.github.io/draft/output/%E4%B8%80%E3%80%81%E4%BB%8B%E7%BB%8D_preprocessed.html">
+<meta property="og:site_name" content="nty的技术博客">
+<meta property="og:description" content="机器学习是让计算机自动寻找规律的学科，也是人工智能的基础。例如房价和面积的规律——通常来讲面积越大的房子，售价越高，并且存在简单的线性关系——假设该小区的房价为10000人民币&#x2F;平方米，那么一个80平方的房子售价大概率在80万元上下。反的来说，机器学习算法可以通过过往该小区房子售价和面积的数据，推导出每平方米售价在1万元，进而能预测一个面积为120平米的房子售价大概在120万元。当然这是一个比较简">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://nie-tianyi.github.io/images/avatar.png">
+<meta property="article:published_time" content="2025-09-16T17:30:23.164Z">
+<meta property="article:modified_time" content="2025-09-16T17:30:23.164Z">
+<meta property="article:author" content="nty">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://nie-tianyi.github.io/images/avatar.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://nie-tianyi.github.io/draft/output/%E4%B8%80%E3%80%81%E4%BB%8B%E7%BB%8D_preprocessed.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'nty的技术博客',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'page'
+}</script><meta name="generator" content="Hexo 7.3.0"><link href="https://cdn.bootcss.com/KaTeX/0.11.1/katex.min.css" rel="stylesheet" /></head><body><div class="page" id="body-wrap"><header class="not-home-page" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">nty的技术博客</span></a></span><div id="menus"></div></nav><div id="page-site-info"><h1 id="site-title"></h1></div></header><main class="layout" id="content-inner"><div id="page"><div class="container" id="article-container"><p>机器学习是让计算机自动寻找规律的学科，也是人工智能的基础。例如房价和面积的规律——通常来讲面积越大的房子，售价越高，并且存在简单的线性关系——假设该小区的房价为10000人民币/平方米，那么一个80平方的房子售价大概率在80万元上下。反的来说，机器学习算法可以通过过往该小区房子售价和面积的数据，推导出每平方米售价在1万元，进而能预测一个面积为120平米的房子售价大概在120万元。当然这是一个比较简单的例子，机器学习算法不仅能推导简单的关系，还能处理复杂的问题，例如房子的售价不仅与面积相关，还跟房间是否朝阳、装修是否老旧、房间内噪音多少等多个变量相关，机器学习算法同样能处理多个变量之间的复杂关系。甚至更复杂的，假设最终房价和一百多个变量相关，每个变量或多或少都影响着最终房价，机器学习算法同样能精准的推导每个变量和最终房价之间的关系，最终做出精准的预测。</p>
+<p>现有的机器学习的算法根据训练的方式通常会被划分成三个大类，分别是：有监督学习（supervised-learning）、无监督学习（unsupervised-learning）以及强化学习（reinforcement-learning）。尽管被划分为了三个大类，各类中的算法既有交叉，也有互补。例如，著名的神经网络算法不仅在监督学习中用于预测，还在无监督学习中用于异常检测，也在强化学习中用于帮助机器人在未知的环境下做出决策。监督学习通常指我们在训练前准备好标注好的数据，然后用算法拟合数据（也可以叫做训练算法），最后再用训练好的模型用于预测。例如在监督学习中我们通常会准备很多条标注好的数据，例如我们想要预测房价，我们通常会准备以下数据：</p>
+<table>
+<thead>
+<tr>
+<th>面积（平方米）</th>
+<th>是否朝阳</th>
+<th>噪音分贝（分贝）</th>
+<th>售价（万人民币）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>96</td>
+<td>是</td>
+<td>32</td>
+<td>107</td>
+</tr>
+<tr>
+<td>80</td>
+<td>否</td>
+<td>69</td>
+<td>69</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody>
+</table>
+<p>面积、是否朝阳、噪音分贝将是算法的输入，而售价则是算法的输出。这里想要预测的变量“售价”在数据集中是提前收集好的，这样的数据我们就可以用于训练算法，训练完算法后，我们就可将房屋的面积、是否朝阳、噪音分贝三个变量输入算法，最后算法会输出预测房屋的售价。监督学习在训练前通常要求研究人员手动标注数据，例如这里的“售价”变量。标注工作通常是一个枯燥乏味的“苦力活”，例如在计算机视觉中，标注数据通常需要研究人员手动框出图片中想要识别的物体，这通常耗费大量的人力和时间。常见的监督学习算法有分类算法、预测数据，如果将上例中的预测目标改为售价是否高于100万，预测结果只有“是”或者“不是”，上面的问题就会变成一个分类问题（更准确的说是一个二分类问题）。</p>
+<p>无监督学习中我们通常没有所谓的“标注数据”，无监督学习可以帮助我们发现数据中不曾知道的规律。常见的无监督学习算法有聚类算法、异常检测。例如在聚类算法中，我们只需要将数据直接交给算法，接着算法会根据我们提前设定的规则，将数据分为符合直觉的多个类别。</p>
+<p>强化学习能够让模型在不确定的环境中自主进化出完成任务的能力，适用于我们没法给出最优解的任务，于是我们让模型自主探索出如何完成目标。在强化学习中，我们会提前规定一系列的奖励和惩罚规则，然后让模型不断试错——如果模型做出更接近目标的动作，则奖励模型；如果模型做出的决策偏离了我们设定的目标，则惩罚模型。通过不断的奖励和惩罚，让神经网络模型学习如何自主完成我们规定的目标。</p>
+<p>最常用的强化学习算法叫DQL（Deep Q-Learning，强化Q学习），DQL中的核心算法也是神经网络算法，神经网络的输入为环境中的各种数据，而输出则为我们的模型在这种环境中应该做出的决策。常见的强化学习应用包括让机器人、机器狗自主学习走路跑步，让火星车登陆火星后自主完成科研任务。最早开发机器狗的公司波士顿动力最开始就是使用强化学习算法来让机器狗学习如何走路、越障、甚至完成后空翻等杂技动作。</p>
+<p>机器学习发展到今天远远不能用三个类别就简单概括所有算法，现有的机器学习算法通常使用多种算法结合在一起完成目标——例如有的大语言模型可能先使用监督学习预训练模型，然后再用强化学习强化模型完成任务的能力；或者是一个机器学习算法使用了多个模型算法，每个模型都用不同的方式训练而来，完成任务的时候同时使用多个模型共同决策。</p>
+<p>机器学习的应用充斥着我们的生活，从几乎到处都有的人脸识别系统、语音转文字应用、信达雅的中英文翻译软件，到短视频的推荐算法、自动驾驶、以及火爆出圈的大语言模型，都是由一个个最基础的机器学习算法驱动。学习机器学习不仅能让你学习这些神奇的应用背后的原理，还能让你有机会亲手构建这些像魔法一样的应用，让你走在人工智能发展的最前沿。</p>
+</div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">nty</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">38</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Nie-Tianyi"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/14/%E4%BB%80%E4%B9%88%E6%98%AFHadoop_preprocessed/" title="Hadoop">Hadoop</a><time datetime="2025-09-14T12:46:25.000Z" title="发表于 2025-09-14 20:46:25">2025-09-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/12/Raft%E5%8D%8F%E8%AE%AE_preprocessed/" title="Raft协议">Raft协议</a><time datetime="2025-09-12T12:46:25.000Z" title="发表于 2025-09-12 20:46:25">2025-09-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/07/Lecture%201_preprocessed/" title="凸函数优化笔记（1）">凸函数优化笔记（1）</a><time datetime="2025-09-07T12:46:25.000Z" title="发表于 2025-09-07 20:46:25">2025-09-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/27/%E7%BA%BF%E6%80%A7%E5%87%BD%E6%95%B0%E5%AE%9A%E4%B9%89_preprocessed/" title="线性函数定义">线性函数定义</a><time datetime="2025-08-27T12:46:25.000Z" title="发表于 2025-08-27 20:46:25">2025-08-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/16/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C's%20Gradient_preprocessed/" title="神经网络's Gradient">神经网络's Gradient</a><time datetime="2025-08-16T12:46:25.000Z" title="发表于 2025-08-16 20:46:25">2025-08-16</time></div></div></div></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/Hadoop/" style="font-size: 1.1em; color: #999">Hadoop</a> <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" style="font-size: 1.1em; color: #999">人工智能</a> <a href="/tags/Python/" style="font-size: 1.3em; color: #99a1ac">Python</a> <a href="/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/" style="font-size: 1.1em; color: #999">异步编程</a> <a href="/tags/%E4%BA%8C%E5%B1%82%E6%89%A9%E5%B1%95/" style="font-size: 1.1em; color: #999">二层扩展</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 1.1em; color: #999">性能优化</a> <a href="/tags/PostgreSQL/" style="font-size: 1.1em; color: #999">PostgreSQL</a> <a href="/tags/%E7%BA%BF%E6%80%A7%E5%87%BD%E6%95%B0/" style="font-size: 1.1em; color: #999">线性函数</a> <a href="/tags/%E4%BB%A5%E5%A4%AA%E5%9D%8A/" style="font-size: 1.2em; color: #999da3">以太坊</a> <a href="/tags/PyO3/" style="font-size: 1.1em; color: #999">PyO3</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 1.1em; color: #999">大数据</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/" style="font-size: 1.1em; color: #999">编程基础</a> <a href="/tags/%E5%85%B1%E8%AF%86%E5%8D%8F%E8%AE%AE/" style="font-size: 1.1em; color: #999">共识协议</a> <a href="/tags/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" style="font-size: 1.1em; color: #999">线性回归</a> <a href="/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" style="font-size: 1.4em; color: #99a5b6">区块链</a> <a href="/tags/%E6%95%B0%E5%AD%A6/" style="font-size: 1.1em; color: #999">数学</a> <a href="/tags/%E6%AF%94%E7%89%B9%E5%B8%81/" style="font-size: 1.1em; color: #999">比特币</a> <a href="/tags/Rust/" style="font-size: 1.4em; color: #99a5b6">Rust</a> <a href="/tags/Web%E6%A1%86%E6%9E%B6/" style="font-size: 1.1em; color: #999">Web框架</a> <a href="/tags/%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81/" style="font-size: 1.1em; color: #999">加密货币</a> <a href="/tags/SQL/" style="font-size: 1.1em; color: #999">SQL</a> <a href="/tags/Axum/" style="font-size: 1.1em; color: #999">Axum</a> <a href="/tags/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/" style="font-size: 1.4em; color: #99a5b6">梯度下降</a> <a href="/tags/%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/" style="font-size: 1.1em; color: #999">智能合约</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6/" style="font-size: 1.1em; color: #999">数据科学</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" style="font-size: 1.3em; color: #99a1ac">分布式系统</a> <a href="/tags/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/" style="font-size: 1.1em; color: #999">逻辑回归</a> <a href="/tags/Raft/" style="font-size: 1.1em; color: #999">Raft</a> <a href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" style="font-size: 1.1em; color: #999">线程池</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 1.1em; color: #999">并发编程</a> <a href="/tags/numba/" style="font-size: 1.1em; color: #999">numba</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 1.1em; color: #999">数据库</a> <a href="/tags/Python%E8%AF%AD%E6%B3%95/" style="font-size: 1.1em; color: #999">Python语法</a> <a href="/tags/%E5%85%B1%E8%AF%86%E7%AE%97%E6%B3%95/" style="font-size: 1.1em; color: #999">共识算法</a> <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 1.1em; color: #999">神经网络</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 1.5em; color: #99a9bf">机器学习</a> <a href="/tags/Tokio/" style="font-size: 1.1em; color: #999">Tokio</a> <a href="/tags/%E5%87%B8%E5%87%BD%E6%95%B0%E4%BC%98%E5%8C%96/" style="font-size: 1.1em; color: #999">凸函数优化</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      <a class="card-more-btn" href="/archives/"
+            title="查看更多">
+            <i class="fas fa-angle-right"></i>
+          </a>
+    </div>
+  
+    <ul class="card-archive-list">
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/09/">
+            <span class="card-archive-list-date">
+              九月 2025
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/08/">
+            <span class="card-archive-list-date">
+              八月 2025
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/07/">
+            <span class="card-archive-list-date">
+              七月 2025
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/06/">
+            <span class="card-archive-list-date">
+              六月 2025
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/05/">
+            <span class="card-archive-list-date">
+              五月 2025
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/03/">
+            <span class="card-archive-list-date">
+              三月 2025
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/10/">
+            <span class="card-archive-list-date">
+              十月 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/09/">
+            <span class="card-archive-list-date">
+              九月 2024
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">19</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总浏览量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2025-09-16T17:46:14.948Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By nty</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

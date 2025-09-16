@@ -1,0 +1,433 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>nty的技术博客 | nty的技术博客</title><meta name="author" content="nty"><meta name="copyright" content="nty"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="正向传播 假设我们的神经网络是由三层神经元构成：分别是一层拥有4个神经元的隐藏层，一层拥有三个神经元的隐藏层，以及最后一层只拥有一个神经元的输出层，神经网络结构如下图所示：  假设我们输入的数据的维度是2，那么第一层神经元里面的每一个神经元都有和两个权重以及一个偏置，整个第一层就一共有 个以及四个偏置。我们用表示每一层的权重，其中  表示这个权重属于第几层。 表示这是这一层的第几个神经元。 最后表">
+<meta property="og:type" content="website">
+<meta property="og:title" content="nty的技术博客">
+<meta property="og:url" content="https://nie-tianyi.github.io/draft/source_markdowns/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C's%20Gradient.html">
+<meta property="og:site_name" content="nty的技术博客">
+<meta property="og:description" content="正向传播 假设我们的神经网络是由三层神经元构成：分别是一层拥有4个神经元的隐藏层，一层拥有三个神经元的隐藏层，以及最后一层只拥有一个神经元的输出层，神经网络结构如下图所示：  假设我们输入的数据的维度是2，那么第一层神经元里面的每一个神经元都有和两个权重以及一个偏置，整个第一层就一共有 个以及四个偏置。我们用表示每一层的权重，其中  表示这个权重属于第几层。 表示这是这一层的第几个神经元。 最后表">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://nie-tianyi.github.io/images/avatar.png">
+<meta property="article:published_time" content="2025-09-16T17:12:00.228Z">
+<meta property="article:modified_time" content="2025-09-16T17:02:55.856Z">
+<meta property="article:author" content="nty">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://nie-tianyi.github.io/images/avatar.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://nie-tianyi.github.io/draft/source_markdowns/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C's%20Gradient.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'nty的技术博客',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'page'
+}</script><meta name="generator" content="Hexo 7.3.0"><link href="https://cdn.bootcss.com/KaTeX/0.11.1/katex.min.css" rel="stylesheet" /></head><body><div class="page" id="body-wrap"><header class="not-home-page" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">nty的技术博客</span></a></span><div id="menus"></div></nav><div id="page-site-info"><h1 id="site-title"></h1></div></header><main class="layout" id="content-inner"><div id="page"><div class="container" id="article-container"><h2 id="正向传播">正向传播</h2>
+<p>假设我们的神经网络是由三层神经元构成：分别是一层拥有4个神经元的隐藏层，一层拥有三个神经元的隐藏层，以及最后一层只拥有一个神经元的输出层，神经网络结构如下图所示：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/45785720/1754758666679-554e9a17-89aa-44b0-abb8-52af05e59b09.png" alt></p>
+<p>假设我们输入的数据的维度是2，那么第一层神经元里面的每一个神经元都有<img src="https://cdn.nlark.com/yuque/__latex/204ef929f76b3378e50aa9551cb332a3.svg" alt="image">和<img src="https://cdn.nlark.com/yuque/__latex/84d86c0da655fb4aa82d8ca0151c603b.svg" alt="image">两个权重以及一个偏置，整个第一层就一共有 <img src="https://cdn.nlark.com/yuque/__latex/5f88c9bac0f52a9e120f5ce49d01cc7c.svg" alt="image">个<img src="https://cdn.nlark.com/yuque/__latex/c9b08ae6d9fed72562880f75720531bc.svg" alt="image">以及四个偏置<img src="https://cdn.nlark.com/yuque/__latex/d29c2e5f4926e5b0e9a95305650f6e54.svg" alt="image">。我们用<img src="https://cdn.nlark.com/yuque/__latex/591ad007d69f75445767e2d1f1be19a7.svg" alt="image">表示每一层的权重，其中</p>
+<ul>
+<li><img src="https://cdn.nlark.com/yuque/__latex/76666a3cdde5bfa5ff817478864d8c7a.svg" alt="image">表示这个权重属于第几层。</li>
+<li><img src="https://cdn.nlark.com/yuque/__latex/2443fbcfeb7e85e1d62b6f5e4f27207e.svg" alt="image">表示这是这一层的第几个神经元。</li>
+<li>最后<img src="https://cdn.nlark.com/yuque/__latex/036441a335dd85c838f76d63a3db2363.svg" alt="image">表示这是这个神经元的第几个权重，也对应着前一层第几个神经元的输出。</li>
+</ul>
+<p>例如，第一层的第一个神经元的权重为<img src="https://cdn.nlark.com/yuque/__latex/1247819cc79ef2625a19da6709d26e34.svg" alt="image">以及<img src="https://cdn.nlark.com/yuque/__latex/08c3265a2052ba6be0de989d959b7eff.svg" alt="image">，这里的上标（1）代表了这两个权重是第一层神经元的权重；而下标的两个数字，前面一个数字“1”代表了这个第一层的第一个神经元，第二个数字“1”和“2”分别代表了这是这一个神经元的第一个权重和第二个权重。</p>
+<blockquote>
+<p>在机器学习中我们还通常习惯性的把输入的数据叫做第零层，第零层通常不算做神经网络的层数。</p>
+</blockquote>
+<p>第二层神经元里面每一个神经元都有四个<img src="https://cdn.nlark.com/yuque/__latex/c9b08ae6d9fed72562880f75720531bc.svg" alt="image">——每个<img src="https://cdn.nlark.com/yuque/__latex/c9b08ae6d9fed72562880f75720531bc.svg" alt="image">分别对应着上一层神经元的四个输出，以及一个偏置<img src="https://cdn.nlark.com/yuque/__latex/7ac0d7a8a5cf47e53bac99d1216bd5f0.svg" alt="image">。而最后一层输出层的参数数量则根据需要预测的目标来决定：如果我们需要这个神经网络预测房价，一个线性预测任务，则输出层有一个神经元，神经元内有有三个权重，分别对应着上一层的三个输出；如果是决定某样商品是否畅销，一个二分类任务，则输出层应该有一个神经元，神经元内有三个权重以及Sigmoid激活函数；如果我们要识别MNIST中的手写数字，则输出层应该有10个神经元，并且使用Softmax函数作为最后一层的激活函数。</p>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>输出层神经元数量</th>
+<th>输出层激活函数</th>
+<th>损失函数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>房价</td>
+<td>1</td>
+<td>无/线性，y=x</td>
+<td>均方误差（MSE）</td>
+</tr>
+<tr>
+<td>二分类问题</td>
+<td>1</td>
+<td>Sigmoid</td>
+<td>交叉熵损失函数（CEL）</td>
+</tr>
+<tr>
+<td>多分类问题（例如MNIST）</td>
+<td>K（MNIST中K=10）</td>
+<td>Softmax</td>
+<td><font style="color:rgb(64, 64, 64);">分类交叉熵</font></td>
+</tr>
+</tbody>
+</table>
+<p>那么神经网络是怎么做出预测的呢？神经网络会逐层的计算每一层的结果，最后到输出层，我们把这个过程叫做正向传播（或者前向传播，forward propagation）。在上例中，我们的神经网络的输入为一个二维的数据，假设为<img src="https://cdn.nlark.com/yuque/__latex/0e8831d88c93179dbe6c8b5e3678ca20.svg" alt="image">和<img src="https://cdn.nlark.com/yuque/__latex/b526050a1759d2db5c1ae7e883a48312.svg" alt="image">，那么我们首先计算第一层神经元的输出：</p>
+<p>第一层有四个神经元，我们分别计算每个神经元与我们的输入相乘：</p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/c2ed4d75daea7aab262ca3367e861a18.svg" alt="image"></p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/802c70f08c1c94991f77c66d950d1638.svg" alt="image"></p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/9844aa4b4d45d497a47923b06401f022.svg" alt="image"></p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/d6fd084f8bfe8c4b1c8c9214eedc5141.svg" alt="image"></p>
+<p>然后对每一个输出应用激活函数 <img src="https://cdn.nlark.com/yuque/__latex/2f3ab90789f94a4290c45a37d4591836.svg" alt="image">：</p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/d66e57a83e3221d8b97143bc7b79ce7c.svg" alt="image"></p>
+<p>现在我们有了<img src="https://cdn.nlark.com/yuque/__latex/7bb3719a43a76f59c6a58f36a061a481.svg" alt="image">四个输出，在全连接神经网络中，这一层的所有神经元的输出，都将作为下一层神经元的输入。与之相对的是稀疏连接神经网络，在稀疏连接神经网络中，下一层的每一个神经元只连接上一层中离其较近的几个神经元。稀疏神经网络较全连接神经网络相比，需要计算的数据更少，在特定数据集上的表现要优于全连接神经网络。在这里，我们以最常见的全连接神经网络为例，计算下一层的输出——在第二层中，我们一共有三个神经元，每一个神经元都接收来自上一层四个神经元的输出，我们计算每一个神经元的权重与上一层输出的乘积加偏置：</p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/93676fa8d46f0416126c9f373d9e760a.svg" alt="image"></p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/2d825061f4deacdbebe9114c2325197d.svg" alt="image"></p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/e7f49e356d6327f6c80d3ef682ff064b.svg" alt="image"></p>
+<p>然后对每一个输出应用激活函数<img src="https://cdn.nlark.com/yuque/__latex/2f3ab90789f94a4290c45a37d4591836.svg" alt="image"></p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/ed848957cff3c452f60de26c67c75384.svg" alt="image"></p>
+<p>第二层神经元输出了 <img src="https://cdn.nlark.com/yuque/__latex/bd107655c03f9e7f8afa1c98b78065db.svg" alt="image">三个输出，这些输出会用送到最后一层输出层神经元，用于做最后的决策。在这里，我们假设我们面对的问题是一个二分类问题，那么最后一个层输出层应该只有一个神经元，并且使用激活函数Softmax——最后我们计算：</p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/a897cf36ec822484be8972f98adb8fa1.svg" alt="image"></p>
+<p>最后使用Softmax函数，输出一个预测标签为1的概率：</p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/aacaf56bbbd591a146d550d429ccdf1b.svg" alt="image"></p>
+<p>如果我们面对的是一个多分类问题，则最后一层应该有 K 个神经元（K为实际标签类别的数量），然后再在K个神经元的输出上使用 Softmax 激活函数。</p>
+<h2 id="反向传播">反向传播</h2>
+<p>接着我们更新权重参数，我们分别计算损失函数在每一个权重和偏置方向上的偏导。如果我们要预测的目标是一个线性问题，那么我们的损失函数为均方差MSE函数；如果我们需要预测的目标是一个二分类问题，那么我们的损失函数则应该是交叉熵损失函数CEL；如果是多分类问题，则应该是是稀疏交叉熵函数SCEL。</p>
+<p>在这里，我们先以二分类问题举例，假设我们的损失函数为交叉熵损失函数：</p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/751081c7c1a522f42f481df04373a91a.svg" alt="image"></p>
+<p>我们先计算输出层<img src="https://cdn.nlark.com/yuque/__latex/2dcfc8cde415df025d13cbc5bf7ce5dd.svg" alt="image">的梯度（记住<img src="https://cdn.nlark.com/yuque/__latex/2dcfc8cde415df025d13cbc5bf7ce5dd.svg" alt="image">为输出层第三层的第一个神经元的第一个参数）：</p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/81b369e32c9e6f597138c8a464865cc0.svg" alt="image"></p>
+<p>同理我们可以得到<img src="https://cdn.nlark.com/yuque/__latex/d1e068c4f42e944f59752bf093168f53.svg" alt="image">、<img src="https://cdn.nlark.com/yuque/__latex/679b9816f3b56170dbe9d8cd15c8dda7.svg" alt="image">以及<img src="https://cdn.nlark.com/yuque/__latex/46b02b0760748c6a514dc35026eef7ae.svg" alt="image">的梯度，分别为<img src="https://cdn.nlark.com/yuque/__latex/cb2ec7f1922f95fa46edbe4fae26894d.svg" alt="image">、<img src="https://cdn.nlark.com/yuque/__latex/6c7e19a5c30f19e081ee9e71a3244d3e.svg" alt="image">和<img src="https://cdn.nlark.com/yuque/__latex/c428d7b4f1f4c69dbb3eb64d51a96dd8.svg" alt="image"> 。接下来我们求隐藏层的参数的梯度，我们先求<img src="https://cdn.nlark.com/yuque/__latex/f66e401908f4414d82e524b7c772f778.svg" alt="image">的梯度：</p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/0a656713f7763d19e16b80b1ad28bac1.svg" alt="image"></p>
+<p>同理可得<img src="https://cdn.nlark.com/yuque/__latex/b0feb69dcf005bfceba3c67af221eb16.svg" alt="image">、<img src="https://cdn.nlark.com/yuque/__latex/b7b15bf0cf62828157609232ef86e86e.svg" alt="image">、<img src="https://cdn.nlark.com/yuque/__latex/b478886228e78945ac82d62c32aca3b7.svg" alt="image">以及<img src="https://cdn.nlark.com/yuque/__latex/f973f2235b3e63cdc78de9c82a7e24cd.svg" alt="image">的梯度分别为：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>梯度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="https://cdn.nlark.com/yuque/__latex/b0feb69dcf005bfceba3c67af221eb16.svg" alt="image"></td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/02d799dfe0049114a6db1e543583465c.svg" alt="image"></td>
+</tr>
+<tr>
+<td><img src="https://cdn.nlark.com/yuque/__latex/b7b15bf0cf62828157609232ef86e86e.svg" alt="image"></td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/739da6dade3333258ac104d90a7d7f2f.svg" alt="image"></td>
+</tr>
+<tr>
+<td><img src="https://cdn.nlark.com/yuque/__latex/b478886228e78945ac82d62c32aca3b7.svg" alt="image"></td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/6f5d0202f072ebe302de6c763df143d9.svg" alt="image"></td>
+</tr>
+<tr>
+<td><img src="https://cdn.nlark.com/yuque/__latex/f973f2235b3e63cdc78de9c82a7e24cd.svg" alt="image"></td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/623df56fb9e949456eaadbdc749b30dc.svg" alt="image"></td>
+</tr>
+</tbody>
+</table>
+<p>我们再计算<img src="https://cdn.nlark.com/yuque/__latex/ecc22c7f0e6f11c495a8e84a9be64535.svg" alt="image">的梯度：</p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/574cbe6464d91b82af56262bf12f1e28.svg" alt="image"></p>
+<p>同理我们也可以得到<img src="https://cdn.nlark.com/yuque/__latex/596909c2f71863aa81fe77327019e5ed.svg" alt="image">的梯度：</p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/14ce980e7bfaf78c3e880364610416dc.svg" alt="image"></p>
+<p>我们发现在计算第二层神经网络的参数的时候，我们都要计算<img src="https://cdn.nlark.com/yuque/__latex/3a3c37085ee5d4660722b3213cfa76a9.svg" alt="image">，于是我们令:</p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/b1e13d2d53d6f5272f9c16f3064c993d.svg" alt="image"></p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/ecb3b10575f4bbd00933c4f2f66c689b.svg" alt="image"></p>
+<table>
+<thead>
+<tr>
+<th>梯度</th>
+<th><img src="https://cdn.nlark.com/yuque/__latex/eb2604fac6c8077a6a81320958e27a6b.svg" alt="image"></th>
+<th><img src="https://cdn.nlark.com/yuque/__latex/ef08aec5cd41878ef4f66571d6794d33.svg" alt="image"></th>
+<th><img src="https://cdn.nlark.com/yuque/__latex/01eafb211789d8a55b22940d188235d4.svg" alt="image"></th>
+<th><img src="https://cdn.nlark.com/yuque/__latex/a848565fe2150efa507d06a184b2394d.svg" alt="image"></th>
+<th><img src="https://cdn.nlark.com/yuque/__latex/91836e40f154d5b56368b1cd9d2607d9.svg" alt="image"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>i=1</td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/95ae262821eec665ec43ac7890f410cf.svg" alt="image"></td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/6bc91c9b1d7d7f9cea042aebc26aeed3.svg" alt="image"></td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/06870208b1f0c88e32fdf86df35cd097.svg" alt="image"></td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/a92f4695c846fc2579e248434360f453.svg" alt="image"></td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/aac22f9f5e1c31fb045b0497cd7f669b.svg" alt="image"></td>
+</tr>
+<tr>
+<td>i=2</td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/b05a18101a21e4dc7fec7c5b87d0e6c5.svg" alt="image"></td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/03a083fdc2f27b14c19eddcb7e136fc5.svg" alt="image"></td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/1f4723fafd7c030a77fb14270683b10a.svg" alt="image"></td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/ea985f708a29450bb428d96d68ab3810.svg" alt="image"></td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/952cc3a2a4dba9d9d211b82600a1ae3c.svg" alt="image"></td>
+</tr>
+<tr>
+<td>i=3</td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/83eeaae33b9d9a9c71bd1a28cb696fb9.svg" alt="image"></td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/6f84de589e5ad8e12a8b5e0d72fcf63f.svg" alt="image"></td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/88ccd007cac3f81866d01875781de253.svg" alt="image"></td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/565109b683e88594693a89255c7981ab.svg" alt="image"></td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/f63ff42a23775f11753f9f56a8f34caa.svg" alt="image"></td>
+</tr>
+</tbody>
+</table>
+<p>通用的公式可以写为：</p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/17162f084daae5e9f4800f4dd11daadd.svg" alt="image"></p>
+<p>最后我们求第一层神经网络参数的梯度，我们先求<img src="https://cdn.nlark.com/yuque/__latex/1247819cc79ef2625a19da6709d26e34.svg" alt="image">的梯度。先回忆一下，<img src="https://cdn.nlark.com/yuque/__latex/1247819cc79ef2625a19da6709d26e34.svg" alt="image">通过和输入<img src="https://cdn.nlark.com/yuque/__latex/0e8831d88c93179dbe6c8b5e3678ca20.svg" alt="image">相乘得到<img src="https://cdn.nlark.com/yuque/__latex/df3a725e71ce9abcca74e97cc95cc74b.svg" alt="image">,<img src="https://cdn.nlark.com/yuque/__latex/df3a725e71ce9abcca74e97cc95cc74b.svg" alt="image">通过激活函数得到<img src="https://cdn.nlark.com/yuque/__latex/8e3351610d813c64e18b3c901bafc333.svg" alt="image">。</p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/6b2016993f2cf59b76262e5a6c27407b.svg" alt="image"></p>
+<p>然后第二层神经网络内三个神经元都使用了<img src="https://cdn.nlark.com/yuque/__latex/8e3351610d813c64e18b3c901bafc333.svg" alt="image">进行了计算，分别得到了<img src="https://cdn.nlark.com/yuque/__latex/5dad5a10fa6605e54417886b47b7bf51.svg" alt="image">、<img src="https://cdn.nlark.com/yuque/__latex/a46b8fcf0d3a8fa389fbd73ce15d9bf1.svg" alt="image">、<img src="https://cdn.nlark.com/yuque/__latex/5a3984345c5f1e07561d5eec4ad68044.svg" alt="image">，并且最后都对最终结果产生了影响。接着我们单独计算<img src="https://cdn.nlark.com/yuque/__latex/193ad86628efaf22b19562e216565931.svg" alt="image">:</p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/6c8767e41b87edc34f441030ba5c3e45.svg" alt="image"></p>
+<p>将这个结果带到上面的式子，就可以得到：</p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/df89746e9208f5b7276e6697c76d986d.svg" alt="image"></p>
+<p>接着我们计算<img src="https://cdn.nlark.com/yuque/__latex/08c3265a2052ba6be0de989d959b7eff.svg" alt="image">以及<img src="https://cdn.nlark.com/yuque/__latex/4d3099f128b0098e079e4b5129f822cd.svg" alt="image">的梯度：</p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/e48d3ffe3521c92a045d8ea11902a3bf.svg" alt="image"></p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/537283ff8d5f1ac5fa42a51e32858bd8.svg" alt="image"></p>
+<p>我们接着计算<img src="https://cdn.nlark.com/yuque/__latex/30be0b066f6d9d3d8171068a4d3abe2f.svg" alt="image">的梯度：</p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/1d73739d8c4fc168d583f503b28c58ad.svg" alt="image"></p>
+<p>我们令<img src="https://cdn.nlark.com/yuque/__latex/2b8fee93573bb3f175bac47c1397f423.svg" alt="image">，能得到以下梯度：</p>
+<table>
+<thead>
+<tr>
+<th>梯度</th>
+<th><img src="https://cdn.nlark.com/yuque/__latex/b819d1cb3fe414970d91c0a8ef1ed817.svg" alt="image"></th>
+<th><img src="https://cdn.nlark.com/yuque/__latex/8d8805b59f7e0a018b219e9166b09919.svg" alt="image"></th>
+<th><img src="https://cdn.nlark.com/yuque/__latex/5c67a7ba34f993596a438661709042fe.svg" alt="image"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>i=1</td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/e94f5da349ec0c9bd706a18361462b4d.svg" alt="image"></td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/eaa6507b3e1f51f74e143a1ab1bb3795.svg" alt="image"></td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/810c169dfdb08a8a62fb8e62f4475c73.svg" alt="image"></td>
+</tr>
+<tr>
+<td>i=2</td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/b6d72e9122b90c11e598b35f83bb0d05.svg" alt="image"></td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/2d527eb11fafc26500f7c1e4c5978488.svg" alt="image"></td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/2d15899d07c35f017c2f401ce80af421.svg" alt="image"></td>
+</tr>
+<tr>
+<td>i=3</td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/d997a8185bc1a6c8cdf9fe90e7134a91.svg" alt="image"></td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/9e56453bf8247710c49f4878ffc39fb1.svg" alt="image"></td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/be23a71b2ddd15842dbca13e391d78de.svg" alt="image"></td>
+</tr>
+<tr>
+<td>i=4</td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/b06613b1bfa6cf21ecbcfd1e4d141ec2.svg" alt="image"></td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/985976d79798d736ad23598677c38d15.svg" alt="image"></td>
+<td><img src="https://cdn.nlark.com/yuque/__latex/0f500ba95bf21ecc80235f454646c26f.svg" alt="image"></td>
+</tr>
+</tbody>
+</table>
+<p>我们可以得到通用的神经网络权重梯度的计算公式，对于第<img src="https://cdn.nlark.com/yuque/__latex/6945e109777fe3fd777e8254f0ec0f0c.svg" alt="image">层的第<img src="https://cdn.nlark.com/yuque/__latex/2443fbcfeb7e85e1d62b6f5e4f27207e.svg" alt="image">个神经元的权重<img src="https://cdn.nlark.com/yuque/__latex/407a31732c4a750cc8f3ffdee07b588e.svg" alt="image">：</p>
+<p><img src="https://cdn.nlark.com/yuque/__latex/ee80a246efe8aa2f6085d2e180b3ef52.svg" alt="image"></p>
+<p>其中的反向传播的误差<img src="https://cdn.nlark.com/yuque/__latex/64c340238591a6c5de80fc1e3b49c64f.svg" alt="image">。</p>
+<p>这里使用了三个参数<img src="https://cdn.nlark.com/yuque/__latex/9bee3b00deee3164c7f70e397beb1089.svg" alt="image">,分别代表了：</p>
+<ul>
+<li><img src="https://cdn.nlark.com/yuque/__latex/2443fbcfeb7e85e1d62b6f5e4f27207e.svg" alt="image">：第<img src="https://cdn.nlark.com/yuque/__latex/6945e109777fe3fd777e8254f0ec0f0c.svg" alt="image">层神经元的第几个神经元。</li>
+<li><img src="https://cdn.nlark.com/yuque/__latex/036441a335dd85c838f76d63a3db2363.svg" alt="image">：第<img src="https://cdn.nlark.com/yuque/__latex/05ec8d0a68ea82025ab796c626c2d32d.svg" alt="image">层神经元的第几个神经元，也是这一层神经元的每一个神经元的第几个<img src="https://cdn.nlark.com/yuque/__latex/c9b08ae6d9fed72562880f75720531bc.svg" alt="image">参数。如果这层神经元是第一层神经元，那么<img src="https://cdn.nlark.com/yuque/__latex/036441a335dd85c838f76d63a3db2363.svg" alt="image">就是输入数据的第几个维度。</li>
+<li><img src="https://cdn.nlark.com/yuque/__latex/df976ff7fcf17d60490267d18a1e3996.svg" alt="image">：第<img src="https://cdn.nlark.com/yuque/__latex/5e4ec7ab2615024dafeeac0ab684d187.svg" alt="image">层神经元的第几个神经元。</li>
+</ul>
+</div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">nty</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">38</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Nie-Tianyi"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/14/%E4%BB%80%E4%B9%88%E6%98%AFHadoop_preprocessed/" title="Hadoop">Hadoop</a><time datetime="2025-09-14T12:46:25.000Z" title="发表于 2025-09-14 20:46:25">2025-09-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/12/Raft%E5%8D%8F%E8%AE%AE_preprocessed/" title="Raft协议">Raft协议</a><time datetime="2025-09-12T12:46:25.000Z" title="发表于 2025-09-12 20:46:25">2025-09-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/07/Lecture%201_preprocessed/" title="凸函数优化笔记（1）">凸函数优化笔记（1）</a><time datetime="2025-09-07T12:46:25.000Z" title="发表于 2025-09-07 20:46:25">2025-09-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/27/%E7%BA%BF%E6%80%A7%E5%87%BD%E6%95%B0%E5%AE%9A%E4%B9%89_preprocessed/" title="线性函数定义">线性函数定义</a><time datetime="2025-08-27T12:46:25.000Z" title="发表于 2025-08-27 20:46:25">2025-08-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/16/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C's%20Gradient_preprocessed/" title="神经网络's Gradient">神经网络's Gradient</a><time datetime="2025-08-16T12:46:25.000Z" title="发表于 2025-08-16 20:46:25">2025-08-16</time></div></div></div></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/Hadoop/" style="font-size: 1.1em; color: #999">Hadoop</a> <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" style="font-size: 1.1em; color: #999">人工智能</a> <a href="/tags/Python/" style="font-size: 1.3em; color: #99a1ac">Python</a> <a href="/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/" style="font-size: 1.1em; color: #999">异步编程</a> <a href="/tags/%E4%BA%8C%E5%B1%82%E6%89%A9%E5%B1%95/" style="font-size: 1.1em; color: #999">二层扩展</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 1.1em; color: #999">性能优化</a> <a href="/tags/PostgreSQL/" style="font-size: 1.1em; color: #999">PostgreSQL</a> <a href="/tags/%E7%BA%BF%E6%80%A7%E5%87%BD%E6%95%B0/" style="font-size: 1.1em; color: #999">线性函数</a> <a href="/tags/%E4%BB%A5%E5%A4%AA%E5%9D%8A/" style="font-size: 1.2em; color: #999da3">以太坊</a> <a href="/tags/PyO3/" style="font-size: 1.1em; color: #999">PyO3</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 1.1em; color: #999">大数据</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/" style="font-size: 1.1em; color: #999">编程基础</a> <a href="/tags/%E5%85%B1%E8%AF%86%E5%8D%8F%E8%AE%AE/" style="font-size: 1.1em; color: #999">共识协议</a> <a href="/tags/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" style="font-size: 1.1em; color: #999">线性回归</a> <a href="/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" style="font-size: 1.4em; color: #99a5b6">区块链</a> <a href="/tags/%E6%95%B0%E5%AD%A6/" style="font-size: 1.1em; color: #999">数学</a> <a href="/tags/%E6%AF%94%E7%89%B9%E5%B8%81/" style="font-size: 1.1em; color: #999">比特币</a> <a href="/tags/Rust/" style="font-size: 1.4em; color: #99a5b6">Rust</a> <a href="/tags/Web%E6%A1%86%E6%9E%B6/" style="font-size: 1.1em; color: #999">Web框架</a> <a href="/tags/%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81/" style="font-size: 1.1em; color: #999">加密货币</a> <a href="/tags/SQL/" style="font-size: 1.1em; color: #999">SQL</a> <a href="/tags/Axum/" style="font-size: 1.1em; color: #999">Axum</a> <a href="/tags/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/" style="font-size: 1.4em; color: #99a5b6">梯度下降</a> <a href="/tags/%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/" style="font-size: 1.1em; color: #999">智能合约</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6/" style="font-size: 1.1em; color: #999">数据科学</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" style="font-size: 1.3em; color: #99a1ac">分布式系统</a> <a href="/tags/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/" style="font-size: 1.1em; color: #999">逻辑回归</a> <a href="/tags/Raft/" style="font-size: 1.1em; color: #999">Raft</a> <a href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" style="font-size: 1.1em; color: #999">线程池</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 1.1em; color: #999">并发编程</a> <a href="/tags/numba/" style="font-size: 1.1em; color: #999">numba</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 1.1em; color: #999">数据库</a> <a href="/tags/Python%E8%AF%AD%E6%B3%95/" style="font-size: 1.1em; color: #999">Python语法</a> <a href="/tags/%E5%85%B1%E8%AF%86%E7%AE%97%E6%B3%95/" style="font-size: 1.1em; color: #999">共识算法</a> <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 1.1em; color: #999">神经网络</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 1.5em; color: #99a9bf">机器学习</a> <a href="/tags/Tokio/" style="font-size: 1.1em; color: #999">Tokio</a> <a href="/tags/%E5%87%B8%E5%87%BD%E6%95%B0%E4%BC%98%E5%8C%96/" style="font-size: 1.1em; color: #999">凸函数优化</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      <a class="card-more-btn" href="/archives/"
+            title="查看更多">
+            <i class="fas fa-angle-right"></i>
+          </a>
+    </div>
+  
+    <ul class="card-archive-list">
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/09/">
+            <span class="card-archive-list-date">
+              九月 2025
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/08/">
+            <span class="card-archive-list-date">
+              八月 2025
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/07/">
+            <span class="card-archive-list-date">
+              七月 2025
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/06/">
+            <span class="card-archive-list-date">
+              六月 2025
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/05/">
+            <span class="card-archive-list-date">
+              五月 2025
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/03/">
+            <span class="card-archive-list-date">
+              三月 2025
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/10/">
+            <span class="card-archive-list-date">
+              十月 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/09/">
+            <span class="card-archive-list-date">
+              九月 2024
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">19</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总浏览量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2025-09-16T17:46:14.948Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By nty</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

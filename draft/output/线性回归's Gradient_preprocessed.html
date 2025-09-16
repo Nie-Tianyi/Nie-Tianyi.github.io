@@ -1,0 +1,267 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>nty的技术博客 | nty的技术博客</title><meta name="author" content="nty"><meta name="copyright" content="nty"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="损失函数和代价函数 在线性回归中，我们通常使用MSE（Mean Square Error, 均方误差） 作为我们算法的损失函数，其基本思想为衡量预测值和真实结果之间的绝对距离。MSE的公式为：![image](images&#x2F;线性回归’s Gradient&#x2F;6af3f19d2adba1a26928924a51d2c6e8.svg)。同时我们为了防止函数过拟合，我们引入正则表达式。在这里，我们先用L2">
+<meta property="og:type" content="website">
+<meta property="og:title" content="nty的技术博客">
+<meta property="og:url" content="https://nie-tianyi.github.io/draft/output/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92's%20Gradient_preprocessed.html">
+<meta property="og:site_name" content="nty的技术博客">
+<meta property="og:description" content="损失函数和代价函数 在线性回归中，我们通常使用MSE（Mean Square Error, 均方误差） 作为我们算法的损失函数，其基本思想为衡量预测值和真实结果之间的绝对距离。MSE的公式为：![image](images&#x2F;线性回归’s Gradient&#x2F;6af3f19d2adba1a26928924a51d2c6e8.svg)。同时我们为了防止函数过拟合，我们引入正则表达式。在这里，我们先用L2">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://nie-tianyi.github.io/images/avatar.png">
+<meta property="article:published_time" content="2025-09-16T17:30:20.366Z">
+<meta property="article:modified_time" content="2025-09-16T17:30:20.366Z">
+<meta property="article:author" content="nty">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://nie-tianyi.github.io/images/avatar.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://nie-tianyi.github.io/draft/output/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92's%20Gradient_preprocessed.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'nty的技术博客',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'page'
+}</script><meta name="generator" content="Hexo 7.3.0"><link href="https://cdn.bootcss.com/KaTeX/0.11.1/katex.min.css" rel="stylesheet" /></head><body><div class="page" id="body-wrap"><header class="not-home-page" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">nty的技术博客</span></a></span><div id="menus"></div></nav><div id="page-site-info"><h1 id="site-title"></h1></div></header><main class="layout" id="content-inner"><div id="page"><div class="container" id="article-container"><h2 id="损失函数和代价函数">损失函数和代价函数</h2>
+<p>在线性回归中，我们通常使用MSE（Mean Square Error, 均方误差） 作为我们算法的损失函数，其基本思想为衡量预测值和真实结果之间的绝对距离。MSE的公式为：![image](images/线性回归’s Gradient/6af3f19d2adba1a26928924a51d2c6e8.svg)。同时我们为了防止函数过拟合，我们引入正则表达式。在这里，我们先用L2正则表达式作为例子，L2正则表达式为：![image](images/线性回归’s Gradient/252998d74b77dda1d3e3058c2c186bb5.svg)。结合这两项，我们函数的代价函数可以表达为：</p>
+<p>![image](images/线性回归’s Gradient/aaf67dd2756d4aab15b836c0f03aa81c.svg)。</p>
+<p>在反向传播中，我们需要计算梯度，以更新算法的权重：</p>
+<p>![image](images/线性回归’s Gradient/0deb816030214f666cfcf5d5ee5809c8.svg)</p>
+<p>![image](images/线性回归’s Gradient/d6cbb7d70f576a80e9cc45f273ad163b.svg)</p>
+<h2 id="计算梯度">计算梯度</h2>
+<p>![image](images/线性回归’s Gradient/3a71b540d1d0a8e432554933bbed70d3.svg)</p>
+<p>根据求导规则，对** x+y求导** 等于 <strong>对x求导</strong> 加上 <strong>对y求导</strong>，即 (x + y)’ = x’ + y’ :</p>
+<p>![image](images/线性回归’s Gradient/fbb6dfccec6c335940fe899f220b1392.svg)</p>
+<h3 id="MSE梯度">MSE梯度</h3>
+<p>我们分别计算两个部分，我们先计算第一部分：</p>
+<p>![image](images/线性回归’s Gradient/b6adae3584137e35a0ce73a81bbae0d8.svg)</p>
+<p>根据链式法则，我们有 f[g(x)]’ = f(g(x)) * g’(x)，于是</p>
+<p>![image](images/线性回归’s Gradient/c771d948650380b899bb00b45b35f44b.svg)</p>
+<p>其中：</p>
+<p>![image](images/线性回归’s Gradient/da9f5a71f2f43d94e2e0b7e7685c58c7.svg)</p>
+<p>所以，第一部分求导结果如下</p>
+<p>![image](images/线性回归’s Gradient/68688eb819f8ac4b8d1acd2efe32053a.svg)</p>
+<h3 id="正则表达式梯度">正则表达式梯度</h3>
+<p>我们再对正则表达式部分求导：</p>
+<p>![image](images/线性回归’s Gradient/61c09ec54ea321d3f56b79eece48675d.svg)</p>
+<p>正则表达式和MSE部分梯度总结起来就是：</p>
+<p>![image](images/线性回归’s Gradient/7109a75ee46e80cf5dcfaf17ced5ac0f.svg)</p>
+<h3 id="计算Bias梯度">计算Bias梯度</h3>
+<p>接着我们对b求导</p>
+<p>![image](images/线性回归’s Gradient/ab41f6409e19e6da4641864936c1bdc7.svg)</p>
+<p>其中：</p>
+<p>![image](images/线性回归’s Gradient/1062c1e360a98a1f0b2501b6f8ab0342.svg)</p>
+<p>所以更新权重的算法现在为：</p>
+<p>![image](images/线性回归’s Gradient/eeaa0f61f15b1a6f3405be4745b8a247.svg)</p>
+<p>![image](images/线性回归’s Gradient/4976565cca35071e552b9ee7711d85df.svg)</p>
+<h2 id="深入理解L2正则表达式">深入理解L2正则表达式</h2>
+<p>通过观察上面![image](images/线性回归’s Gradient/e962475aca62e7f210f40004870bd692.svg)的更新公式，我们可以观察到：</p>
+<p>![image](images/线性回归’s Gradient/09cda16b72f776b764d8ee3de5cc2aa1.svg)</p>
+<p>其中![image](images/线性回归’s Gradient/18d25ca4f77a9bbed9812e2bb0b350a5.svg)为学习率，![image](images/线性回归’s Gradient/e520c061a407db472027709bf3f73290.svg)为正则参数，m 为训练样本容量。可以看到L2正则表达式实际上在做的是，每一轮训练都把现有的![image](images/线性回归’s Gradient/e962475aca62e7f210f40004870bd692.svg)固定乘以一个稍微小于1的系数——越大的权重将减少的越多——因此我们能避免个别权重过大，让模型过于复杂。</p>
+</div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">nty</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">38</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Nie-Tianyi"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/14/%E4%BB%80%E4%B9%88%E6%98%AFHadoop_preprocessed/" title="Hadoop">Hadoop</a><time datetime="2025-09-14T12:46:25.000Z" title="发表于 2025-09-14 20:46:25">2025-09-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/12/Raft%E5%8D%8F%E8%AE%AE_preprocessed/" title="Raft协议">Raft协议</a><time datetime="2025-09-12T12:46:25.000Z" title="发表于 2025-09-12 20:46:25">2025-09-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/07/Lecture%201_preprocessed/" title="凸函数优化笔记（1）">凸函数优化笔记（1）</a><time datetime="2025-09-07T12:46:25.000Z" title="发表于 2025-09-07 20:46:25">2025-09-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/27/%E7%BA%BF%E6%80%A7%E5%87%BD%E6%95%B0%E5%AE%9A%E4%B9%89_preprocessed/" title="线性函数定义">线性函数定义</a><time datetime="2025-08-27T12:46:25.000Z" title="发表于 2025-08-27 20:46:25">2025-08-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/16/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C's%20Gradient_preprocessed/" title="神经网络's Gradient">神经网络's Gradient</a><time datetime="2025-08-16T12:46:25.000Z" title="发表于 2025-08-16 20:46:25">2025-08-16</time></div></div></div></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/Hadoop/" style="font-size: 1.1em; color: #999">Hadoop</a> <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" style="font-size: 1.1em; color: #999">人工智能</a> <a href="/tags/Python/" style="font-size: 1.3em; color: #99a1ac">Python</a> <a href="/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/" style="font-size: 1.1em; color: #999">异步编程</a> <a href="/tags/%E4%BA%8C%E5%B1%82%E6%89%A9%E5%B1%95/" style="font-size: 1.1em; color: #999">二层扩展</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 1.1em; color: #999">性能优化</a> <a href="/tags/PostgreSQL/" style="font-size: 1.1em; color: #999">PostgreSQL</a> <a href="/tags/%E7%BA%BF%E6%80%A7%E5%87%BD%E6%95%B0/" style="font-size: 1.1em; color: #999">线性函数</a> <a href="/tags/%E4%BB%A5%E5%A4%AA%E5%9D%8A/" style="font-size: 1.2em; color: #999da3">以太坊</a> <a href="/tags/PyO3/" style="font-size: 1.1em; color: #999">PyO3</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 1.1em; color: #999">大数据</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/" style="font-size: 1.1em; color: #999">编程基础</a> <a href="/tags/%E5%85%B1%E8%AF%86%E5%8D%8F%E8%AE%AE/" style="font-size: 1.1em; color: #999">共识协议</a> <a href="/tags/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" style="font-size: 1.1em; color: #999">线性回归</a> <a href="/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" style="font-size: 1.4em; color: #99a5b6">区块链</a> <a href="/tags/%E6%95%B0%E5%AD%A6/" style="font-size: 1.1em; color: #999">数学</a> <a href="/tags/%E6%AF%94%E7%89%B9%E5%B8%81/" style="font-size: 1.1em; color: #999">比特币</a> <a href="/tags/Rust/" style="font-size: 1.4em; color: #99a5b6">Rust</a> <a href="/tags/Web%E6%A1%86%E6%9E%B6/" style="font-size: 1.1em; color: #999">Web框架</a> <a href="/tags/%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81/" style="font-size: 1.1em; color: #999">加密货币</a> <a href="/tags/SQL/" style="font-size: 1.1em; color: #999">SQL</a> <a href="/tags/Axum/" style="font-size: 1.1em; color: #999">Axum</a> <a href="/tags/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/" style="font-size: 1.4em; color: #99a5b6">梯度下降</a> <a href="/tags/%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/" style="font-size: 1.1em; color: #999">智能合约</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6/" style="font-size: 1.1em; color: #999">数据科学</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" style="font-size: 1.3em; color: #99a1ac">分布式系统</a> <a href="/tags/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/" style="font-size: 1.1em; color: #999">逻辑回归</a> <a href="/tags/Raft/" style="font-size: 1.1em; color: #999">Raft</a> <a href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" style="font-size: 1.1em; color: #999">线程池</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 1.1em; color: #999">并发编程</a> <a href="/tags/numba/" style="font-size: 1.1em; color: #999">numba</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 1.1em; color: #999">数据库</a> <a href="/tags/Python%E8%AF%AD%E6%B3%95/" style="font-size: 1.1em; color: #999">Python语法</a> <a href="/tags/%E5%85%B1%E8%AF%86%E7%AE%97%E6%B3%95/" style="font-size: 1.1em; color: #999">共识算法</a> <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 1.1em; color: #999">神经网络</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 1.5em; color: #99a9bf">机器学习</a> <a href="/tags/Tokio/" style="font-size: 1.1em; color: #999">Tokio</a> <a href="/tags/%E5%87%B8%E5%87%BD%E6%95%B0%E4%BC%98%E5%8C%96/" style="font-size: 1.1em; color: #999">凸函数优化</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      <a class="card-more-btn" href="/archives/"
+            title="查看更多">
+            <i class="fas fa-angle-right"></i>
+          </a>
+    </div>
+  
+    <ul class="card-archive-list">
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/09/">
+            <span class="card-archive-list-date">
+              九月 2025
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/08/">
+            <span class="card-archive-list-date">
+              八月 2025
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/07/">
+            <span class="card-archive-list-date">
+              七月 2025
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/06/">
+            <span class="card-archive-list-date">
+              六月 2025
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/05/">
+            <span class="card-archive-list-date">
+              五月 2025
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/03/">
+            <span class="card-archive-list-date">
+              三月 2025
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/10/">
+            <span class="card-archive-list-date">
+              十月 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/09/">
+            <span class="card-archive-list-date">
+              九月 2024
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">19</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总浏览量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2025-09-16T17:46:14.948Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By nty</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
