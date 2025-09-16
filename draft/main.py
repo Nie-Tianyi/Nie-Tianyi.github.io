@@ -159,6 +159,7 @@ def main():
     for path in markdown_files:
         print(f"Processing: {path}")
         f_name = os.path.basename(path)
+        f_name = f_name.replace(" ", "_")
         downloader = MarkdownImageDownloader(
             markdown_file=f"source_markdowns/{f_name}",
             output_dir=f"images/{f_name.split('.')[0]}",

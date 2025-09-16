@@ -1,0 +1,242 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>逻辑回归's Gradient | nty的技术博客</title><meta name="author" content="nty"><meta name="copyright" content="nty"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="损失函数和代价函数 我们使用交叉熵损失（Cross Entropy Loss）函数作为逻辑回归算法的损失函数，其公式如下  其中, 为 Sigmoid 函数，通过计算给出的输入和自身权重乘积（以及加上偏置），经过Sigmoid函数的处理，最后计算出一个处于(0,1）之间的概率，这个概率表示预测为真的概率。Sigmoid函数公式如下：   其中 与 等价，都是计算 ，只不过前者为矩阵写法，表示一个一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="逻辑回归&#39;s Gradient">
+<meta property="og:url" content="https://nie-tianyi.github.io/2025/07/26/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC_preprocessed/index.html">
+<meta property="og:site_name" content="nty的技术博客">
+<meta property="og:description" content="损失函数和代价函数 我们使用交叉熵损失（Cross Entropy Loss）函数作为逻辑回归算法的损失函数，其公式如下  其中, 为 Sigmoid 函数，通过计算给出的输入和自身权重乘积（以及加上偏置），经过Sigmoid函数的处理，最后计算出一个处于(0,1）之间的概率，这个概率表示预测为真的概率。Sigmoid函数公式如下：   其中 与 等价，都是计算 ，只不过前者为矩阵写法，表示一个一">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://nie-tianyi.github.io/images/avatar.png">
+<meta property="article:published_time" content="2025-07-26T12:46:25.000Z">
+<meta property="article:modified_time" content="2024-07-26T12:46:25.000Z">
+<meta property="article:author" content="nty">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="梯度下降">
+<meta property="article:tag" content="逻辑回归">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://nie-tianyi.github.io/images/avatar.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "逻辑回归's Gradient",
+  "url": "https://nie-tianyi.github.io/2025/07/26/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC_preprocessed/",
+  "image": "https://nie-tianyi.github.io/images/avatar.png",
+  "datePublished": "2025-07-26T12:46:25.000Z",
+  "dateModified": "2024-07-26T12:46:25.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "nty",
+      "url": "https://nie-tianyi.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://nie-tianyi.github.io/2025/07/26/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC_preprocessed/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '逻辑回归\'s Gradient',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"><link href="https://cdn.bootcss.com/KaTeX/0.11.1/katex.min.css" rel="stylesheet" /></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">nty的技术博客</span></a><a class="nav-page-title" href="/"><span class="site-name">逻辑回归's Gradient</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">逻辑回归's Gradient</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-07-26T12:46:25.000Z" title="发表于 2025-07-26 20:46:25">2025-07-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-07-26T12:46:25.000Z" title="更新于 2024-07-26 20:46:25">2024-07-26</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="损失函数和代价函数">损失函数和代价函数</h2>
+<p>我们使用交叉熵损失（Cross Entropy Loss）函数作为逻辑回归算法的损失函数，其公式如下</p>
+<p><img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/7c9f0d29be9da57f2349f49f538e080d.svg" alt="image"></p>
+<p>其中, <img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/1bce09fbf65f0fcf4cf55aec95d479cb.svg" alt="image">为 Sigmoid 函数，通过计算给出的输入和自身权重乘积（以及加上偏置），经过Sigmoid函数的处理，最后计算出一个处于(0,1）之间的概率，这个概率表示预测为真的概率。Sigmoid函数公式如下：</p>
+<p><img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/46322849aacf5fe105678ef3096c0686.svg" alt="image"></p>
+<blockquote>
+<p>其中 <img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/bdce11e5c8a8691160f094a699fdd149.svg" alt="image">与 <img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/a2c32b77dad2e922ed80307378232c7f.svg" alt="image">等价，都是计算 <img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/87998e99d3dda05e4f45c7850710eb1d.svg" alt="image">，只不过前者为矩阵写法，表示一个一维矩阵<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/5e293cf754c9e3a9ad8af0b4c8b6971f.svg" alt="image">的转置（transpose）乘以另外一个一维矩阵<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/1100b198878cf618864989a0e841e099.svg" alt="image">，而后者是常见的求和公式。使用矩阵写法不仅在书写上更方便，也更符合我们需要在NumPy中需要写的代码。</p>
+</blockquote>
+<p>一个小细节：为什么机器学习中总是习惯性的写成<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/04fc4bfd1647f8ba0ca31a20fa7183fb.svg" alt="image">，而不是<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/717ec016851b38dc8e80a4bfe3d06442.svg" alt="image">？因为在机器学习中，我们习惯性的将<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/5e293cf754c9e3a9ad8af0b4c8b6971f.svg" alt="image">和 <img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/9bc21b9ec0ce99019d63120115080c9e.svg" alt="image">视作形状为 <img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/29cf1c9370447f71e2d6410da3551d32.svg" alt="image">的列向量（column vector） ，于是<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/f90656db63cc39782e3cb15df962c0b9.svg" alt="image">实际上是一个形状<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/29cf1c9370447f71e2d6410da3551d32.svg" alt="image">，求转置后，成为一个形状为<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/bd518381539e2259a8109c52beec3257.svg" alt="image">的矩阵，然后乘以另一个形状为 <img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/29cf1c9370447f71e2d6410da3551d32.svg" alt="image">的矩阵。如果你足够了解矩阵乘法，那么你就会知道前者的计算结果是一个形状为<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/5ce90cfd5dec8b917254288b23aebdb7.svg" alt="image">的矩阵；而后者的计算结果是一个<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/88a5675269d6d4cd8b9e592baf7a7adc.svg" alt="image">的矩阵。在这里我们只想要得到一个标量，而不需要一个矩阵。</p>
+<blockquote></blockquote>
+<p>交叉熵损失函数如果写成一行公式，则可以表示为（以下这个公式和上面的损失函数是完全等价的）：</p>
+<p><img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/6a22a570b8aeac10ac39d98c4b247808.svg" alt="image"></p>
+<p>而整个数据集的代价函数，加上L2正则化项，则可以表示为：</p>
+<p><img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/f9b8a88efcb519cb3e8465b68cf07a45.svg" alt="image"></p>
+<h2 id="计算梯度">计算梯度</h2>
+<p>由于逻辑回归的损失函数是一个非常复杂的复合函数，我们使用链式法则对这个函数求导，以计算得到梯度。首先我们求在代价函数在<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/e962475aca62e7f210f40004870bd692.svg" alt="image">方向上的梯度：</p>
+<p><img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/8cc922b2b952fb64fce5215d5ef99653.svg" alt="image"></p>
+<p>我们把<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/7e699a62a70fdd19bb1600a07511085f.svg" alt="image">单独拎出来计算，并且用<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/a5e8faa212780fd7d755593138757279.svg" alt="image">代替<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/85f49526bb68877fbe04c8f2d9b50f86.svg" alt="image">（仅仅是为了书写简单）。根据链式法则我们有：</p>
+<p><img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/4ae59cb8b2dbcf04065d4a5aebef4bdf.svg" alt="image"></p>
+<p>通常这里的<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/f421c9630300dab712200995d269df5a.svg" alt="image">函数的底可以是任意实数，但是为了我们计算简便，我们使用自然常数<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/c9a277d40d3a0b3afb85cdb557908945.svg" alt="image">作为底：</p>
+<p><img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/92b74d943cba97e7ad81bf019f1fcb43.svg" alt="image"></p>
+<p>接着我们求<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/600ddbe3dc21ae85d9b9534449177464.svg" alt="image">，我们设<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/82d02b6c28f1dcd23a500b2d4ec5390f.svg" alt="image">，根据链式法则我们有：</p>
+<p><img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/1fb0d2711bf80975dddb18b0dd1407fd.svg" alt="image"></p>
+<blockquote>
+<p>关于 Sigmoid 函数求导，其过程如下：</p>
+<p><img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/4c1ec75e41c227ccc28a7a3be9ff16c1.svg" alt="image"></p>
+<p>即 <img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/eb32eef974f48e16cf8cab2b6bf6003d.svg" alt="image"></p>
+</blockquote>
+<p>于是我们有：</p>
+<p><img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/40970d1dd0f8461199ee376856e4ecd1.svg" alt="image"></p>
+<p>结果非常的amazing啊，交叉熵损失函数CEL的求导结果竟然和我们在线性回归中使用的损失函数MSE的求导结果一模一样。我们将这个求导结果带入代价函数，得到代价函数在<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/e962475aca62e7f210f40004870bd692.svg" alt="image">方向上的梯度：</p>
+<p><img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/ae05ac0eee608ad58755fadcd9593423.svg" alt="image"></p>
+<p>我们接着计算这个损失函数在 <img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/d29c2e5f4926e5b0e9a95305650f6e54.svg" alt="image">方向上的偏导，求导过程几乎和上面展示的一样，唯一的不同是 <img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/2aedcfe13a0c055783d346c5e49d7894.svg" alt="image">而 <img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/098584dc24ace58ef778ec466d6512e8.svg" alt="image">(假设 <img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/82d02b6c28f1dcd23a500b2d4ec5390f.svg" alt="image">)：</p>
+<p><img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/38bbb4b9ddc54dfa09003121a60eba51.svg" alt="image"></p>
+<p>于是我们更新梯度的公式为：</p>
+<p><img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/e3b89e5f83178817c0a3fc210041ac9f.svg" alt="image"></p>
+<h2 id="多项式逻辑回归">多项式逻辑回归</h2>
+<p>逻辑回归只能处理二分类问题，如果想要预测有多个标签的结果，单个逻辑回归模型就无能为力了。处理多标签分类问题时，最直观、最容易想到的办法是先将其中几个聚集为一类，分类，然后再在每个子类内继续分类。例如我们现在需要分类的结果有 [0, 1, 2, 3] 四类，那么我们可以先将0和1分为一类，3和4分为另一类，这样问题就简化成了多个二分类问题：</p>
+<p><img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/1752349137934-5b2912db-74f7-47d0-9531-7f2f0acae18e.png" alt></p>
+<blockquote>
+<p>在处理多分类的问题的时候，我们首先需要将预测标签编码成 one-hot 编码。例如在上例中，我们想要预测的结果有四类[0, 1, 2, 3]，但是我们实际的标签——假设这条数据的类别是2——则是[0, 0, 1, 0]，分别对应这[0, 1, 2, 3]。或者假设我们要预测的标签为 [红色， 绿色， 蓝色]，而这单条样本的标签为绿色，则我们需要将<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/bf98c0ddcbe9c1e535f767c78c3aa813.svg" alt="image">编码成 [0，1，0] （注意，我们所有的标签都需要遵循一样的次序）。</p>
+</blockquote>
+<p>这里我们需要连续训练三个逻辑回归模型，如果需要分的类别越多，则需要训练的模型也越多。有更简单的方法吗？有的！在面对多分类问题时，我们可以使用多项式逻辑回归（Polynomial Logistic Regression）。多项式逻辑回归的核心是 Softmax 函数，我们用 Softmax 函数取代而二项式逻辑回归中的 Sigmoid 函数：</p>
+<p><img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/991302128cc8cc83c385ca18b5f07d6f.svg" alt="image"></p>
+<p>这里的<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/da8ba3ff388a4a17525f3d51358aebd1.svg" alt="image">表示每个类别的输入和其权重的乘积再加上偏置，即<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/97c493e04d4b888043c22f94bba7b65a.svg" alt="image">。假设我们有三个类别需要分类，分别是 [0, 1, 2] 三个类别：</p>
+<ol>
+<li>我们首先初始化三组权重，分别是 <img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/1f0b2c1a602f5a52f29bed25d3346115.svg" alt="image">和<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/ccd7921caa636e4b39239f38768dbc52.svg" alt="image">、<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/deb8257d4bfd5f75d99bc965a6088f98.svg" alt="image">和<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/1becf94a458da89497059c47a43c858a.svg" alt="image">、<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/7e5c604851fe7a8d19a97a5e63757c58.svg" alt="image">和<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/99b74c73e8f07cc892af007b651fce09.svg" alt="image">；</li>
+<li>接着我们计算权重和输入的乘积 <img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/ba32bbf550e9b4770785882c14921e25.svg" alt="image">、<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/c6f04b14150a8bb1a100eb16b5d91c64.svg" alt="image">、<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/0e41bae649b03a29e8c613fa2f833063.svg" alt="image">;</li>
+<li>最后我们通过 Softmax函数，计算出每个分类的概率<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/39cdaec02c6d19112b5f870766d3e300.svg" alt="image">、<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/3da99999420353fda48faf744c988e15.svg" alt="image">、<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/9972f5a4aab8f6d74ec7220b90f1b686.svg" alt="image">。这样我们就能得到三个概率，分别对应着预测为0、1、2三类的概率，并且<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/fb1dd5af48470897a55b8cecb310d818.svg" alt="image">。</li>
+</ol>
+<blockquote>
+<p>我们使用softmax函数主要是为了将预测的结果归一化为三个加起来等于1的概率，那为什么使用以 <img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/c9a277d40d3a0b3afb85cdb557908945.svg" alt="image">为底的 Softmax 函数，而不是直接使用<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/3a962584124a21a32d4757332498aaa0.svg" alt="image">呢？后者不也可以将多个输出归一到和为1的多个概率吗？使用以 <img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/c9a277d40d3a0b3afb85cdb557908945.svg" alt="image"> 为底的指数函数的目的主要有两个：一个是可以保证结果中不会出现负数，二个是可以利用指数爆炸的性质，放大多个预测结果之间的差异，使其更贴合我们期望的“其中一个类别的预测结果趋近于1，而其他几个类别的预测结果接近于0”的预测结果。至于为什么底是<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/c9a277d40d3a0b3afb85cdb557908945.svg" alt="image">?当然是为了我们后面计算梯度的时候求导方便啦！</p>
+</blockquote>
+<p>这个时候我们得到了三个概率，那我们该怎么计算梯度，更新我们模型的权重参数呢？在多分类问题中，我们沿用逻辑回归中的损失函数 <img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/30154f57030912fcbdcf346d646a82c6.svg" alt="image">。假设数据的真实标签是0，那么我们期望我们的模型的输出为 [1, 0, 0]（分别对应<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/c5940a3acff4f38f793a8ce19bdb8690.svg" alt="image"><img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/091a44b6adf69464fa153ab4fb6b1d64.svg" alt="image"><img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/764c1c88fba43c220e26e27403bf676f.svg" alt="image">），但是我们模型实际输出为[0.34, 0.33, 0.33]，那么我们的模型这一轮训练的损失为<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/65a313bfe1a63f7d6ac7f7d3d054640d.svg" alt="image">。后面两项为0，这意味着在多项式分类中，我们只关心标签为真的项的损失。</p>
+<h2 id="计算多项式逻辑回归的梯度">计算多项式逻辑回归的梯度</h2>
+<p>跟之前求导梯度不一样的是，我们现在一共有<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/38a3f4d664b7a723d138f9d57be0c783.svg" alt="image">组权重，并且每组权重内有<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/4760e2f007e23d820825ba241c47ce3b.svg" alt="image">个权重以及一个偏置<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/d29c2e5f4926e5b0e9a95305650f6e54.svg" alt="image">。（假设我们预测的结果一共有<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/38a3f4d664b7a723d138f9d57be0c783.svg" alt="image">类，并且每条数据的维度为<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/4760e2f007e23d820825ba241c47ce3b.svg" alt="image">维）。</p>
+<p><img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/b787123144017b9367197b79be0de230.svg" alt="image"></p>
+<p>跟之前不同的是，之前的权重只有一个维度，而这里的权重成为了一个二维的矩阵，我们接下来要分别求出这个矩阵中每一个参数的梯度。在计算Softmax函数梯度之前，我们要根据标签<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/bf98c0ddcbe9c1e535f767c78c3aa813.svg" alt="image">的值分成两种情况，分别分成<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/1951f9656e5e28af5edb9c326a2bfa91.svg" alt="image"> 的时候和 <img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/e8cbef78c5f630a10a4ebd954dfb6649.svg" alt="image">的时候。因为当<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/0e30338d8bdf1ce3a92ee33809a7ae88.svg" alt="image">的时候，Softmax函数的分子内包含我们要求的参数的偏导；而<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/5ef5eebdaedab8a0d31a54532a9f9ef0.svg" alt="image"> 的时候，Softmax函数的分子内不包含我们要求的参数的梯度，因此我们可以将分子上的式子视作一个常数。</p>
+<p>由于我们需要根据标签的值分成多种情况求导，当预测标签的值不一样的时候，我们计算各个参数的梯度的方式也不一样。所以和之前不一样的是，我们需要先计算单个样本上的梯度，再将所有梯度总和起来，最后将总和起来的梯度更新到权重上去——而不是将所有样本总和在一起批量求得梯度。</p>
+<p>我们先求当<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/0e30338d8bdf1ce3a92ee33809a7ae88.svg" alt="image">的时候，<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/46bdf85a6e2e7aacd135b250b69ec4a3.svg" alt="image">和<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/4345c351f6518a166eac8084f4808059.svg" alt="image">的梯度（这里<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/2443fbcfeb7e85e1d62b6f5e4f27207e.svg" alt="image">表示<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/b9c66c39e242967e2281353ebca824b2.svg" alt="image">的第几组权重，而<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/036441a335dd85c838f76d63a3db2363.svg" alt="image">表示<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/c74f73927a2412c78030b0639d60009d.svg" alt="image">的每组权重中的第几个权重）：</p>
+<p><img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/f05d3373d7175826f9c6fb7bc44a8f1f.svg" alt="image"></p>
+<p>同理可得：</p>
+<p><img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/810f462ad8ce651cb38a66c8948d0edb.svg" alt="image"></p>
+<p>我们再求当 <img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/e8cbef78c5f630a10a4ebd954dfb6649.svg" alt="image">的时候，<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/46bdf85a6e2e7aacd135b250b69ec4a3.svg" alt="image">和<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/4345c351f6518a166eac8084f4808059.svg" alt="image">的梯度：</p>
+<p><img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/c25c14a0fde3a120414759fb5ba8bc87.svg" alt="image"></p>
+<p>同理可得：</p>
+<p><img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/b426c0303c88d28328b882412e73178f.svg" alt="image"></p>
+<blockquote>
+<p><img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/390bbc9c93864a64b5bde28aedd14da9.svg" alt="image"> ，<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/48e6989aee378b0671dcbc11187f8dd6.svg" alt="image">代表了数据实际的标签，是一个[0,0,…,1,…,0,0] 的数组，所以所有 <img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/48e6989aee378b0671dcbc11187f8dd6.svg" alt="image">加起来等于一。<br>
+关于Softmax函数求导，其求导过程如下，当 <img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/0e30338d8bdf1ce3a92ee33809a7ae88.svg" alt="image">的时候：</p>
+<p><img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/ea23f1a99916d59f3184c239fa128061.svg" alt="image"></p>
+<p>当 <img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/e8cbef78c5f630a10a4ebd954dfb6649.svg" alt="image">的时候：</p>
+<p><img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/df5e1256970e04457d0e9279dddc3e93.svg" alt="image"></p>
+<p>其中 <img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/52a4c57a062ca68a08ae3c6d9f9c030a.svg" alt="image"></p>
+</blockquote>
+<p><img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/413a4f26f2440e92cb1632aa98535235.svg" alt="image">可以写成 <img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/493aec845200dc42811a6f811d758180.svg" alt="image">的形式，当 <img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/1951f9656e5e28af5edb9c326a2bfa91.svg" alt="image">的时候，<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/8b8c97ae7efefd2990a03002a22291ee.svg" alt="image">；而当<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/e8cbef78c5f630a10a4ebd954dfb6649.svg" alt="image">的时候，<img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/c65a0f115f2a74760d2933f44842f128.svg" alt="image">。于是梯度计算又回到了我们熟悉的形式：</p>
+<p><img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/e4ca05ecbdf467f0635c061a7c90619d.svg" alt="image"></p>
+<p><img src="images/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/89a8ebff4b2546fb46a2648757eab40e.svg" alt="image"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://Nie-Tianyi.github.io">nty</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://nie-tianyi.github.io/2025/07/26/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC_preprocessed/">https://nie-tianyi.github.io/2025/07/26/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC_preprocessed/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://Nie-Tianyi.github.io" target="_blank">nty的技术博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a><a class="post-meta__tags" href="/tags/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/">梯度下降</a><a class="post-meta__tags" href="/tags/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/">逻辑回归</a></div><div class="post-share"><div class="social-share" data-image="/images/avatar.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/07/15/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC_preprocessed/" title="线性回归's Gradient"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">线性回归's Gradient</div></div><div class="info-2"><div class="info-item-1">损失函数和代价函数 在线性回归中，我们通常使用MSE（Mean Square Error, 均方误差） 作为我们算法的损失函数，其基本思想为衡量预测值和真实结果之间的绝对距离。MSE的公式为：。同时我们为了防止函数过拟合，我们引入正则表达式。在这里，我们先用L2正则表达式作为例子，L2正则表达式为：。结合这两项，我们函数的代价函数可以表达为： 。 在反向传播中，我们需要计算梯度，以更新算法的权重：   计算梯度  根据求导规则，对** x+y求导** 等于 对x求导 加上 对y求导，即 (x + y)’ = x’ + y’ :  MSE梯度 我们分别计算两个部分，我们先计算第一部分：  根据链式法则，我们有 f[g(x)]’ = f(g(x)) * g’(x)，于是  其中：  所以，第一部分求导结果如下  正则表达式梯度 我们再对正则表达式部分求导：  正则表达式和MSE部分梯度总结起来就是：  计算Bias梯度 接着我们对b求导  其中：  所以更新权重的算法现在为：   深入理解L2正则表达式 通过观察上面的更新公式，我们可以观察到：  其中为学习率，为正则参数，m...</div></div></div></a><a class="pagination-related" href="/2025/08/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0_preprocessed/" title="手写线程池"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">手写线程池</div></div><div class="info-2"><div class="info-item-1">123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106use std::sync::mpsc::Receiver;use std::sync::&#123;mpsc, Arc, Mutex&#125;;use std::thread;use std::thread::JoinHandle;/// 手写一个线程池type Job = Box&lt;dyn FnOnce() + Send + &#x27;static&gt;;struct Worker &#123;    id: usize,    join_handle: Option&lt;JoinHandle&lt;()&gt;&gt;,&#125;impl...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/09/07/%E5%87%B8%E5%87%BD%E6%95%B0%E4%BC%98%E5%8C%96%E4%B8%80_preprocessed/" title="凸函数优化笔记（1）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-09-07</div><div class="info-item-2">凸函数优化笔记（1）</div></div><div class="info-2"><div class="info-item-1">向量的范数 norm 我们用符号双竖杠来表示向量范数，例如来表示向量的范数。向量的范数是我们可以用来衡量向量“大小”或者“长度”的一个指标。其定义形式如下，我们通常说一个向量的-norm为：  其中为一个大于1的实数 如果，那么的范数就是我们熟知的曼哈顿距离的公式：  如果，那么的范数就是我们熟知的欧几里得距离，他描述了向量的长度：  如果我们没有注明的值，通常我们默认，即  时，范数描述了向量的长度，假设是一个二维的向量，那么的范数描绘在平面上的长度；如果是一个三维的向量，那么的范数描述了向量在空间中的长度；由此推广，当在四维、五维，甚至更高维度的空间内时，范数描述了向量在更高维空间中的长度。  而当趋于的时候，向量的范数趋向于中绝对值最大的分量，即：  柯西-施瓦茨不等式（Cauchy-Schwarz inequality） 柯西不等式公式为：  或者进一步可以写为：   回忆一下向量乘法的规则：  所以柯西不等式式其实只是在另一个方面论证了一个简单的事实 :  赫尔德不等式（Holder’s...</div></div></div></a><a class="pagination-related" href="/2025/08/16/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC_preprocessed/" title="神经网络&#39;s Gradient"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-08-16</div><div class="info-item-2">神经网络&#39;s Gradient</div></div><div class="info-2"><div class="info-item-1">正向传播 假设我们的神经网络是由三层神经元构成：分别是一层拥有4个神经元的隐藏层，一层拥有三个神经元的隐藏层，以及最后一层只拥有一个神经元的输出层，神经网络结构如下图所示：  假设我们输入的数据的维度是2，那么第一层神经元里面的每一个神经元都有和两个权重以及一个偏置，整个第一层就一共有...</div></div></div></a><a class="pagination-related" href="/2025/07/15/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC_preprocessed/" title="线性回归&#39;s Gradient"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-07-15</div><div class="info-item-2">线性回归&#39;s Gradient</div></div><div class="info-2"><div class="info-item-1">损失函数和代价函数 在线性回归中，我们通常使用MSE（Mean Square Error, 均方误差） 作为我们算法的损失函数，其基本思想为衡量预测值和真实结果之间的绝对距离。MSE的公式为：。同时我们为了防止函数过拟合，我们引入正则表达式。在这里，我们先用L2正则表达式作为例子，L2正则表达式为：。结合这两项，我们函数的代价函数可以表达为： 。 在反向传播中，我们需要计算梯度，以更新算法的权重：   计算梯度  根据求导规则，对** x+y求导** 等于 对x求导 加上 对y求导，即 (x + y)’ = x’ + y’ :  MSE梯度 我们分别计算两个部分，我们先计算第一部分：  根据链式法则，我们有 f[g(x)]’ = f(g(x)) * g’(x)，于是  其中：  所以，第一部分求导结果如下  正则表达式梯度 我们再对正则表达式部分求导：  正则表达式和MSE部分梯度总结起来就是：  计算Bias梯度 接着我们对b求导  其中：  所以更新权重的算法现在为：   深入理解L2正则表达式 通过观察上面的更新公式，我们可以观察到：  其中为学习率，为正则参数，m...</div></div></div></a><a class="pagination-related" href="/2025/03/19/%E4%B8%80%E3%80%81%E4%BB%8B%E7%BB%8D_preprocessed/" title="机器学习简介"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-03-19</div><div class="info-item-2">机器学习简介</div></div><div class="info-2"><div class="info-item-1">...</div></div></div></a><a class="pagination-related" href="/2025/08/27/%E7%BA%BF%E6%80%A7%E5%87%BD%E6%95%B0%E5%AE%9A%E4%B9%89_preprocessed/" title="线性函数定义"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-08-27</div><div class="info-item-2">线性函数定义</div></div><div class="info-2"><div class="info-item-1">这句话“a linear function of linear function is still a linear function”有严谨的数学推导论证。下面我将从线性代数的角度进行详细推导。 线性函数的定义 在数学中，一个函数  是线性的，当且仅当它满足以下两个条件：  可加性：对于所有向量 ,有 。 齐次性：对于所有标量  和向量 ，有 。  问题陈述 假设有两个线性函数：   是线性的，  是线性的。  定义组合函数  为 。我们需要证明  也是线性的。 严谨推导 1. 验证可加性 对于任意 :  由于 ( g ) 是线性的，满足可加性，因此 ( g(x + y) = g(x) + g(y) )。代入上式：  又因为 ( f ) 是线性的，也满足可加性，因此 ( f(g(x) + g(y)) = f(g(x)) + f(g(y)) )。所以：  thus,  满足可加性。 2. 验证齐次性 对于任意标量  和向量 :  由于 ( g ) 是线性的，满足齐次性，因此 。代入上式：  又因为 ( f ) 是线性的，也满足齐次性，因此 。所以：  thus, ...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">nty</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">38</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Nie-Tianyi"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0%E5%92%8C%E4%BB%A3%E4%BB%B7%E5%87%BD%E6%95%B0"><span class="toc-number">1.</span> <span class="toc-text">损失函数和代价函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%A2%AF%E5%BA%A6"><span class="toc-number">2.</span> <span class="toc-text">计算梯度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E9%A1%B9%E5%BC%8F%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92"><span class="toc-number">3.</span> <span class="toc-text">多项式逻辑回归</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E5%A4%9A%E9%A1%B9%E5%BC%8F%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E7%9A%84%E6%A2%AF%E5%BA%A6"><span class="toc-number">4.</span> <span class="toc-text">计算多项式逻辑回归的梯度</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/14/%E4%BB%80%E4%B9%88%E6%98%AFHadoop_preprocessed/" title="Hadoop">Hadoop</a><time datetime="2025-09-14T12:46:25.000Z" title="发表于 2025-09-14 20:46:25">2025-09-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/12/Raft%E5%8D%8F%E8%AE%AE_preprocessed/" title="Raft协议">Raft协议</a><time datetime="2025-09-12T12:46:25.000Z" title="发表于 2025-09-12 20:46:25">2025-09-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/07/%E5%87%B8%E5%87%BD%E6%95%B0%E4%BC%98%E5%8C%96%E4%B8%80_preprocessed/" title="凸函数优化笔记（1）">凸函数优化笔记（1）</a><time datetime="2025-09-07T12:46:25.000Z" title="发表于 2025-09-07 20:46:25">2025-09-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/27/%E7%BA%BF%E6%80%A7%E5%87%BD%E6%95%B0%E5%AE%9A%E4%B9%89_preprocessed/" title="线性函数定义">线性函数定义</a><time datetime="2025-08-27T12:46:25.000Z" title="发表于 2025-08-27 20:46:25">2025-08-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/16/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC_preprocessed/" title="神经网络's Gradient">神经网络's Gradient</a><time datetime="2025-08-16T12:46:25.000Z" title="发表于 2025-08-16 20:46:25">2025-08-16</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By nty</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
